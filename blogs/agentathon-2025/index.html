@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>2,300 developers, one room, and a fraud-detection agent | Mohammed Mudassir Uddin</title>
+<meta name="description" content="Agentathon 2025 set a Guinness World Record for the largest agentic AI hackathon. What I built there, and the one design idea I kept.">
+<meta name="author" content="Mohammed Mudassir Uddin">
+<link rel="canonical" href="https://mudassiruddin7.github.io/blogs/agentathon-2025/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="2,300 developers, one room, and a fraud-detection agent | Mohammed Mudassir Uddin">
+<meta property="og:description" content="Agentathon 2025 set a Guinness World Record for the largest agentic AI hackathon. What I built there, and the one design idea I kept.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/blogs/agentathon-2025/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/images/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="Mohammed Mudassir Uddin: blog" href="https://mudassiruddin7.github.io/blogs/feed.xml">
+<link rel="icon" href="../../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/paper/paper.css">
+<link rel="stylesheet" href="../../assets/blog/blog.css">
+</head>
+<body class="acc-blue">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Site"><a href="../../blogs/">Blog</a><a href="../../#-publications">Research</a><a href="https://drive.google.com/file/d/1gz7MvatR6PW-qhG1u03cm1_K6LDS6_O4/view">CV</a></nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="wrap">
+  <header class="post-hero">
+    <p class="eyebrow"><span class="name"><a href="../">Blog</a></span><span>December 2025</span><span>hackathon</span><span>agents</span><span>knowledge graphs</span></p>
+    <h1 class="title">2,300 developers, one room, and a fraud-detection agent</h1>
+    <p class="subtitle">Agentathon 2025 set a Guinness World Record for the largest agentic AI hackathon. What I built there, and the one design idea I kept.</p>
+  </header>
+  <main id="main" class="post">
+<p>In December I took part in Agentathon 2025 at Malla Reddy University in Hyderabad. More than 2,300 developers built at the same time, and the event set a Guinness World Record for the largest agentic AI hackathon. The record belonged to the room. What I took home was smaller.</p>
+
+<p>I built fraud-detection agents for public-spending transparency: a multi-agent system that reasons over spending records and keeps every decision in a Neo4j knowledge graph. Each decision is stored as a versioned record. When a new finding contradicts an older one, the older record is flagged rather than overwritten. By the end the graph held more than 500 nodes.</p>
+
+<h2>The part worth keeping</h2>
+
+<p>The contradiction flag. Agents that summarise financial records sound confident by default. If a later agent reads a transaction differently, the easy design lets the newest answer win, and the disagreement disappears from the record. Keeping both versions, with a flag between them, turns the disagreement into something a person can check.</p>
+
+<p>The same concern shows up in a proposal I co-wrote later in the year, <a href="../four-proposals/">AetherState</a>: cached memory should keep a pointer back to the evidence it came from, so you can tell when it has gone stale.</p>
+
+<p>The record was a bonus. The lesson was humility.</p>
+  </main>
+  <nav class="post-nav" aria-label="More posts">
+<span></span>
+<a class="next" href="../a-pdf-in-a-training-series-out/"><span class="pn-l">Later</span><span class="pn-t">A PDF in, a training series out</span></a>
+</nav>
+</div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../../">Mohammed Mudassir Uddin</a> &middot; Blog</span>
+    <nav aria-label="More"><a href="../../blogs/">All posts</a><a href="../../blogs/feed.xml">RSS</a><a href="../../#-publications">Research</a><a href="https://github.com/Mudassiruddin7">GitHub</a></nav>
+  </div>
+</footer>
+<script src="../../assets/paper/paper.js" defer></script>
+</body>
+</html>

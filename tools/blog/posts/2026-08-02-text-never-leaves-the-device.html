@@ -1,0 +1,78 @@
+<!--
+title: A data node where the text never leaves the device
+dek: Collecting Telugu, Tamil, Hindi and Bengali text for training without shipping anyone's health records to a server. The rule is one line; enforcing it took four separate guards.
+tags: data, privacy, Indian languages
+-->
+<p>Models deployed for Indian healthcare and agriculture were trained on text in which English is about 46% and Telugu is a rounding error. The usual fix is to collect more data and fine-tune, which means somebody ships raw health records from a village in Telangana to a server. Nobody in that village got to weigh that trade-off.</p>
+
+<p>So the <a href="https://github.com/Mudassiruddin7/Federated-Learning">collection node</a> I published on 30 August has one rule: raw text stays on the device it was typed into. What moves upstream is scores, counts and, later, gradient updates. The node runs at a partner site, an ASHA sub-centre, an agricultural extension office or a legal aid clinic, in four languages (Telugu, Tamil, Hindi, Bengali) and four domains (health, agriculture, legal, education).</p>
+
+<figure>
+  <div class="panel scroll">
+    <svg class="dg dg-wide" viewBox="0 0 760 236" role="img" aria-label="Raw text is kept in its own table on the device. Records pass five local checks, then an egress check that searches the outgoing bytes for the raw text before anything is sent. Only scores and counts travel upstream over a 2G link.">
+      <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <text class="t-lab" x="16" y="20">ON THE DEVICE</text>
+      <text class="t-lab" x="566" y="20">UPSTREAM</text>
+      <rect class="band" x="8" y="30" width="520" height="196" rx="6"/>
+      <rect class="box" x="28" y="50" width="206" height="62" rx="4"/>
+      <text class="t-b" x="131" y="76" text-anchor="middle">Raw text</text>
+      <text class="t-2" x="131" y="96" text-anchor="middle">its own table, never sent</text>
+      <path class="ln" d="M131,112 L131,138" marker-end="url(#ah4)"/>
+      <rect class="box" x="28" y="142" width="206" height="66" rx="4"/>
+      <text class="t-b" x="131" y="168" text-anchor="middle">Five local checks</text>
+      <text class="t-2" x="131" y="188" text-anchor="middle">format, language, fit, PII, score</text>
+      <path class="ln" d="M234,175 L290,150" marker-end="url(#ah4)"/>
+      <rect class="box-new" x="294" y="98" width="214" height="84" rx="4"/>
+      <text class="t-b t-acc" x="401" y="126" text-anchor="middle">Egress check</text>
+      <text class="t-2" x="401" y="146" text-anchor="middle">search the outgoing bytes</text>
+      <text class="t-2" x="401" y="164" text-anchor="middle">for the raw text, twice</text>
+      <path class="ln" d="M508,140 L562,140" marker-end="url(#ah4)"/>
+      <text class="t-m" x="535" y="130" text-anchor="middle">2G</text>
+      <rect class="box" x="566" y="98" width="186" height="84" rx="4"/>
+      <text class="t-b" x="659" y="126" text-anchor="middle">Scores and counts</text>
+      <text class="t-2" x="659" y="146" text-anchor="middle">later: gradient</text>
+      <text class="t-2" x="659" y="164" text-anchor="middle">updates</text>
+    </svg>
+    <svg class="dg dg-tall" viewBox="0 0 340 462" role="img" aria-label="Raw text is kept in its own table on the device. Records pass five local checks, then an egress check that searches the outgoing bytes for the raw text before anything is sent. Only scores and counts travel upstream over a 2G link.">
+      <defs><marker id="ah4t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <text class="t-lab" x="16" y="18">ON THE DEVICE</text>
+      <rect class="band" x="8" y="26" width="324" height="318" rx="6"/>
+      <rect class="box" x="40" y="46" width="260" height="62" rx="4"/>
+      <text class="t-b" x="170" y="72" text-anchor="middle">Raw text</text>
+      <text class="t-2" x="170" y="92" text-anchor="middle">its own table, never sent</text>
+      <path class="ln" d="M170,108 L170,134" marker-end="url(#ah4t)"/>
+      <rect class="box" x="40" y="138" width="260" height="62" rx="4"/>
+      <text class="t-b" x="170" y="164" text-anchor="middle">Five local checks</text>
+      <text class="t-2" x="170" y="184" text-anchor="middle">format, language, fit, PII, score</text>
+      <path class="ln" d="M170,200 L170,226" marker-end="url(#ah4t)"/>
+      <rect class="box-new" x="40" y="230" width="260" height="92" rx="4"/>
+      <text class="t-b t-acc" x="170" y="258" text-anchor="middle">Egress check</text>
+      <text class="t-2" x="170" y="280" text-anchor="middle">search the outgoing bytes</text>
+      <text class="t-2" x="170" y="300" text-anchor="middle">for the raw text, twice</text>
+      <path class="ln" d="M170,322 L170,384" marker-end="url(#ah4t)"/>
+      <text class="t-m" x="182" y="364">2G</text>
+      <text class="t-lab" x="16" y="364">UPSTREAM</text>
+      <rect class="box" x="40" y="388" width="260" height="66" rx="4"/>
+      <text class="t-b" x="170" y="414" text-anchor="middle">Scores and counts</text>
+      <text class="t-2" x="170" y="436" text-anchor="middle">later: gradient updates</text>
+    </svg>
+  </div>
+  <figcaption><b>What crosses the boundary.</b> The check runs before a record is queued and again before the socket.</figcaption>
+</figure>
+
+<h2>Four guards, because one is easy to delete</h2>
+
+<ol class="plain">
+  <li>The record type that goes on the wire has a <code>raw_text</code> property that returns nothing and raises if anything tries to set it.</li>
+  <li>Raw text lives in a separate SQLite table, not a column, so reading it is always a deliberate join you can spot in a diff.</li>
+  <li>The Avro schema types <code>raw_text</code> as null, so both encoders throw if handed a value. That turned out to be the strongest guard, and it was free.</li>
+  <li>Before queueing, and again before the socket, the node searches the finished bytes for the raw capture.</li>
+</ol>
+
+<h2>Built for a Pi on 2G</h2>
+
+<p>The target is a Raspberry Pi 4 or a mid-range Android box with 4 GB, on a 2G link. Nothing heavy loads at import. The default embedder is a character n-gram hasher with no weights, so a node can boot and verify before anyone has copied 500 MB onto its SD card over GPRS. Sync batches are sized by compressed bytes rather than record count, because a one-line field note and an hour of classroom transcript differ in size by a factor of 100. There are 188 tests.</p>
+
+<h2>What I only noticed late</h2>
+
+<p>The privacy term in the quality score works as a gate. A record still waiting for human review can never reach the corpus, so the corpus grows at the speed of reviewer hours, not collection. That is the right behaviour, and it is also the real bottleneck.</p>

@@ -1,0 +1,21 @@
+<!--
+title: Eleven pull requests to pgmpy in one week
+dek: Reading a causal-inference library closely enough to fix it, from d-separators to NaN treatment effects.
+tags: open source, causal inference
+-->
+<p>Between 25 and 28 February I opened <a href="https://github.com/pgmpy/pgmpy/pulls?q=is%3Apr+author%3AMudassiruddin7">11 pull requests</a> against pgmpy, the Python library for probabilistic graphical models and causal inference. Reading code closely enough to fix it is the fastest way I know to learn how a library really works.</p>
+
+<h2>What I found</h2>
+
+<ul>
+  <li><span class="lead-in">Graph logic.</span> I rewrote <code>minimal_dseparator</code> on the moralized ancestral graph, the standard construction for finding a separating set.</li>
+  <li><span class="lead-in">Silent data loss.</span> State names were lost when a model was fit, and writing a model to the UAI format and reading it back lost its variable names.</li>
+  <li><span class="lead-in">Inference plumbing.</span> <code>query</code> did not forward its keyword arguments, the average treatment effect came back as NaN on an empty adjustment set, and <code>ApproxInference</code> built its state space from the samples it drew rather than from the model, which misses any state that happens not to appear in the samples.</li>
+  <li><span class="lead-in">Model utilities.</span> <code>simulate()</code> dropped valid parent edges when a CPD was replaced for an intervention, and a dynamic Bayesian network's <code>get_evidence</code> returned <code>None</code>.</li>
+</ul>
+
+<p>Eight of the eleven have since been closed, and three are still open.</p>
+
+<h2>What I would do differently</h2>
+
+<p>Several of the pull requests bundle two or three related fixes. A maintainer reviewing a library in their spare time would rather get one fix per request, each with a test that fails before the change and passes after it. Bundling made my week faster and their review slower, which is the wrong trade.</p>

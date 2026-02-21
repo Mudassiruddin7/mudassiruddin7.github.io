@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Does the explanation predict the model? | Mohammed Mudassir Uddin</title>
+<meta name="description" content="In May I began working with Prof. Hamdi Al-Jamimi at KFUPM on a narrow question about sepsis decision support: when a model explains itself, is the explanation true?">
+<meta name="author" content="Mohammed Mudassir Uddin">
+<link rel="canonical" href="https://mudassiruddin7.github.io/blogs/does-the-explanation-predict-the-model/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="Does the explanation predict the model? | Mohammed Mudassir Uddin">
+<meta property="og:description" content="In May I began working with Prof. Hamdi Al-Jamimi at KFUPM on a narrow question about sepsis decision support: when a model explains itself, is the explanation true?">
+<meta property="og:url" content="https://mudassiruddin7.github.io/blogs/does-the-explanation-predict-the-model/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/images/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="Mohammed Mudassir Uddin: blog" href="https://mudassiruddin7.github.io/blogs/feed.xml">
+<link rel="icon" href="../../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/paper/paper.css">
+<link rel="stylesheet" href="../../assets/blog/blog.css">
+</head>
+<body class="acc-blue">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Site"><a href="../../blogs/">Blog</a><a href="../../#-publications">Research</a><a href="https://drive.google.com/file/d/1gz7MvatR6PW-qhG1u03cm1_K6LDS6_O4/view">CV</a></nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="wrap">
+  <header class="post-hero">
+    <p class="eyebrow"><span class="name"><a href="../">Blog</a></span><span>May 2026</span><span>research</span><span>faithfulness</span><span>healthcare</span></p>
+    <h1 class="title">Does the explanation predict the model?</h1>
+    <p class="subtitle">In May I began working with Prof. Hamdi Al-Jamimi at KFUPM on a narrow question about sepsis decision support: when a model explains itself, is the explanation true?</p>
+  </header>
+  <main id="main" class="post">
+<p>In May I started a visiting research collaboration with Prof. Hamdi Al-Jamimi at King Fahd University of Petroleum and Minerals, on sepsis clinical decision support.</p>
+
+<p>Hospitals are starting to deploy models that recommend a sepsis treatment together with an explanation of why, for example this patient's lactate or this blood-pressure trend. The explanation is what a clinician reads. It is rarely checked against what the model actually did.</p>
+
+<h2>The test</h2>
+
+<p>Take a piece of evidence the explanation names, perturb it, and check whether the recommendation shifts the way the explanation predicts. If the explanation says lactate drove the decision and changing the lactate changes nothing, the explanation is not describing the model. That recommendation gets flagged as unreliable, however accurate the underlying prediction is.</p>
+
+<figure>
+  <div class="panel scroll">
+    <svg class="dg dg-wide" viewBox="0 0 760 170" role="img" aria-label="Faithfulness test: the model makes a recommendation with an explanation naming evidence E. Perturb E. If the recommendation shifts as the explanation predicts, the explanation is consistent. If not, the recommendation is flagged as unreliable.">
+      <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <rect class="box" x="8" y="52" width="176" height="64" rx="4"/>
+      <text class="t-b" x="96" y="78" text-anchor="middle">Recommendation</text>
+      <text class="t-m" x="96" y="97" text-anchor="middle">"because of E"</text>
+      <path class="ln" d="M184,84 L222,84" marker-end="url(#ah3)"/>
+      <rect class="box-new" x="226" y="52" width="160" height="64" rx="4"/>
+      <text class="t-b t-acc" x="306" y="78" text-anchor="middle">Perturb E</text>
+      <text class="t-m" x="306" y="97" text-anchor="middle">re-run the model</text>
+      <path class="ln" d="M386,84 L424,84" marker-end="url(#ah3)"/>
+      <rect class="box" x="428" y="52" width="150" height="64" rx="4"/>
+      <text class="t-b" x="503" y="78" text-anchor="middle">Did it shift</text>
+      <text class="t-b" x="503" y="96" text-anchor="middle">as predicted?</text>
+      <path class="ln" d="M578,70 L612,34" marker-end="url(#ah3)"/>
+      <path class="ln" d="M578,98 L612,134" marker-end="url(#ah3)"/>
+      <text x="618" y="30">Yes: consistent</text>
+      <text class="t-2" x="618" y="46">keep the explanation</text>
+      <text x="618" y="138">No: flag it</text>
+      <text class="t-2" x="618" y="154">however accurate</text>
+    </svg>
+    <svg class="dg dg-tall" viewBox="0 0 340 380" role="img" aria-label="Faithfulness test: the model makes a recommendation with an explanation naming evidence E. Perturb E. If the recommendation shifts as the explanation predicts, the explanation is consistent. If not, the recommendation is flagged as unreliable.">
+      <defs><marker id="ah3t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <rect class="box" x="50" y="8" width="240" height="62" rx="4"/>
+      <text class="t-b" x="170" y="34" text-anchor="middle">Recommendation</text>
+      <text class="t-m" x="170" y="54" text-anchor="middle">"because of E"</text>
+      <path class="ln" d="M170,70 L170,98" marker-end="url(#ah3t)"/>
+      <rect class="box-new" x="50" y="102" width="240" height="62" rx="4"/>
+      <text class="t-b t-acc" x="170" y="128" text-anchor="middle">Perturb E</text>
+      <text class="t-m" x="170" y="148" text-anchor="middle">re-run the model</text>
+      <path class="ln" d="M170,164 L170,192" marker-end="url(#ah3t)"/>
+      <rect class="box" x="50" y="196" width="240" height="62" rx="4"/>
+      <text class="t-b" x="170" y="222" text-anchor="middle">Did it shift</text>
+      <text class="t-b" x="170" y="242" text-anchor="middle">as predicted?</text>
+      <path class="ln" d="M140,258 L88,306" marker-end="url(#ah3t)"/>
+      <path class="ln" d="M200,258 L252,306" marker-end="url(#ah3t)"/>
+      <rect class="box" x="8" y="310" width="154" height="62" rx="4"/>
+      <text x="85" y="336" text-anchor="middle">Yes: consistent</text>
+      <text class="t-2" x="85" y="356" text-anchor="middle">keep it</text>
+      <rect class="box" x="178" y="310" width="154" height="62" rx="4"/>
+      <text x="255" y="336" text-anchor="middle">No: flag it</text>
+      <text class="t-2" x="255" y="356" text-anchor="middle">however accurate</text>
+    </svg>
+  </div>
+  <figcaption><b>The check, per recommendation.</b> The question is about the explanation, not the accuracy.</figcaption>
+</figure>
+
+<h2>Data, and the step I care about most</h2>
+
+<p>Cases are labelled with the Sepsis-3 consensus criteria. The plan is MIMIC-IV and the PhysioNet 2019 Sepsis Challenge data first, then HiRID, a Swiss ICU cohort.</p>
+
+<p>The last step is the one I care most about. A model whose accuracy transfers from US hospitals to a Swiss one may not carry its explanations with it, and almost no sepsis AI work checks that.</p>
+  </main>
+  <nav class="post-nav" aria-label="More posts">
+<a class="prev" href="../flood-claims-from-radar/"><span class="pn-l">Earlier</span><span class="pn-t">Flood claims from radar in under five minutes</span></a>
+<a class="next" href="../done-with-the-degree/"><span class="pn-l">Later</span><span class="pn-t">Done with the degree</span></a>
+</nav>
+</div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../../">Mohammed Mudassir Uddin</a> &middot; Blog</span>
+    <nav aria-label="More"><a href="../../blogs/">All posts</a><a href="../../blogs/feed.xml">RSS</a><a href="../../#-publications">Research</a><a href="https://github.com/Mudassiruddin7">GitHub</a></nav>
+  </div>
+</footer>
+<script src="../../assets/paper/paper.js" defer></script>
+</body>
+</html>

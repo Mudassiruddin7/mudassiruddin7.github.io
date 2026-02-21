@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Four validated upgrades that don&#x27;t add up | Mohammed Mudassir Uddin</title>
+<meta name="description" content="LAF-YOLOv10 combined four published small-object detection techniques in one detector. Together they cost 7.8 points of mAP, and the loss traces to one interaction.">
+<meta name="author" content="Mohammed Mudassir Uddin">
+<link rel="canonical" href="https://mudassiruddin7.github.io/blogs/four-upgrades-that-dont-add-up/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="Four validated upgrades that don&#x27;t add up | Mohammed Mudassir Uddin">
+<meta property="og:description" content="LAF-YOLOv10 combined four published small-object detection techniques in one detector. Together they cost 7.8 points of mAP, and the loss traces to one interaction.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/blogs/four-upgrades-that-dont-add-up/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/images/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="Mohammed Mudassir Uddin: blog" href="https://mudassiruddin7.github.io/blogs/feed.xml">
+<link rel="icon" href="../../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/paper/paper.css">
+<link rel="stylesheet" href="../../assets/blog/blog.css">
+</head>
+<body class="acc-blue">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Site"><a href="../../blogs/">Blog</a><a href="../../#-publications">Research</a><a href="https://drive.google.com/file/d/1gz7MvatR6PW-qhG1u03cm1_K6LDS6_O4/view">CV</a></nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="wrap">
+  <header class="post-hero">
+    <p class="eyebrow"><span class="name"><a href="../">Blog</a></span><span>September 2026</span><span>paper</span><span>computer vision</span><span>evaluation</span></p>
+    <h1 class="title">Four validated upgrades that don&#x27;t add up</h1>
+    <p class="subtitle">LAF-YOLOv10 combined four published small-object detection techniques in one detector. Together they cost 7.8 points of mAP, and the loss traces to one interaction.</p>
+  </header>
+  <main id="main" class="post">
+<p>On 13 September we posted <a href="https://arxiv.org/abs/2609.14560">Small Object Detection in Drone Aerial Imagery with LAF-YOLOv10</a>. Quratulain Nayeem is the first author, with Dr. Fahmina Taranum and me.</p>
+
+<p>Drone footage is hard for general-purpose detectors: targets span a handful of pixels, and onboard compute is small. The common recipe is to take techniques that each worked in their own paper and combine them. We did that with four: a partial-convolution backbone block (PC-C2f), an attention-guided feature pyramid (AG-FPN), a stride-4 detection head in place of the large-object head, and Wise-IoU v3 regression. Then we tested whether the gains add up.</p>
+
+<h2>They don't</h2>
+
+<p>Over three seeds on VisDrone-DET2019, LAF-YOLOv10 reaches 24.0 &plusmn; 0.4% mAP@0.5 at 2.14M parameters, against 31.8% for plain YOLOv10n. The deficit carries over to UAVDT, where it is 10 points, and holds on the held-out and test-dev splits.</p>
+
+<figure>
+  <a class="fig-link" href="../../images/papers/laf-yolov10-composability.svg"><img class="diagram" src="../../images/papers/laf-yolov10-composability.svg" alt="LAF-YOLOv10 composability study: four individually validated modules predict a 3.0-point mAP loss but stack to 5.5, a 2.5-point interaction penalty concentrated at the P2 head swap." loading="lazy"></a>
+  <figcaption><b>The composability test.</b> What the modules cost alone predicts one number; stacked, they cost more, and the extra sits at the head swap.</figcaption>
+</figure>
+
+<h2>The diagnosis</h2>
+
+<p>The failure is not uniform. Background false positives, localisation errors and duplicate detections all move in the direction AG-FPN and Wise-IoU were designed to push. The deficit sits in missed detections and class confusion, concentrated on vans, trucks, buses and awning tricycles: the medium-to-large vehicles the removed head used to cover.</p>
+
+<p>Ablation puts 2.5 points on the head swap alone and another 2.5 on its interaction with the backbone. The backbone is weakened because, once PC-C2f changes its channel layout, only 73 of 150 pretrained tensors transfer. That last point is the leading hypothesis, not a tested one, and a controlled run is the first item of future work.</p>
+
+<p>Composability has to be tested, not assumed. The checkpoints for all three seeds are in the <a href="https://github.com/Mudassiruddin7/Small-Object-Detection-in-UAV-Imagery">repository</a>, and the <a href="../../laf-yolov10/">project page</a> has the detection examples.</p>
+  </main>
+  <nav class="post-nav" aria-label="More posts">
+<a class="prev" href="../latex-intelligence/"><span class="pn-l">Earlier</span><span class="pn-t">LaTeX to Word without losing the equations</span></a>
+<a class="next" href="../bkf-layer-order/"><span class="pn-l">Later</span><span class="pn-t">Where the global layer goes decides when a hybrid learns to retrieve</span></a>
+</nav>
+</div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../../">Mohammed Mudassir Uddin</a> &middot; Blog</span>
+    <nav aria-label="More"><a href="../../blogs/">All posts</a><a href="../../blogs/feed.xml">RSS</a><a href="../../#-publications">Research</a><a href="https://github.com/Mudassiruddin7">GitHub</a></nav>
+  </div>
+</footer>
+<script src="../../assets/paper/paper.js" defer></script>
+</body>
+</html>

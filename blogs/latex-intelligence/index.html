@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LaTeX to Word without losing the equations | Mohammed Mudassir Uddin</title>
+<meta name="description" content="Nine months of work, now on the VS Code Marketplace: editable equations, live cross-references, and failed builds explained in plain words.">
+<meta name="author" content="Mohammed Mudassir Uddin">
+<link rel="canonical" href="https://mudassiruddin7.github.io/blogs/latex-intelligence/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="LaTeX to Word without losing the equations | Mohammed Mudassir Uddin">
+<meta property="og:description" content="Nine months of work, now on the VS Code Marketplace: editable equations, live cross-references, and failed builds explained in plain words.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/blogs/latex-intelligence/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/images/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="Mohammed Mudassir Uddin: blog" href="https://mudassiruddin7.github.io/blogs/feed.xml">
+<link rel="icon" href="../../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/paper/paper.css">
+<link rel="stylesheet" href="../../assets/blog/blog.css">
+</head>
+<body class="acc-blue">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Site"><a href="../../blogs/">Blog</a><a href="../../#-publications">Research</a><a href="https://drive.google.com/file/d/1gz7MvatR6PW-qhG1u03cm1_K6LDS6_O4/view">CV</a></nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="wrap">
+  <header class="post-hero">
+    <p class="eyebrow"><span class="name"><a href="../">Blog</a></span><span>September 2026</span><span>tools</span><span>open source</span></p>
+    <h1 class="title">LaTeX to Word without losing the equations</h1>
+    <p class="subtitle">Nine months of work, now on the VS Code Marketplace: editable equations, live cross-references, and failed builds explained in plain words.</p>
+  </header>
+  <main id="main" class="post">
+<p>In September I published <a href="https://marketplace.visualstudio.com/items?itemName=MudassirUddinMohammed.latex-intelligence">LaTeX Intelligence</a> to the VS Code Marketplace, after about nine months of work. The idea came from my supervisors, Dr. Fahmina Taranum and Dr. Tasneem Bano Rehman, who write in LaTeX and keep getting asked for Word files by collaborators, reviewers and grant offices.</p>
+
+<p>The usual route is Pandoc or a conversion website. What comes back has equations as images, cross-references as dead text, broken tables and missing TikZ diagrams, and someone spends two hours repairing it by hand.</p>
+
+<h2>What survives the conversion</h2>
+
+<ul>
+  <li>Equations become OMML, Word's own equation format, so you can click into them and edit.</li>
+  <li><code>\ref</code> and <code>\eqref</code> become live Word fields that carry the numbers from your <code>.aux</code> file, so they renumber when a collaborator adds a section.</li>
+  <li>Tables keep the column widths LaTeX gave them, including booktabs rules, merged cells and shading.</li>
+  <li>TikZ diagrams are compiled against your own preamble when a LaTeX engine is installed, and drawn as native Word shapes you can move and recolour when it is not.</li>
+  <li>The page layout comes from your document class, IEEEtran, ACM, Springer LNCS, Elsevier and others, measured from the class files rather than guessed.</li>
+</ul>
+
+<h2>The other half: why the build failed</h2>
+
+<p>The extension also explains failed builds: the line, what the error means in plain words, and what is missing from your machine. That includes the common case where a file compiles in a terminal but not in VS Code, because the editor's <code>PATH</code> does not include the directory your TeX installation added after the editor started.</p>
+
+<p>It is 153 KB packaged, with 397 tests and no runtime dependencies. The README lists what is still wrong. For example, three of the eight papers in the test corpus come out a page longer than the compiled PDF.</p>
+
+<p>Install it from the Extensions view, or with <code>ext install MudassirUddinMohammed.latex-intelligence</code>. The source is on <a href="https://github.com/Mudassiruddin7/LaTex-Intelligence">GitHub</a>.</p>
+  </main>
+  <nav class="post-nav" aria-label="More posts">
+<a class="prev" href="../instructions-hidden-in-log-fields/"><span class="pn-l">Earlier</span><span class="pn-t">Instructions hidden in log fields</span></a>
+<a class="next" href="../four-upgrades-that-dont-add-up/"><span class="pn-l">Later</span><span class="pn-t">Four validated upgrades that don&#x27;t add up</span></a>
+</nav>
+</div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../../">Mohammed Mudassir Uddin</a> &middot; Blog</span>
+    <nav aria-label="More"><a href="../../blogs/">All posts</a><a href="../../blogs/feed.xml">RSS</a><a href="../../#-publications">Research</a><a href="https://github.com/Mudassiruddin7">GitHub</a></nav>
+  </div>
+</footer>
+<script src="../../assets/paper/paper.js" defer></script>
+</body>
+</html>

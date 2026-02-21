@@ -1,0 +1,27 @@
+<!--
+title: Not every agent step needs the whole model
+dek: AgentCompress picks a precision for each step of an LLM agent's workflow, from the first 32 tokens of the request.
+tags: paper, LLM agents, efficiency
+-->
+<p>Three days after the pruning paper, <a href="https://arxiv.org/abs/2601.05191">AgentCompress</a> went up. Zuhair Ahmed Khan Taha is the first author; I am second, with Shahnawaz Alam.</p>
+
+<p>A research agent might survey papers, form a hypothesis, design an experiment, clean data and format citations, all with one 70B model at full precision. The hypothesis step needs that model. The citation step does not. Quantizing everything to INT8 saves compute, but it cuts the reasoning steps as hard as the clerical ones.</p>
+
+<h2>How it works</h2>
+
+<p>AgentCompress reads the first 32 tokens of each step, estimates how demanding the step is, and runs it on an FP16, INT8, INT4 or INT2 copy of LLaMA-2-70B. Only one copy fits in the GPU memory we had, so a cache that weighs how often and how recently each copy was used decides which one stays loaded.</p>
+
+<figure>
+  <a class="fig-link" href="{root}images/papers/agentcompress.svg"><img class="diagram" src="{root}images/papers/agentcompress.svg" alt="AgentCompress: a controller reads the first 32 tokens of each agent task, predicts its cognitive load, and routes it to an FP16, INT8, INT4 or INT2 variant of the model." loading="lazy"></a>
+  <figcaption><b>Routing.</b> A small controller reads the start of each step and picks the precision; the model copies themselves are standard quantized LLaMA-2-70B.</figcaption>
+</figure>
+
+<h2>What the paper reports</h2>
+
+<p>On a benchmark of 290 research workflows, 68.3% less compute than uniform FP16 at 96.2% task success, against 98.2% for the uncompressed model and 87.5% for uniform INT8. Hypothesis steps stay at FP16 most of the time. Citation steps drop to four bits or fewer.</p>
+
+<h2>Two caveats I would read first</h2>
+
+<p>The benchmark and its human difficulty labels are not public, so the public notebook can only run the pipeline on synthetic workflows. I wrote about what that notebook does and does not show in <a href="{blog}what-the-agentcompress-notebook-shows/">July</a>.</p>
+
+<p>And about 8% of steps lose more than 10% quality. Most are steps that look routine and are not, like "summarise the methodology section" when the methodology is a new proof technique.</p>

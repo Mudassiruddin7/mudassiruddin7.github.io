@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>An AI chief of staff in 36 hours | Mohammed Mudassir Uddin</title>
+<meta name="description" content="At the Hack-Nation Global AI Hackathon with the MIT Sloan AI Club we mapped how information moves inside a company. The RAG pipeline died at hour 22.">
+<meta name="author" content="Mohammed Mudassir Uddin">
+<link rel="canonical" href="https://mudassiruddin7.github.io/blogs/ai-chief-of-staff/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="An AI chief of staff in 36 hours | Mohammed Mudassir Uddin">
+<meta property="og:description" content="At the Hack-Nation Global AI Hackathon with the MIT Sloan AI Club we mapped how information moves inside a company. The RAG pipeline died at hour 22.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/blogs/ai-chief-of-staff/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/images/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="Mohammed Mudassir Uddin: blog" href="https://mudassiruddin7.github.io/blogs/feed.xml">
+<link rel="icon" href="../../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/paper/paper.css">
+<link rel="stylesheet" href="../../assets/blog/blog.css">
+</head>
+<body class="acc-blue">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Site"><a href="../../blogs/">Blog</a><a href="../../#-publications">Research</a><a href="https://drive.google.com/file/d/1gz7MvatR6PW-qhG1u03cm1_K6LDS6_O4/view">CV</a></nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="wrap">
+  <header class="post-hero">
+    <p class="eyebrow"><span class="name"><a href="../">Blog</a></span><span>February 2026</span><span>hackathon</span><span>agents</span><span>knowledge graphs</span></p>
+    <h1 class="title">An AI chief of staff in 36 hours</h1>
+    <p class="subtitle">At the Hack-Nation Global AI Hackathon with the MIT Sloan AI Club we mapped how information moves inside a company. The RAG pipeline died at hour 22.</p>
+  </header>
+  <main id="main" class="post">
+<p>On 7 and 8 February I was at the Hack-Nation Global AI Hackathon, run with the MIT Sloan AI Club. I went in with Bibhor Puhan and Mohammed Kaif Pasha, and we built a prototype we called an AI chief of staff.</p>
+
+<p>The problem: inside most companies, information moves like a game of telephone. Some people drown in updates, others miss the one that mattered, there is no single source of truth, and nobody has a map of who knows what.</p>
+
+<h2>What the prototype did</h2>
+
+<ul>
+  <li>Mapped how knowledge flows across teams, using communication graphs and stakeholder networks built from the Enron email dataset.</li>
+  <li>Kept a living source of truth that versions decisions and flags when a new one conflicts with an old one.</li>
+  <li>Routed each update to the people who needed it, instead of broadcasting it to everyone.</li>
+</ul>
+
+<p>The questions it was meant to answer every morning: what changed today, who needs to know, and where is knowledge getting stuck?</p>
+
+<h2>Hour 22</h2>
+
+<p>The RAG pipeline crashed at hour 22. We rebuilt it by hour 26 and shipped at hour 36. It is a rough prototype, not an operating system for a company.</p>
+
+<p>The piece I would keep is the versioned record of decisions with conflicts flagged, which is the same idea I used at <a href="../agentathon-2025/">Agentathon</a> in December. Search engines organised the world's information. Inside organisations, information still spreads blindly, and I think the fix starts with keeping track of what was decided and when.</p>
+  </main>
+  <nav class="post-nav" aria-label="More posts">
+<a class="prev" href="../searching-a-hierarchy/"><span class="pn-l">Earlier</span><span class="pn-t">Searching a hierarchy instead of the graph</span></a>
+<a class="next" href="../pihole-tailscale/"><span class="pn-l">Later</span><span class="pn-t">Blocking ads on every device from a Raspberry Pi Zero 2 W</span></a>
+</nav>
+</div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../../">Mohammed Mudassir Uddin</a> &middot; Blog</span>
+    <nav aria-label="More"><a href="../../blogs/">All posts</a><a href="../../blogs/feed.xml">RSS</a><a href="../../#-publications">Research</a><a href="https://github.com/Mudassiruddin7">GitHub</a></nav>
+  </div>
+</footer>
+<script src="../../assets/paper/paper.js" defer></script>
+</body>
+</html>

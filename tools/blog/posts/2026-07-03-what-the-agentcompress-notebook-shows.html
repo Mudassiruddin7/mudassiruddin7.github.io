@@ -1,0 +1,32 @@
+<!--
+title: What our AgentCompress notebook shows, and what it doesn't
+dek: The paper's benchmark is not public, so the released notebook runs on synthetic workflows and its numbers are lower. Both columns belong in the README.
+tags: reproducibility, LLM agents
+-->
+<p>On 20 July we published the <a href="https://github.com/Mudassiruddin7/AgentCompress">AgentCompress code</a> as a single Colab notebook: the controller, the variant cache, the training loop, the theoretical bounds, the significance tests and the ablations. By default it runs on TinyLlama, so the controller trains on a CPU. The INT8, INT4 and INT2 paths need a GPU, and Llama-2 7B and 70B need approved access.</p>
+
+<h2>What it cannot do</h2>
+
+<p>The paper's 290-workflow benchmark and its human difficulty labels are not public. So the notebook cannot reproduce the paper's numbers, and it does not pretend to. It generates synthetic workflows, calibrates its uniform FP16, INT8 and INT4 anchors to the paper's table, and runs the whole pipeline end to end.</p>
+
+<div class="table-fig">
+  <div class="tbl-wrap">
+    <table class="bt">
+      <caption><b>Table 1.</b> The paper's benchmark against the released notebook. Different workflows and hardware, so these are two conditions, not a reproduction.</caption>
+      <thead><tr><th>Measure</th><th>Paper<span class="u">290 workflows</span></th><th>Notebook<span class="u">synthetic workflows</span></th></tr></thead>
+      <tbody>
+        <tr class="ours"><td>AgentCompress, compute saved</td><td>68.3%</td><td>50.9%</td></tr>
+        <tr class="ours"><td>AgentCompress, task quality</td><td>96.2%</td><td>89.6%</td></tr>
+        <tr class="mid"><td>Uniform FP16, task quality</td><td>98.2%</td><td>97.4%</td></tr>
+        <tr><td>Uniform INT8, task quality</td><td>87.5%</td><td>86.8%</td></tr>
+        <tr><td>Controller latency per decision</td><td>&asymp;12 ms, two A100s</td><td>36.9 ms mean</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<p>In the notebook the router saves less and keeps less quality, and its controller takes three times as long per decision on the hardware it ran on. None of that contradicts the paper; the conditions differ. But a reader deserves to see both columns side by side before they have to go looking, so the README and the <a href="{root}agentcompress/">project page</a> print them together.</p>
+
+<p>To evaluate real workflows, you replace the notebook's two simulation hooks with actual inference and scoring. That is the experiment I would most like someone to run.</p>
+
+<p>The habit I took from this into everything after: publish the gap between what the paper reports and what the public code runs, before someone else finds it.</p>

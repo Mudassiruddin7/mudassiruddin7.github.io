@@ -1,0 +1,57 @@
+<!--
+title: Where the global layer goes decides when a hybrid learns to retrieve
+dek: Our ICLR 2027 submission: 49 small models, 15 designs, one mechanism changed at a time. Attention-sink size did not predict recall. Layer order and key binding did.
+tags: paper, long context, architecture
+-->
+<p>This month we submitted Layer Order and Key Binding Decide When Hybrid Models Learn to Retrieve to ICLR 2027. I am the first author, with Fahmina Taranum, Tasneem Bano Rehman, Sumrana Siddiqui, Sara Rizwan, Samaanah Abdus Salam, Quratulain Nayeem, Summaiya Unnisa Begum, Sadaf Kauser, Muzammil Shareef and Abdul Raheem Ahmed. The <a href="https://mudassiruddin7.github.io/Attention-Sink/">project page</a> has the figures.</p>
+
+<p>Hybrid language models such as Qwen3-Next and Kimi Linear make most layers linear attention, which keeps a fixed-size memory, and add a few global attention layers for retrieval. New designs are often judged by their attention sink, the share of attention that lands on the first token. We asked a narrower question: which design learns retrieval early, and keeps it on inputs far longer than those seen in training?</p>
+
+<p>We trained 49 small models, up to 1.9 million parameters, from 15 designs, changed one mechanism at a time, and tested key-value retrieval at every depth up to 64 times the training length.</p>
+
+<h2>BKF: bound keys, global layer first</h2>
+
+<figure>
+  <a class="fig-link" href="{root}images/papers/bkf.svg"><img class="diagram" src="{root}images/papers/bkf.svg" alt="BKF puts the global layer first in each four-layer block and binds every key to the three tokens before it with a causal width-4 convolution; all 11 runs learn retrieval by step 300 and keep 98% recall at 64 times the training length." loading="lazy"></a>
+  <figcaption><b>Two changes to the usual hybrid block.</b> Global, linear, linear, linear instead of linear, linear, linear, global; and a width-4 causal convolution on the keys and values of the global layer.</figcaption>
+</figure>
+
+<p>Putting the global layer first lets it read token embeddings directly, instead of the outputs of linear layers that are still changing early in training. Binding each key and value to the three preceding tokens lets one attention step link a question to its matching value, so the lookup needs one layer instead of two.</p>
+
+<figure>
+  <p class="fig-title">Exact-match recall at 16 times the training length (4,096 tokens), averaged over the runs that learned</p>
+  <div class="panel"><div class="chart" data-chart="designs"></div></div>
+  <figcaption><b>Selected designs from the paper's Table 2.</b> Hover a bar for how many runs learned and when. Attention-only models learn early but fail beyond twice the training length.</figcaption>
+</figure>
+
+<h2>What we found</h2>
+
+<p>With both changes, all 11 runs learned retrieval by step 300 and kept 98.0% recall at 64 times the training length (16,384 tokens). Each change alone leaves one obstacle: with bound keys but the global layer last, 8 of 11 runs learned and none before step 1,100; with the global layer first but no bound keys, 1 of 4 learned. Removing BKF's first global layer at test time drops recall at 4,096 tokens from 99.0% to 0.2%, which places the lookup in that one layer. Across the runs that learned, a larger attention sink did not mean worse recall.</p>
+
+<p>These are small models and a synthetic task. Whether the ordering rule holds at the scale where hybrids are deployed is the next question, and the one I most want to answer.</p>
+
+<script>
+window.CHARTS = {
+  designs: {
+    type: 'hbar', domain: [0, 100], ticks: [0, 25, 50, 75, 100], barH: 18, gap: 14, narrowAt: 520,
+    valueName: 'recall at 16x',
+    fmt: function (v) { return v.toFixed(1) + '%'; }, tickFmt: function (v) { return v + '%'; },
+    aria: 'Recall at 16 times the training length. Softmax attention with rotary positions 0.3 percent. Gated attention 0.5 percent. Standard hybrid, global layer last, 83.2 percent. Global last with bound keys 93.8 percent. Global first without bound keys 42.4 percent. BKF, global first with bound keys, 99.1 percent.',
+    rows: [
+      { label: 'Softmax attention, rotary', value: 0.3, tip: 'learned in 2 of 2 runs, median step 600' },
+      { label: 'Gated attention', value: 0.5, tip: 'learned in 2 of 2 runs, median step 650' },
+      { label: 'Hybrid, global layer last', value: 83.2, tip: 'learned in 2 of 3 runs, median step 2,250' },
+      { label: 'Global last + bound keys', value: 93.8, tip: 'learned in 8 of 11 runs, median step 1,700' },
+      { label: 'Global first, no bound keys', value: 42.4, tip: 'learned in 1 of 4 runs, median step 2,600' },
+      { label: 'BKF: global first + bound keys', value: 99.1, hl: true, tip: 'learned in 11 of 11 runs, median step 300' }
+    ],
+    data: { cols: ['Design', 'Global layer', 'Runs learned', 'Median learning step', 'Recall at 16x'], rows: [
+      ['Softmax attention, rotary positions', 'attention only', '2/2', '600', '0.3%'],
+      ['Gated attention', 'attention only', '2/2', '650', '0.5%'],
+      ['Standard hybrid (Qwen3-Next / Kimi Linear layout)', 'last', '2/3', '2,250', '83.2%'],
+      ['Standard hybrid + bound keys', 'last', '8/11', '1,700', '93.8%'],
+      ['Global layer first, no bound keys', 'first', '1/4', '2,600', '42.4%'],
+      ['BKF', 'first, bound keys', '11/11', '300', '99.1%']] }
+  }
+};
+</script>

@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LAF-YOLOv10 | Small Object Detection in Drone Imagery</title>
+<meta name="description" content="A composability study: four small-object techniques that each help on their own lose 7.8 mAP points when combined in YOLOv10n on VisDrone. The loss is traced to one interaction (arXiv 2609.14560).">
+<link rel="canonical" href="https://mudassiruddin7.github.io/laf-yolov10/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="Small Object Detection in Drone Aerial Imagery with LAF-YOLOv10">
+<meta property="og:description" content="Four individually validated detector upgrades do not add up: the stack loses 5.5 mAP points where the parts predict 3.0. A composability study with the diagnosis.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/laf-yolov10/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/laf-yolov10/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../assets/paper/paper.css">
+</head>
+<body class="acc-orange">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Research pages">
+      <a href="../agentcompress/">AgentCompress</a>
+      <a href="../hagd/">HAGD</a>
+      <a href="../pmp-dacis/">PMP-DACIS</a>
+      <a href="../laf-yolov10/" aria-current="page">LAF-YOLOv10</a>
+    </nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow"><span class="name">LAF-YOLOv10</span><span>arXiv 2609.14560</span><span>Computer vision &middot; UAV imagery</span><span>September 2026</span></p>
+    <h1 class="title">Small Object Detection in Drone Aerial Imagery with LAF-YOLOv10</h1>
+    <p class="subtitle">A composability study of four architectural techniques</p>
+    <div class="byline">
+      <p class="authors">Quratulain Nayeem &middot; Fahmina Taranum &middot; <span class="me">Mohammed Mudassir Uddin</span></p>
+      <p class="affil">Hyderabad, India. Implementation and experiments by Quratulain Nayeem, Mohammed Mudassir Uddin and Bibhor Puhan.</p>
+    </div>
+    <div class="links">
+      <a class="btn primary" href="https://arxiv.org/abs/2609.14560"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L13 5v9.5H4z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M9.5 1.5V5H13M6 8.5h5M6 11h5" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>Paper <span class="meta">arXiv</span></a>
+      <a class="btn" href="https://arxiv.org/pdf/2609.14560"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13.5h10" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>PDF</a>
+      <a class="btn" href="https://github.com/Mudassiruddin7/Small-Object-Detection-in-UAV-Imagery"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>Code <span class="meta">GitHub</span></a>
+      <a class="btn" href="https://github.com/Mudassiruddin7/Small-Object-Detection-in-UAV-Imagery/tree/main/checkpoints"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4.5 8 1.8l5.5 2.7v7L8 14.2l-5.5-2.7z M2.5 4.5 8 7.2l5.5-2.7M8 7.2v7" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>Checkpoints <span class="meta">3 seeds</span></a>
+      <a class="btn" href="#cite" target="_self"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M2.5 10c0-2.6 1.2-4.4 3.4-5.2l.5.9C5 6.3 4.5 7.3 4.4 8.5h2v4h-3.9zM8.8 10c0-2.6 1.2-4.4 3.4-5.2l.5.9c-1.4.6-1.9 1.6-2 2.8h2v4H8.8z"/></svg>Cite</a>
+    </div>
+
+    <p class="thesis">Four upgrades each help small-object detection on their own: partial convolution, attention-gated feature fusion, a stride-4 detection head and Wise-IoU regression. Combined inside YOLOv10n, <strong>they lose 7.8 mAP points</strong>. This study measures the combination instead of assuming the gains stack, and traces most of the loss to one interaction: the head swap, made on a backbone whose pretrained weights only partly transferred.</p>
+
+    <div class="stats" role="list">
+      <div class="stat" role="listitem"><div class="v">24.0%</div><div class="l">mAP@0.5 on VisDrone (3 seeds, &plusmn;0.4), against 31.8% for plain YOLOv10n</div></div>
+      <div class="stat" role="listitem"><div class="v">&minus;2.5<small>pts</small></div><div class="l">interaction penalty: the stack loses 5.5 points where its parts predict 3.0</div></div>
+      <div class="stat" role="listitem"><div class="v">73<small>of 150</small></div><div class="l">backbone tensors carried over from the COCO-pretrained checkpoint</div></div>
+      <div class="stat" role="listitem"><div class="v">&minus;10.0<small>pts</small></div><div class="l">on UAVDT zero-shot, matching the vehicle-class pattern</div></div>
+    </div>
+  </header>
+
+  <div class="page">
+    <nav class="toc" aria-label="On this page">
+      <p>On this page</p>
+      <ol>
+        <li><a href="#finding" target="_self">The finding</a></li>
+        <li><a href="#new" target="_self">What is new</a></li>
+        <li><a href="#method" target="_self">The four modules</a></li>
+        <li><a href="#results" target="_self">Where accuracy went</a></li>
+        <li><a href="#cause" target="_self">The likely cause</a></li>
+        <li><a href="#limits" target="_self">Limitations</a></li>
+        <li><a href="#cite" target="_self">Citation</a></li>
+      </ol>
+    </nav>
+
+    <main id="main">
+      <section id="finding">
+        <h2><span class="kicker">The finding</span>The parts predict &minus;3.0; the stack measures &minus;5.5</h2>
+        <p>Drone footage is hard for general-purpose detectors. A car can be under 20 pixels across in a 1080p frame, more than half of VisDrone&rsquo;s objects are smaller than 32&times;32 pixels, and onboard compute is small. Recent drone detectors respond by stacking techniques that each have published gains, on the assumption that the gains carry over. This paper tests that assumption directly on YOLOv10n.</p>
+
+        <figure>
+          <h3 class="fig-title">Adding the modules one at a time: the P2/&minus;P5 step costs twice what it costs alone</h3>
+          <div class="panel"><div class="chart" data-chart="waterfall"></div></div>
+          <figcaption><b>Figure 1.</b> mAP@0.5 on VisDrone as each module is added to the same reimplemented YOLOv10n baseline (seed 42, 300 epochs). Bars show the measured change at each step. The dashed track and open circles show what adding each module&rsquo;s stand-alone effect would predict. The full model, with YOLOv10&rsquo;s attention block and NMS-free dual head, reaches 24.0%.</figcaption>
+        </figure>
+      </section>
+
+      <section id="new">
+        <h2><span class="kicker">What is new</span>Testing the combination instead of assuming it</h2>
+        <table class="contrast">
+          <thead><tr><th scope="col"></th><th scope="col">Common practice</th><th scope="col" class="new">This study</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Assumption</th><td class="old">Techniques that help alone will help together</td><td class="new">Tested directly on one model, with three training seeds</td></tr>
+            <tr><th scope="row">Evidence</th><td class="old">One aggregate mAP number</td><td class="new">Independent and additive ablations, TIDE error types, per-class results, zero-shot transfer, held-out and test-dev splits, and an audit of the weight transfer</td></tr>
+            <tr><th scope="row">Outcome</th><td class="old">A new state-of-the-art row</td><td class="new">A measured failure, located in one interaction, plus the single experiment that would confirm the cause</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="method">
+        <h2><span class="kicker">The four modules</span>One change for each structural gap</h2>
+        <p>Each module answers a known weakness of YOLOv10n on aerial images. None is new on its own; the contribution is putting all four in one model and measuring what happens.</p>
+        <figure>
+          <div class="panel scroll">
+            <svg class="dg" viewBox="0 0 960 432" role="img" aria-label="LAF-YOLOv10 architecture. Backbone: input 640 by 640, stem convolution, four PC-C2f stages at 160, 80, 40 and 20 pixel resolution with 32, 64, 128 and 256 channels, then SPPF. Neck: AG-FPN fusion at 160, 80 and 40 pixel resolution, with squeeze-and-excitation gates on the lateral connections and DySample upsampling top-down. Heads: P2 at stride 4 (added), P3 at stride 8, P4 at stride 16; the P5 head at stride 32 is removed. Wise-IoU v3 replaces CIoU as the box loss. The four changes are highlighted.">
+              <defs>
+                <marker id="lf-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="ah" d="M0,1 L10,5 L0,9 z"/></marker>
+                <marker id="lf-ahn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="ah-new" d="M0,1 L10,5 L0,9 z"/></marker>
+              </defs>
+              <text class="t-lab-acc" x="232" y="26">BACKBONE: PC-C2f REPLACES EVERY C2f BLOCK</text>
+              <!-- backbone -->
+              <rect class="box" x="0" y="42" width="100" height="62" rx="3"/>
+              <text class="t-b" x="12" y="66">Input</text><text class="t-m" x="12" y="86">640&#215;640&#215;3</text>
+              <rect class="box" x="124" y="42" width="84" height="62" rx="3"/>
+              <text class="t-b" x="136" y="66">Stem</text><text class="t-m" x="136" y="86">stride 2</text>
+              <rect class="box-new" x="232" y="42" width="120" height="62" rx="3"/>
+              <text class="t-b t-acc" x="244" y="66">PC-C2f</text><text class="t-m" x="244" y="86">160&#215;160 &#183; 32</text>
+              <rect class="box-new" x="376" y="42" width="120" height="62" rx="3"/>
+              <text class="t-b t-acc" x="388" y="66">PC-C2f</text><text class="t-m" x="388" y="86">80&#215;80 &#183; 64</text>
+              <rect class="box-new" x="520" y="42" width="120" height="62" rx="3"/>
+              <text class="t-b t-acc" x="532" y="66">PC-C2f</text><text class="t-m" x="532" y="86">40&#215;40 &#183; 128</text>
+              <rect class="box-new" x="664" y="42" width="120" height="62" rx="3"/>
+              <text class="t-b t-acc" x="676" y="66">PC-C2f</text><text class="t-m" x="676" y="86">20&#215;20 &#183; 256</text>
+              <rect class="box" x="808" y="42" width="100" height="62" rx="3"/>
+              <text class="t-b" x="820" y="66">SPPF</text><text class="t-m" x="820" y="86">k = 5</text>
+              <line class="ln" x1="100" y1="73" x2="122" y2="73" marker-end="url(#lf-ah)"/>
+              <line class="ln" x1="208" y1="73" x2="230" y2="73" marker-end="url(#lf-ah)"/>
+              <line class="ln" x1="352" y1="73" x2="374" y2="73" marker-end="url(#lf-ah)"/>
+              <line class="ln" x1="496" y1="73" x2="518" y2="73" marker-end="url(#lf-ah)"/>
+              <line class="ln" x1="640" y1="73" x2="662" y2="73" marker-end="url(#lf-ah)"/>
+              <line class="ln" x1="784" y1="73" x2="806" y2="73" marker-end="url(#lf-ah)"/>
+
+              <!-- SE gates on laterals -->
+              <path class="ln-new" d="M292,104 V132"/><path class="ln-new" d="M436,104 V132"/><path class="ln-new" d="M580,104 V132"/>
+              <rect class="box-new" x="272" y="132" width="40" height="24" rx="3"/><text class="t-mi t-acc" x="292" y="148" text-anchor="middle">SE</text>
+              <rect class="box-new" x="416" y="132" width="40" height="24" rx="3"/><text class="t-mi t-acc" x="436" y="148" text-anchor="middle">SE</text>
+              <rect class="box-new" x="560" y="132" width="40" height="24" rx="3"/><text class="t-mi t-acc" x="580" y="148" text-anchor="middle">SE</text>
+              <path class="ln-new" d="M292,156 V190" marker-end="url(#lf-ahn)"/><path class="ln-new" d="M436,156 V190" marker-end="url(#lf-ahn)"/><path class="ln-new" d="M580,156 V190" marker-end="url(#lf-ahn)"/>
+
+              <!-- neck -->
+              <text class="t-lab-acc" x="0" y="214">NECK: AG-FPN</text>
+              <text class="t-m" x="0" y="232">SE-gated laterals,</text>
+              <text class="t-m" x="0" y="248">DySample upsampling</text>
+              <rect class="box-new" x="242" y="192" width="100" height="56" rx="3"/>
+              <text class="t-b t-acc" x="254" y="214">AG-FPN</text><text class="t-m" x="254" y="233">160&#215;160</text>
+              <rect class="box-new" x="386" y="192" width="100" height="56" rx="3"/>
+              <text class="t-b t-acc" x="398" y="214">AG-FPN</text><text class="t-m" x="398" y="233">80&#215;80</text>
+              <rect class="box-new" x="530" y="192" width="100" height="56" rx="3"/>
+              <text class="t-b t-acc" x="542" y="214">AG-FPN</text><text class="t-m" x="542" y="233">40&#215;40</text>
+              <path class="ln" d="M858,104 V220 H632" marker-end="url(#lf-ah)"/>
+              <line class="ln-new" x1="530" y1="220" x2="488" y2="220" marker-end="url(#lf-ahn)"/>
+              <line class="ln-new" x1="386" y1="220" x2="344" y2="220" marker-end="url(#lf-ahn)"/>
+              <text class="t-mi t-acc" x="648" y="272">top-down path: DySample &#8593;2</text>
+
+              <!-- heads -->
+              <text class="t-lab-acc" x="0" y="326">HEADS</text>
+              <text class="t-m" x="0" y="344">P2 added, P5 removed</text>
+              <path class="ln" d="M292,248 V298" marker-end="url(#lf-ah)"/><path class="ln" d="M436,248 V298" marker-end="url(#lf-ah)"/><path class="ln" d="M580,248 V298" marker-end="url(#lf-ah)"/>
+              <rect class="box-new" x="242" y="300" width="100" height="56" rx="3"/>
+              <text class="t-b t-acc" x="254" y="322">P2 head</text><text class="t-m" x="254" y="341">stride 4</text>
+              <rect class="box" x="386" y="300" width="100" height="56" rx="3"/>
+              <text class="t-b" x="398" y="322">P3 head</text><text class="t-m" x="398" y="341">stride 8</text>
+              <rect class="box" x="530" y="300" width="100" height="56" rx="3"/>
+              <text class="t-b" x="542" y="322">P4 head</text><text class="t-m" x="542" y="341">stride 16</text>
+              <rect x="664" y="300" width="112" height="56" rx="3" style="fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:5 4"/>
+              <text class="t-b" x="676" y="322" style="fill:var(--muted)">P5 head</text><text class="t-m" x="676" y="341">stride 32</text>
+              <line x1="664" y1="356" x2="776" y2="300" style="stroke:var(--muted);stroke-width:1.2"/>
+              <rect class="box-new" x="808" y="300" width="120" height="56" rx="3"/>
+              <text class="t-b t-acc" x="820" y="322">Wise-IoU v3</text><text class="t-m" x="820" y="341">replaces CIoU</text>
+              <path class="ln-soft" d="M292,356 V392 H868 V358"/>
+              <line class="ln-soft" x1="436" y1="356" x2="436" y2="392"/><line class="ln-soft" x1="580" y1="356" x2="580" y2="392"/>
+              <text class="t-m" x="604" y="412">training loss on every head</text>
+            </svg>
+          </div>
+          <figcaption><b>Figure 2.</b> LAF-YOLOv10. The four changes to YOLOv10n are highlighted: PC-C2f blocks in the backbone, the AG-FPN neck (SE gates plus DySample), the P2 head that replaces P5, and the Wise-IoU v3 loss. The rest is stock YOLOv10n.</figcaption>
+        </figure>
+
+        <h3>PC-C2f: spatial convolution on a quarter of the channels</h3>
+        <p>Small objects light up only a few feature maps, so a full 3&times;3 convolution over every channel spends most of its FLOPs on little. Partial convolution applies the 3&times;3 kernel to the first quarter of the channels, passes the rest through, and mixes them with a 1&times;1 convolution:</p>
+        <div class="eq"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>𝐘</mi><mo>=</mo><msub><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">v</mi></mrow><mrow><mn>1</mn><mo>×</mo><mn>1</mn></mrow></msub><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">(</mo><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi></mrow><mo stretchy="false">(</mo><msub><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">v</mi></mrow><mrow><mn>3</mn><mo>×</mo><mn>3</mn></mrow></msub><mo stretchy="false">(</mo><msub><mi>𝐗</mi><mi>p</mi></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mtext> </mtext><msub><mi>𝐗</mi><mi>u</mi></msub><mo stretchy="false">)</mo><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">)</mo></mrow><annotation encoding="application/x-tex">\mathbf{Y} = \mathrm{Conv}_{1\times 1}\big(\mathrm{Concat}(\mathrm{Conv}_{3\times 3}(\mathbf{X}_p),\ \mathbf{X}_u)\big)</annotation></semantics></math></span></div>
+        <p>That removes about 75% of the spatial convolution cost; with the 1&times;1 projection counted, the saving per block is closer to 55&ndash;60%. The split also changes tensor shapes throughout the backbone, which matters later.</p>
+
+        <h3>AG-FPN: gate each level before fusing it</h3>
+        <p>Plain concatenation treats every channel as equally useful, so background clutter rides along into the fused map. A squeeze-and-excitation gate rescales each lateral input before fusion (squeeze ratio 16), and DySample replaces nearest-neighbour upsampling with content-dependent sampling offsets for 0.06 extra GFLOPs:</p>
+        <div class="eq"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>𝜶</mi><mi>i</mi></msub><mo>=</mo><mi>σ</mi><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">(</mo><msub><mi>W</mi><mn>2</mn></msub><mtext> </mtext><mi>δ</mi><mo stretchy="false">(</mo><msub><mi>W</mi><mn>1</mn></msub><mtext> </mtext><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">A</mi><mi mathvariant="normal">P</mi></mrow><mo stretchy="false">(</mo><msub><mi>𝐅</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">)</mo><mo separator="true">,</mo><mspace width="2em"/><msubsup><mi>𝐅</mi><mi>i</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo>=</mo><msub><mi>𝜶</mi><mi>i</mi></msub><mo>⊗</mo><msub><mi>𝐅</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\boldsymbol{\alpha}_i = \sigma\big(W_2\,\delta(W_1\,\mathrm{GAP}(\mathbf{F}_i))\big),\qquad \mathbf{F}_i&#x27; = \boldsymbol{\alpha}_i \otimes \mathbf{F}_i</annotation></semantics></math></span></div>
+
+        <h3>P2 head in, P5 head out; Wise-IoU v3 as the box loss</h3>
+        <p>The P5 head (stride 32) exists for objects larger than about 256&nbsp;pixels, and fewer than 0.8% of VisDrone boxes are that large. Removing it saves about 0.3M parameters and 1.2 GFLOPs, which pays for a P2 head (stride 4, a 160&times;160 grid) aimed at the 6&ndash;16-pixel range where the P3 head loses recall. Wise-IoU v3 replaces CIoU and damps the gradient from boxes whose loss is far above the running average, which in crowded aerial scenes are often ambiguous annotations.</p>
+
+        <figure>
+          <div class="panel scroll">
+            <svg class="dg" viewBox="0 0 960 292" role="img" aria-label="Left: PC-C2f block. The input X with C channels is split into X p, the first quarter of channels, which passes through a 3 by 3 convolution, and X u, the other three quarters, which pass through untouched. The two are concatenated and mixed by a 1 by 1 convolution. Right: grid cell sizes for the P2, P3, P4 and P5 heads (4, 8, 16 and 32 pixels, drawn to scale with each other), and the share of VisDrone training boxes by size: under 8 pixels 5 percent, 8 to 16 pixels 17 percent, 16 to 32 pixels 32 percent, 32 pixels and up 46 percent.">
+              <defs>
+                <marker id="lf2-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="ah" d="M0,1 L10,5 L0,9 z"/></marker>
+              </defs>
+              <text class="t-b" x="0" y="18">(a) PC-C2f block</text>
+              <rect class="box" x="0" y="34" width="400" height="30" rx="3"/>
+              <text class="t-2" x="12" y="54">input X, C channels</text>
+              <path class="ln" d="M50,64 V92" marker-end="url(#lf2-ah)"/><path class="ln" d="M250,64 V92" marker-end="url(#lf2-ah)"/>
+              <rect class="box-new" x="0" y="94" width="100" height="30" rx="3"/>
+              <text class="t-mi t-acc" x="12" y="114">X&#8346; &#183; C/4</text>
+              <rect class="box" x="112" y="94" width="288" height="30" rx="3"/>
+              <text class="t-mi" x="124" y="114">X&#7524; &#183; 3C/4, passed through untouched</text>
+              <path class="ln" d="M50,124 V150" marker-end="url(#lf2-ah)"/>
+              <rect class="box-new" x="0" y="152" width="100" height="30" rx="3"/>
+              <text class="t-mi t-acc" x="12" y="172">Conv 3&#215;3</text>
+              <text class="t-m" x="112" y="172">&#8776;75% fewer 3&#215;3 FLOPs</text>
+              <path class="ln" d="M50,182 V208" marker-end="url(#lf2-ah)"/><path class="ln" d="M330,124 V208" marker-end="url(#lf2-ah)"/>
+              <rect class="box" x="0" y="210" width="400" height="30" rx="3"/>
+              <text class="t-2" x="12" y="230">concatenate, then Conv 1&#215;1</text>
+              <path class="ln" d="M200,240 V262" marker-end="url(#lf2-ah)"/>
+              <text class="t-2" x="212" y="280">output Y, C channels</text>
+
+              <line class="ln-soft" x1="460" y1="8" x2="460" y2="286"/>
+
+              <text class="t-b" x="500" y="18">(b) Grid cell per head against object size</text>
+              <rect class="f-acc" x="512" y="84" width="8" height="8"/>
+              <rect x="572" y="76" width="16" height="16" style="fill:var(--deemph)"/>
+              <rect x="636" y="60" width="32" height="32" style="fill:var(--deemph)"/>
+              <rect x="720" y="28" width="64" height="64" style="fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:5 4"/>
+              <line x1="720" y1="92" x2="784" y2="28" style="stroke:var(--muted);stroke-width:1.2"/>
+              <text class="t-mi t-acc" x="500" y="112">P2 &#183; 4 px</text>
+              <text class="t-mi" x="572" y="112">P3 &#183; 8</text>
+              <text class="t-mi" x="636" y="112">P4 &#183; 16</text>
+              <text class="t-mi" x="720" y="112">P5 &#183; 32, removed</text>
+
+              <text class="t-m" x="500" y="150">VisDrone training boxes by size (343,205 boxes)</text>
+              <text class="t-2" x="500" y="174">under 8 px</text>
+              <rect x="620" y="164" width="25" height="12" rx="2" style="fill:#86b6ef"/><text class="t-mi" x="652" y="174">5%</text>
+              <text class="t-2" x="500" y="196">8&#8211;16 px</text>
+              <rect x="620" y="186" width="85" height="12" rx="2" style="fill:#5598e7"/><text class="t-mi" x="712" y="196">17%</text>
+              <text class="t-2" x="500" y="218">16&#8211;32 px</text>
+              <rect x="620" y="208" width="160" height="12" rx="2" style="fill:#2a78d6"/><text class="t-mi" x="787" y="218">32%</text>
+              <text class="t-2" x="500" y="240">32 px and up</text>
+              <rect x="620" y="230" width="230" height="12" rx="2" style="fill:#1c5cab"/><text class="t-mi" x="857" y="240">46%</text>
+              <text class="t-m" x="500" y="272">over 256 px, the P5 head&#8217;s range: under 0.8%</text>
+            </svg>
+          </div>
+          <figcaption><b>Figure 3.</b> (a) The PC-C2f block. (b) Why the head swap looked safe. Grid cells are drawn to scale with one another, and object sizes are counted from the training-split annotations. P5&rsquo;s territory is almost empty by count, but Section 4 shows the larger vehicles still depended on it.</figcaption>
+        </figure>
+      </section>
+
+      <section id="results">
+        <h2><span class="kicker">Where the accuracy went</span>Below every compared detector, and not uniformly</h2>
+        <p>LAF-YOLOv10 was trained three times (seeds 42, 123 and 256; 300 epochs; SGD; COCO-pretrained initialization) on VisDrone-DET2019. That is 6,471 training, 548 validation and 1,610 test-dev images across ten classes. The other rows in Figure 4 are taken from their own papers rather than retrained here.</p>
+
+        <figure>
+          <h3 class="fig-title">24.0% mAP@0.5, 7.8 points below the unmodified baseline</h3>
+          <div class="panel"><div class="chart" data-chart="compare"></div></div>
+          <figcaption><b>Figure 4.</b> mAP@0.5 on the VisDrone-DET2019 validation set. LAF-YOLOv10 is the mean of three seeds (whisker: one s.d.); other values are reported by their authors. LAF-YOLOv10 has 2.14M parameters but the highest compute in the comparison (13.55 GFLOPs), from the 160&times;160 P2 maps and the training-only branch of the NMS-free head.</figcaption>
+        </figure>
+
+        <figure>
+          <h3 class="fig-title">Large vehicles lose 10&ndash;15 points; pedestrians and cars lose 1&ndash;3</h3>
+          <div class="panel"><div class="chart" data-chart="classes"></div></div>
+          <figcaption><b>Figure 5.</b> Per-class mAP@0.5, YOLOv10n against LAF-YOLOv10 (three-seed mean), sorted by the change. The classes that collapse are the medium-to-large vehicles nearest in scale to what the removed P5 head covered.</figcaption>
+        </figure>
+
+        <figure>
+          <h3 class="fig-title">What the modules were built to fix did improve; missed detections swamped it</h3>
+          <div class="panel"><div class="chart" data-chart="tide"></div></div>
+          <figcaption><b>Figure 6.</b> Change in each TIDE error type, LAF-YOLOv10 minus YOLOv10n, in points of mAP@0.5 lost to that error. Background false positives nearly vanish (8.1 to 0.04) and localization improves, as AG-FPN and Wise-IoU intend. Missed detections (+15.4) and classification errors (+7.7) grow far more.</figcaption>
+        </figure>
+
+        <figure>
+          <h3 class="fig-title">Real detections from the best, middle and worst of the validation set</h3>
+          <div class="shots">
+            <figure>
+              <img src="img/best-highway.jpg" width="640" height="361" loading="lazy" alt="Aerial view of a highway through forest. The cars on the road have green ground-truth boxes, each matched by a red prediction labelled car.">
+              <span class="tag">Best</span>
+              <p>Sparse highway traffic. Every car is found.</p>
+            </figure>
+            <figure>
+              <img src="img/typical-court.jpg" width="640" height="361" loading="lazy" alt="Oblique aerial view of a crowded outdoor sports court. Dozens of pedestrians are boxed in green; most have overlapping red predictions labelled pedestrian.">
+              <span class="tag">Typical</span>
+              <p>A crowded court. Most people are found; distant ones are missed.</p>
+            </figure>
+            <figure>
+              <img src="img/worst-trucks.jpg" width="640" height="360" loading="lazy" alt="Aerial view of a wide road with trees. Two large trucks in the foreground have green ground-truth boxes, but the red predictions cover only small parts of them and label one as a car.">
+              <span class="tag">Worst</span>
+              <p>Two trucks in the foreground are missed or labelled as cars, the failure Figure 5 predicts.</p>
+            </figure>
+          </div>
+          <figcaption><b>Figure 7.</b> Validation images sampled from the bottom, middle and top of a per-image precision-plus-recall ranking, not hand-picked. Green: ground truth. Red: LAF-YOLOv10 predictions with class and confidence.</figcaption>
+        </figure>
+
+        <div class="table-fig">
+          <div class="tbl-wrap">
+            <table class="bt">
+              <caption><b>Table 1.</b> Each module added alone to the reimplemented baseline, and added in sequence (seed 42, 300 epochs, mAP@0.5). The alone effects sum to &minus;3.0; the sequence measures &minus;5.5.</caption>
+              <thead>
+                <tr><th scope="col" rowspan="2">Module</th><th scope="col" colspan="3">Added alone</th><th scope="col" colspan="2">Added in sequence</th></tr>
+                <tr><th scope="col">mAP</th><th scope="col">&Delta;</th><th scope="col">GFLOPs</th><th scope="col">mAP</th><th scope="col">&Delta;</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Baseline</td><td>31.5</td><td>&mdash;</td><td>6.28</td><td>31.5</td><td>&mdash;</td></tr>
+                <tr><td>PC-C2f</td><td>29.5</td><td>&minus;2.0</td><td>5.41</td><td>29.5</td><td>&minus;2.0</td></tr>
+                <tr><td>AG-FPN</td><td>32.5</td><td>+1.0</td><td>6.32</td><td>30.5</td><td>+1.0</td></tr>
+                <tr class="ours"><td>P2 head, P5 removed</td><td>29.0</td><td>&minus;2.5</td><td>8.08</td><td>25.5</td><td>&minus;5.0</td></tr>
+                <tr><td>Wise-IoU v3</td><td>32.0</td><td>+0.5</td><td>6.28</td><td>26.0</td><td>+0.5</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-fig">
+          <div class="tbl-wrap">
+            <table class="bt">
+              <caption><b>Table 2.</b> Beyond the validation set. The held-out slice (10% of the training images, locked before training) and test-dev were each evaluated once, after every design decision was frozen. UAVDT is zero-shot: trained on VisDrone only, tested on car, bus and truck.</caption>
+              <thead><tr><th scope="col">Evaluation</th><th scope="col">Images</th><th scope="col">mAP@0.5</th><th scope="col">mAP@[.5:.95]</th><th scope="col">YOLOv10n mAP@0.5</th></tr></thead>
+              <tbody>
+                <tr><td>VisDrone validation</td><td>548</td><td>24.0<span class="pm">&plusmn;0.4</span></td><td>12.3<span class="pm">&plusmn;0.2</span></td><td>31.8</td></tr>
+                <tr><td>VisDrone held-out slice</td><td>647</td><td>23.5</td><td>11.9</td><td>&mdash;</td></tr>
+                <tr><td>VisDrone test-dev</td><td>1,610</td><td>22.5</td><td>11.4</td><td>&mdash;</td></tr>
+                <tr class="mid"><td>UAVDT test, zero-shot</td><td>15,069</td><td>37.8</td><td>19.8</td><td>47.8</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p>The held-out and test-dev results sit close to validation, so the deficit is not validation-set overfitting. The larger UAVDT gap (&minus;10.0) is compositional. UAVDT contains only cars, buses and trucks, and restricting VisDrone&rsquo;s own results to those classes gives a 10.5-point gap.</p>
+
+        <div class="table-fig">
+          <div class="tbl-wrap">
+            <table class="bt small">
+              <caption><b>Table 3.</b> Each design choice against its alternatives, in the full configuration (seed 42). The differences are within the &plusmn;0.4 run-to-run spread, so no single choice explains the deficit.</caption>
+              <thead><tr><th scope="col">Component</th><th scope="col" class="l">Variants, mAP@0.5</th></tr></thead>
+              <tbody>
+                <tr><td>Attention gate in AG-FPN</td><td class="l">SE 24.0 &middot; Coordinate Attention 23.9 &middot; CBAM 23.7</td></tr>
+                <tr><td>Box regression loss</td><td class="l">Wise-IoU v3 24.0 &middot; SIoU 23.8 &middot; EIoU 23.7 &middot; CIoU 23.6 (TIDE localization error 2.6 to 3.1, same order)</td></tr>
+                <tr><td>Channels given the 3&times;3 conv</td><td class="l">first C/4 24.0 &plusmn; 0.4 &middot; a fixed random C/4 23.8 &plusmn; 0.5</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p>The first-quarter and random-quarter results being indistinguishable matters for interpretation. Channel order after initialization means nothing, so PC-C2f works as a regularizer that limits which channels see spatial context, not as a principled selection of useful features.</p>
+
+        <figure>
+          <h3 class="fig-title">Training converges smoothly; the gap is not undertraining</h3>
+          <div class="panel"><div class="chart" data-chart="curve"></div></div>
+          <figcaption><b>Figure 8.</b> Validation mAP@0.5 every 5 epochs for LAF-YOLOv10, seed 42, read from the training log. It rises steeply for 100 epochs and flattens from about epoch 250. A three-seed run takes 17.4 GPU-hours, against 4.2 hours for one YOLOv10n run.</figcaption>
+        </figure>
+      </section>
+
+      <section id="cause">
+        <h2><span class="kicker">The likely cause</span>Half the backbone started from random weights</h2>
+        <p>LAF-YOLOv10 is initialized by copying a COCO-pretrained YOLOv10n checkpoint tensor by tensor, wherever the shapes match. PC-C2f changes the channel layout throughout the backbone, so <strong>only 73 of 150 backbone tensors match</strong>. The other 77 start from random initialization and have to be learned from 6,471 images, orders of magnitude fewer than COCO.</p>
+        <p>Three results fit this account. PC-C2f alone costs 2.0 points while cutting GFLOPs by 14% as intended, so its compute saving works while its accuracy does not. The P2/&minus;P5 swap costs twice as much on top of that weakened backbone (&minus;5.0) as it does alone (&minus;2.5), because a fine-grained head needs reliable low-level features. And the classes hit hardest are the large vehicles the removed P5 head used to serve.</p>
+        <div class="note">
+          <span class="label">The deciding experiment</span>
+          <p>The account is consistent with the data but not yet isolated. The test is a controlled run that transfers weights by name into PC-C2f&rsquo;s reshaped backbone, or trains longer from random initialization, and checks whether the interaction penalty disappears. A P5-retained variant would also separate adding P2 from removing P5.</p>
+        </div>
+      </section>
+
+      <section id="limits">
+        <h2><span class="kicker">Limitations</span>What this study does not show</h2>
+        <ul>
+          <li>The pretrained-transfer explanation is supported by the pattern of results, not by a controlled run.</li>
+          <li>P2 was added and P5 removed in one step, so their effects are not separated.</li>
+          <li>Comparison rows come from each method&rsquo;s own paper, not a shared training recipe; their speeds were measured on their own hardware.</li>
+          <li>Generalization is tested on one other dataset (UAVDT). AI-TOD would be a natural third.</li>
+          <li>Hyperparameters follow YOLOv10 defaults, and variance is reported over three seeds without formal significance tests.</li>
+        </ul>
+      </section>
+
+      <section id="cite">
+        <h2><span class="kicker">Citation</span>Cite this work</h2>
+        <div class="cite">
+          <button class="copy" type="button" data-copy="bib-laf">Copy BibTeX</button>
+<pre id="bib-laf">@article{nayeem2026lafyolov10,
+  title   = {Small Object Detection in Drone Aerial Imagery with LAF-YOLOv10},
+  author  = {Nayeem, Quratulain and Taranum, Fahmina
+             and Uddin, Mohammed Mudassir},
+  journal = {arXiv preprint arXiv:2609.14560},
+  year    = {2026}
+}</pre>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../">Mohammed Mudassir Uddin</a> &middot; Research pages</span>
+    <nav aria-label="Other papers"><a href="../agentcompress/">AgentCompress</a><a href="../hagd/">HAGD</a><a href="../pmp-dacis/">PMP-DACIS</a><a href="https://github.com/Mudassiruddin7/Small-Object-Detection-in-UAV-Imagery">Code on GitHub</a></nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function p1(v) { return v.toFixed(1); }
+  var curve = [[5, 3.61], [10, 7.14], [15, 8.31], [20, 9.47], [25, 11.02], [30, 11.9], [35, 12.63], [40, 13.29], [45, 13.92], [50, 14.27],
+    [55, 14.3], [60, 14.8], [65, 15.05], [70, 15.14], [75, 15.58], [80, 15.79], [85, 15.92], [90, 16.2], [95, 16.7], [100, 16.98],
+    [105, 17.18], [110, 17.58], [115, 17.88], [120, 18.19], [125, 18.6], [130, 18.89], [135, 19.09], [140, 19.06], [145, 19.3], [150, 19.68],
+    [155, 19.78], [160, 19.96], [165, 20.18], [170, 20.37], [175, 20.45], [180, 20.71], [185, 20.87], [190, 20.94], [195, 21.14], [200, 21.66],
+    [205, 21.74], [210, 21.95], [215, 22.07], [220, 22.24], [225, 22.26], [230, 22.44], [235, 22.6], [240, 22.75], [245, 22.71], [250, 22.91],
+    [255, 23.01], [260, 23.19], [265, 23.28], [270, 23.38], [275, 23.45], [280, 23.55], [285, 23.69], [290, 23.76], [295, 23.8], [300, 23.8]];
+  var classes = [['Pedestrian', 33.5, 31.8], ['People', 24.8, 22.5], ['Bicycle', 9.2, 6.2], ['Car', 73.0, 70.0], ['Van', 39.8, 24.8],
+    ['Truck', 28.4, 13.6], ['Tricycle', 13.4, 7.7], ['Awning-tricycle', 12.7, 2.3], ['Bus', 46.0, 32.1], ['Motor', 36.8, 29.1]];
+  window.CHARTS = {
+    waterfall: {
+      type: 'waterfall', domain: [24, 33], ticks: [24, 26, 28, 30, 32], fmt: 1, height: 270, yLabel: 'mAP@0.5 (%)', gapLabel: 'interaction −2.5',
+      aria: 'Waterfall. Baseline 31.5. Adding PC-C2f: minus 2.0 to 29.5. Adding AG-FPN: plus 1.0 to 30.5. Adding the P2 head and removing P5: minus 5.0 to 25.5, where its stand-alone effect predicts minus 2.5. Adding Wise-IoU v3: plus 0.5 to 26.0. Predicted final value 28.5, measured 26.0.',
+      steps: [
+        { label: 'Baseline', short: 'Base', value: 31.5 },
+        { label: '+ PC-C2f', short: '+PC', delta: -2.0, alone: -2.0 },
+        { label: '+ AG-FPN', short: '+AG', delta: 1.0, alone: 1.0 },
+        { label: '+ P2 / −P5', short: '+P2', delta: -5.0, alone: -2.5 },
+        { label: '+ Wise-IoU v3', short: '+WIoU', delta: 0.5, alone: 0.5 }
+      ],
+      legend: [{ label: 'Loss when added in sequence', color: 'neg' }, { label: 'Gain when added in sequence', color: 'pos' }, { label: 'Prediction from each module alone', kind: 'ref' }],
+      data: { cols: ['Step', 'Added in sequence', 'Running mAP@0.5', 'Added alone', 'Predicted running mAP@0.5'], rows: [
+        ['Baseline', '—', '31.5', '—', '31.5'], ['+ PC-C2f', '−2.0', '29.5', '−2.0', '29.5'], ['+ AG-FPN', '+1.0', '30.5', '+1.0', '30.5'],
+        ['+ P2 head, −P5 head', '−5.0', '25.5', '−2.5', '28.0'], ['+ Wise-IoU v3', '+0.5', '26.0', '+0.5', '28.5']] }
+    },
+    compare: {
+      type: 'hbar', domain: [0, 40], ticks: [0, 10, 20, 30, 40], fmt: p1, tickFmt: function (v) { return String(v); }, valueName: 'mAP@0.5 (%)', barH: 16, gap: 11,
+      aria: 'mAP at 0.5 on VisDrone validation: SSCW-YOLO 34.3, TOE-YOLO 33.8, OSD-YOLOv10 33.4, YOLO11n 32.2, YOLOv8n 32.1, BGF-YOLOv10 32.1, YOLOv10n 31.8, YOLOv5n 27.4, LAF-YOLOv10 24.0 plus or minus 0.4.',
+      rows: [
+        { label: 'SSCW-YOLO', value: 34.3 }, { label: 'TOE-YOLO', value: 33.8 }, { label: 'OSD-YOLOv10', value: 33.4 },
+        { label: 'YOLO11n', value: 32.2 }, { label: 'YOLOv8n', value: 32.1 }, { label: 'BGF-YOLOv10', value: 32.1 },
+        { label: 'YOLOv10n (baseline)', value: 31.8 }, { label: 'YOLOv5n', value: 27.4 },
+        { label: 'LAF-YOLOv10, 3 seeds', value: 24.0, err: 0.4, hl: true }
+      ],
+      data: { cols: ['Method', 'mAP@0.5', 'mAP@[.5:.95]', 'Params (M)', 'GFLOPs'], rows: [
+        ['SSCW-YOLO', '34.3', '19.4', '2.8', '6.9'], ['TOE-YOLO', '33.8', '19.7', '2.5', '6.6'], ['OSD-YOLOv10', '33.4', '19.1', '1.6', '7.9'],
+        ['YOLO11n', '32.2', '18.4', '2.6', '6.3'], ['YOLOv8n', '32.1', '19.0', '3.0', '8.1'], ['BGF-YOLOv10', '32.1', '19.5', '2.0', '8.6'],
+        ['YOLOv10n', '31.8', '18.5', '2.7', '8.2'], ['YOLOv5n', '27.4', '14.8', '1.9', '4.5'], ['LAF-YOLOv10 (3 seeds)', '24.0 ± 0.4', '12.3 ± 0.2', '2.14', '13.55']] }
+    },
+    classes: {
+      type: 'dumbbell', domain: [0, 80], ticks: [0, 20, 40, 60, 80], fmt: p1, tickFmt: function (v) { return String(v); }, sort: 'delta', boldAt: 10, rowH: 28, deltaTitle: 'change',
+      a: { name: 'YOLOv10n', color: 's1' }, b: { name: 'LAF-YOLOv10', color: 's2' },
+      aria: 'Per-class mAP, YOLOv10n then LAF-YOLOv10: van 39.8 to 24.8, truck 28.4 to 13.6, bus 46.0 to 32.1, awning-tricycle 12.7 to 2.3, motor 36.8 to 29.1, tricycle 13.4 to 7.7, bicycle 9.2 to 6.2, car 73.0 to 70.0, people 24.8 to 22.5, pedestrian 33.5 to 31.8.',
+      rows: classes.map(function (c) { return { label: c[0], a: c[1], b: c[2] }; }),
+      legend: [{ label: 'YOLOv10n (reported)', color: 's1', kind: 'dot' }, { label: 'LAF-YOLOv10 (3-seed mean)', color: 's2', kind: 'dot' }],
+      data: { cols: ['Class', 'YOLOv10n', 'LAF-YOLOv10', 'Change'], rows: classes.map(function (c) { var d = c[2] - c[1]; return [c[0], p1(c[1]), p1(c[2]), (d < 0 ? '−' : '+') + Math.abs(d).toFixed(1)]; }) }
+    },
+    tide: {
+      type: 'hbar', domain: [-10, 16], ticks: [-10, -5, 0, 5, 10, 15], fmt: p1, signed: true, signColors: { pos: 'neg', neg: 'pos' }, valueName: 'change in mAP@0.5 lost',
+      tickFmt: function (v) { return v < 0 ? '−' + Math.abs(v) : String(v); },
+      aria: 'Change in TIDE error, LAF-YOLOv10 minus YOLOv10n: missed detections plus 15.4, classification plus 7.7, localization minus 2.5, both minus 1.3, duplicates minus 0.55, background minus 8.06.',
+      rows: [
+        { label: 'Missed detections', value: 15.4 }, { label: 'Classification', value: 7.7 },
+        { label: 'Duplicates', value: -0.55, text: '−0.55' }, { label: 'Class and location', value: -1.3 },
+        { label: 'Localization', value: -2.5 }, { label: 'Background false positives', value: -8.06, text: '−8.06' }
+      ],
+      legend: [{ label: 'More error with LAF-YOLOv10', color: 'neg' }, { label: 'Less error', color: 'pos' }],
+      data: { cols: ['Error type', 'YOLOv10n', 'LAF-YOLOv10', 'Change'], rows: [
+        ['Missed detections', '12.3', '27.7', '+15.4'], ['Classification', '3.8', '11.5', '+7.7'], ['Duplicates', '0.6', '0.05', '−0.55'],
+        ['Class and location', '1.4', '0.1', '−1.3'], ['Localization', '5.2', '2.7', '−2.5'], ['Background false positives', '8.1', '0.04', '−8.06']] }
+    },
+    curve: {
+      type: 'line', height: 220,
+      aria: 'Validation mAP at 0.5 over 300 epochs for seed 42, rising from 3.6 at epoch 5 to 17.0 at epoch 100, 21.7 at epoch 200 and 23.8 at epoch 300.',
+      x: { domain: [0, 300], ticks: [0, 50, 100, 150, 200, 250, 300], label: 'Epoch', name: 'epoch', fmt: function (v) { return String(v); } },
+      y: { domain: [0, 28], ticks: [0, 7, 14, 21, 28], label: 'mAP@0.5 (%)', fmt: function (v) { return v.toFixed(2) + '%'; }, tickFmt: function (v) { return v + '%'; } },
+      series: [{ name: 'LAF-YOLOv10, seed 42', color: 'accent', points: curve }],
+      data: { cols: ['Epoch', 'mAP@0.5'], rows: curve.filter(function (p) { return p[0] % 25 === 0; }).map(function (p) { return [String(p[0]), p[1].toFixed(2) + '%']; }) }
+    }
+  };
+})();
+</script>
+<script src="../assets/paper/paper.js" defer></script>
+</body>
+</html>

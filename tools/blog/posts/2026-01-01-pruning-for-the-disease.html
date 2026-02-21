@@ -1,0 +1,33 @@
+<!--
+title: Pruning for the disease, not for ImageNet
+dek: Our first preprint of the year keeps the channels that separate one leaf disease from another, so a few-shot model fits on a Raspberry Pi 4.
+tags: paper, edge ML, few-shot learning
+-->
+<p>On 5 January we posted <a href="https://arxiv.org/abs/2601.02353">Meta-Learning Guided Pruning for Few-Shot Plant Pathology on Edge Devices</a>. I am the first author, with Shahnawaz Alam, Mohammed Kaif Pasha, Dr. Tasneem Bano Rehman, Dr. Fahmina Taranum and Afroze Begum.</p>
+
+<p>The setting: a farmer finds an unfamiliar blight, has no lab nearby and no reliable connection. The model has to run on a cheap board and learn a new disease from one to ten photos.</p>
+
+<h2>What we changed</h2>
+
+<p>Standard pruning keeps a channel because of its weight magnitude, or because the pruned layer still reconstructs its output. Neither asks whether the channel helps tell early blight from late blight, and with a handful of examples per class that is the property worth protecting.</p>
+
+<p>DACIS (disease-aware channel importance scoring) adds Fisher's discriminant ratio across disease classes to a gradient term and an activation-variance term. The PMP pipeline prunes conservatively, meta-learns, then prunes again using the meta-gradients. Pruning once from ImageNet weights would keep the channels ImageNet cared about.</p>
+
+<figure>
+  <a class="fig-link" href="{root}images/papers/pmp-dacis.svg"><img class="diagram" src="{root}images/papers/pmp-dacis.svg" alt="PMP-DACIS: disease-aware channel scoring guides a prune, meta-learn, prune pipeline that shrinks ResNet-18 from 11.2M to 2.5M parameters for real-time diagnosis on a Raspberry Pi 4." loading="lazy"></a>
+  <figcaption><b>The pipeline.</b> DACIS scores drive both pruning passes; the second pass also uses the gradients collected while meta-learning.</figcaption>
+</figure>
+
+<h2>What the paper reports</h2>
+
+<p>ResNet-18 goes from 11.2M to 2.5M parameters and runs at 142 ms per image on a Raspberry Pi 4, 3.6 times faster than the full model. At 30% of the parameters it is 3.8 points ahead of Meta-Prune in 5-way 1-shot and 5-shot accuracy.</p>
+
+<h2>Where it stops</h2>
+
+<ul>
+  <li>Every crop we tested belongs to one plant family: tomato, potato and pepper.</li>
+  <li>PlantVillage photos were taken in a lab. Our domain-shift split is a proxy for field conditions, not a field study.</li>
+  <li>The pruned model makes the same mistakes as the full one. Early versus late blight is still the most confused pair.</li>
+</ul>
+
+<p>More detail, tables and the device measurements are on the <a href="{root}pmp-dacis/">project page</a>.</p>

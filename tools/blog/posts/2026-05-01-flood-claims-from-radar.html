@@ -1,0 +1,58 @@
+<!--
+title: Flood claims from radar in under five minutes
+dek: At the 418 Hackathon at Mahindra University we built OrbitClaim Sentinel: Sentinel-1 radar in, a flood-claim decision out, in a JSON small enough to downlink.
+tags: hackathon, remote sensing
+-->
+<p>In May I was at the 418 Hackathon at Mahindra University, run by AEON, with Mohammed Abdullah Shareef, Hussain Ali Khan and Mohammed Kaif Pasha. One track, one problem, a ₹1,75,000 prize pool.</p>
+
+<p>The problem we picked: after a flood, victims wait 24 to 48 hours for insurers to process satellite imagery by hand before any money moves. We thought that was too long.</p>
+
+<h2>OrbitClaim Sentinel</h2>
+
+<p>It takes raw Sentinel-1 SAR imagery, which sees through cloud, and produces an automated flood-claim decision in under five minutes: flooded area in km², a land-use breakdown and a verdict, all in a JSON file under 10 KB. The size is the point. A satellite could downlink the decision instead of 52 MB of raw tiles, a bandwidth saving above 99.9%.</p>
+
+<figure>
+  <div class="panel scroll">
+    <svg class="dg dg-wide" viewBox="0 0 760 120" role="img" aria-label="Pipeline: Sentinel-1 SAR tiles of about 52 megabytes go into IBM TerraMind flood segmentation, which produces flooded area, land use and a verdict, packed into a JSON file under 10 kilobytes.">
+      <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <rect class="box" x="8" y="30" width="160" height="60" rx="4"/>
+      <text class="t-b" x="88" y="56" text-anchor="middle">Sentinel-1 SAR</text>
+      <text class="t-m" x="88" y="75" text-anchor="middle">raw tiles, ~52 MB</text>
+      <path class="ln" d="M168,60 L204,60" marker-end="url(#ah2)"/>
+      <rect class="box-new" x="208" y="30" width="170" height="60" rx="4"/>
+      <text class="t-b t-acc" x="293" y="56" text-anchor="middle">TerraMind</text>
+      <text class="t-m" x="293" y="75" text-anchor="middle">flood segmentation</text>
+      <path class="ln" d="M378,60 L414,60" marker-end="url(#ah2)"/>
+      <rect class="box" x="418" y="30" width="170" height="60" rx="4"/>
+      <text class="t-b" x="503" y="56" text-anchor="middle">Claim decision</text>
+      <text class="t-m" x="503" y="75" text-anchor="middle">km², land use, verdict</text>
+      <path class="ln" d="M588,60 L624,60" marker-end="url(#ah2)"/>
+      <rect class="box" x="628" y="30" width="124" height="60" rx="4"/>
+      <text class="t-b" x="690" y="56" text-anchor="middle">JSON</text>
+      <text class="t-m" x="690" y="75" text-anchor="middle">under 10 KB</text>
+    </svg>
+    <svg class="dg dg-tall" viewBox="0 0 340 360" role="img" aria-label="Pipeline: Sentinel-1 SAR tiles of about 52 megabytes go into IBM TerraMind flood segmentation, which produces flooded area, land use and a verdict, packed into a JSON file under 10 kilobytes.">
+      <defs><marker id="ah2t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <rect class="box" x="50" y="8" width="240" height="62" rx="4"/>
+      <text class="t-b" x="170" y="34" text-anchor="middle">Sentinel-1 SAR</text>
+      <text class="t-m" x="170" y="54" text-anchor="middle">raw tiles, ~52 MB</text>
+      <path class="ln" d="M170,70 L170,98" marker-end="url(#ah2t)"/>
+      <rect class="box-new" x="50" y="102" width="240" height="62" rx="4"/>
+      <text class="t-b t-acc" x="170" y="128" text-anchor="middle">TerraMind</text>
+      <text class="t-m" x="170" y="148" text-anchor="middle">flood segmentation</text>
+      <path class="ln" d="M170,164 L170,192" marker-end="url(#ah2t)"/>
+      <rect class="box" x="50" y="196" width="240" height="62" rx="4"/>
+      <text class="t-b" x="170" y="222" text-anchor="middle">Claim decision</text>
+      <text class="t-m" x="170" y="242" text-anchor="middle">km², land use, verdict</text>
+      <path class="ln" d="M170,258 L170,286" marker-end="url(#ah2t)"/>
+      <rect class="box" x="50" y="290" width="240" height="62" rx="4"/>
+      <text class="t-b" x="170" y="316" text-anchor="middle">JSON</text>
+      <text class="t-m" x="170" y="336" text-anchor="middle">under 10 KB</text>
+    </svg>
+  </div>
+  <figcaption><b>Decide on the satellite side, send the decision.</b> Under five minutes from imagery to verdict.</figcaption>
+</figure>
+
+<p>The flood segmentation runs on IBM's TerraMind. On our evaluation it reached an F1 of 0.628 against a baseline of 0.455. That is a real improvement, and still far from something an insurer should pay out on without a person checking it. That is the honest status of most hackathon models, ours included.</p>
+
+<p>The event itself deserves a mention: proper accommodation, good food, and games between debugging sessions. It made the all-nighter easier.</p>
