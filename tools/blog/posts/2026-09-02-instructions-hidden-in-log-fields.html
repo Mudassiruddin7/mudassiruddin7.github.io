@@ -1,0 +1,34 @@
+<!--
+title: Instructions hidden in log fields
+dek: Guardian-AI v3.0 sits between untrusted security telemetry and the LLM that reads it. A regex list catches the obvious attacks. The rest need layers.
+tags: security, LLMs
+-->
+<p><a href="https://github.com/Mudassiruddin7/Guardian-AI">Guardian-AI</a> started at the IBM watsonx Orchestrate Hackathon last November as a constitutional security layer for LLMs in security operations centres. On 8 September I pushed version 3.0.</p>
+
+<h2>The threat</h2>
+
+<p>When an LLM analyses security logs, the log fields are attacker-controlled: user agents, URLs, DNS queries, attempted usernames. An attacker can put instructions in the same text that carries the evidence, and the model reads both.</p>
+
+<p>Pattern matching catches an instruction written in the clear. It does not catch the same instruction base64-encoded, spelled with Cyrillic lookalike letters, split across three log fields, parked on a URL the model is invited to fetch, or assembled across five turns of a session.</p>
+
+<h2>Layers, not more rules</h2>
+
+<p>Version 3.0 re-runs the same 34 rules against transformed copies of each input: decoded, homograph-folded, and with split fields rejoined. It checks URLs against an allowlist, classifies tool-invocation syntax, and scores each session for drift against its last ten inputs. A payload that decodes to <code>rm -rf /</code> is caught by the same rule as the literal command. Every block is written to an audit trail with its MITRE ATLAS mapping.</p>
+
+<div class="table-fig">
+  <div class="tbl-wrap">
+    <table class="bt">
+      <caption><b>Table 1.</b> Same inputs, old ruleset against new. A small corpus: treat it as a regression check, not a benchmark.</caption>
+      <thead><tr><th>Inputs</th><th>v2.2<span class="u">24 rules</span></th><th>v3.0<span class="u">34 rules + layers</span></th></tr></thead>
+      <tbody>
+        <tr><td>Legacy attacks caught</td><td>6 of 8</td><td>7 of 8</td></tr>
+        <tr class="ours"><td>Persona, context and obfuscated attacks caught</td><td>4 of 12</td><td>12 of 12</td></tr>
+        <tr><td>False positives on benign SOC inputs</td><td>2 of 22</td><td>2 of 22</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<p>Eight catches are new, and no benign input changed its verdict. Both false positives come from an old word-boundary bug, documented in the README, not from anything v3.0 added. With every layer on, a check takes 1.1 ms at the median. There are 113 tests.</p>
+
+<p>Detection runs locally and offline. Only the analysis response needs a model.</p>

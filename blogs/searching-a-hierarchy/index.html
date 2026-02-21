@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Searching a hierarchy instead of the graph | Mohammed Mudassir Uddin</title>
+<meta name="description" content="HAGD, our circuit-extraction preprint: cluster the attribution graph, search it from the top, and report a circuit only after it passes causal tests.">
+<meta name="author" content="Mohammed Mudassir Uddin">
+<link rel="canonical" href="https://mudassiruddin7.github.io/blogs/searching-a-hierarchy/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="Searching a hierarchy instead of the graph | Mohammed Mudassir Uddin">
+<meta property="og:description" content="HAGD, our circuit-extraction preprint: cluster the attribution graph, search it from the top, and report a circuit only after it passes causal tests.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/blogs/searching-a-hierarchy/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/images/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="Mohammed Mudassir Uddin: blog" href="https://mudassiruddin7.github.io/blogs/feed.xml">
+<link rel="icon" href="../../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/paper/paper.css">
+<link rel="stylesheet" href="../../assets/blog/blog.css">
+</head>
+<body class="acc-blue">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Site"><a href="../../blogs/">Blog</a><a href="../../#-publications">Research</a><a href="https://drive.google.com/file/d/1gz7MvatR6PW-qhG1u03cm1_K6LDS6_O4/view">CV</a></nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="wrap">
+  <header class="post-hero">
+    <p class="eyebrow"><span class="name"><a href="../">Blog</a></span><span>January 2026</span><span>paper</span><span>interpretability</span></p>
+    <h1 class="title">Searching a hierarchy instead of the graph</h1>
+    <p class="subtitle">HAGD, our circuit-extraction preprint: cluster the attribution graph, search it from the top, and report a circuit only after it passes causal tests.</p>
+  </header>
+  <main id="main" class="post">
+<p>On 19 January we posted <a href="https://arxiv.org/abs/2601.12879">Hierarchical Sparse Circuit Extraction</a> with Shahnawaz Alam and Mohammed Kaif Pasha. I am the first author.</p>
+
+<p>A circuit is a small set of interpretable features, plus the causal edges between them, that explains one behaviour of a model. Transcoders make the features readable and attribution graphs supply the edges. The step that does not scale is the search. Trying subsets exhaustively grows as 2<sup>n</sup>, and methods that patch one edge at a time pay a patching pass for every edge.</p>
+
+<h2>The idea</h2>
+
+<p>HAGD borrows the coarse-to-fine idea from graph partitioning. Features that attribute strongly to each other are grouped into supernodes by spectral clustering, the groups are grouped again, and the search starts at the top. A graph attention network decides which branches to open, so most of the graph is never touched, and the worst case drops to O(n<sup>2</sup> log n).</p>
+
+<figure>
+  <a class="fig-link" href="../../images/papers/hagd.svg"><img class="diagram" src="../../images/papers/hagd.svg" alt="HAGD pipeline: cross-layer transcoders, an attribution graph, spectral coarsening, and GNN-guided traversal with causal patching turn an O(2^n) circuit search into O(n^2 log n)." loading="lazy"></a>
+  <figcaption><b>The pipeline.</b> Transcoders, an attribution graph, a spectral hierarchy, and a guided search whose output must pass causal tests.</figcaption>
+</figure>
+
+<p>One design choice I still like. Spectral clustering needs a symmetric graph, but attribution is directed. HAGD clusters on a symmetric magnitude skeleton and keeps the true edge directions for the search and the patching.</p>
+
+<div class="note">
+  <span class="label">Update, August 2026</span>
+  <p>When I re-ran the released code with five seeds and three controls, the circuit it found did no better than random features, and the larger results in the preprint were not in the code. The details are in <a href="../i-audited-my-own-paper/">I audited my own paper</a>, and the <a href="../../hagd/">project page</a> now reports only what the code reproduces.</p>
+</div>
+  </main>
+  <nav class="post-nav" aria-label="More posts">
+<a class="prev" href="../agentcompress/"><span class="pn-l">Earlier</span><span class="pn-t">Not every agent step needs the whole model</span></a>
+<a class="next" href="../ai-chief-of-staff/"><span class="pn-l">Later</span><span class="pn-t">An AI chief of staff in 36 hours</span></a>
+</nav>
+</div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../../">Mohammed Mudassir Uddin</a> &middot; Blog</span>
+    <nav aria-label="More"><a href="../../blogs/">All posts</a><a href="../../blogs/feed.xml">RSS</a><a href="../../#-publications">Research</a><a href="https://github.com/Mudassiruddin7">GitHub</a></nav>
+  </div>
+</footer>
+<script src="../../assets/paper/paper.js" defer></script>
+</body>
+</html>

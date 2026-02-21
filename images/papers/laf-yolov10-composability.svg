@@ -1,0 +1,242 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" role="img" aria-labelledby="t d"><title id="t">LAF-YOLOv10 composability study</title><desc id="d">Four modules tested one at a time change mAP@0.5 by -2.0, +1.0, -2.5 and +0.5 (sum -3.0), but stacked they lose 5.5 points, a -2.5 interaction penalty concentrated in the P2/-P5 head swap. Only 73 of 150 backbone tensors load from the COCO checkpoint, and TIDE shows the gap is missed detections (+15.4) and classification errors (+7.7).</desc><defs></defs><rect width="960" height="640" fill="#ffffff"/><text x="24" y="46" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="30" font-weight="800" fill="#0b0b0b" text-anchor="start">LAF-YOLOv10<tspan font-size="23" font-weight="400" fill="#52514e">  ·  do four validated upgrades add up?</tspan></text>
+<text x="24" y="78" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="400" fill="#52514e" text-anchor="start">Measured over 3 seeds on VisDrone-DET2019: <tspan font-weight="700" fill="#0b0b0b">24.0 ± 0.4% mAP@0.5</tspan> vs 31.8% for unmodified YOLOv10n.</text>
+<rect x="20" y="96" width="440" height="222" rx="14" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<text x="38" y="126" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="19" font-weight="700" fill="#0b0b0b" text-anchor="start">Alone: one module added to the baseline</text>
+<line x1="330" y1="144" x2="330" y2="288" stroke="#c3c2b7" stroke-width="1.5" stroke-linecap="round"/>
+<text x="186" y="170" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#0b0b0b" text-anchor="end">PC-C2f</text>
+<path d="M330 154.0 L262.0 154.0 Q258.0 154.0 258.0 158.0 L258.0 170.0 Q258.0 174.0 262.0 174.0 L330 174.0 Z" fill="#e34948"/>
+<text x="251.0" y="170" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="600" fill="#0b0b0b" text-anchor="end">−2.0</text>
+<text x="186" y="206" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#0b0b0b" text-anchor="end">AG-FPN</text>
+<path d="M330 190.0 L362.0 190.0 Q366.0 190.0 366.0 194.0 L366.0 206.0 Q366.0 210.0 362.0 210.0 L330 210.0 Z" fill="#2a78d6"/>
+<text x="373.0" y="206" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="600" fill="#0b0b0b" text-anchor="start">+1.0</text>
+<text x="186" y="242" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#0b0b0b" text-anchor="end">P2 head, −P5</text>
+<path d="M330 226.0 L244.0 226.0 Q240.0 226.0 240.0 230.0 L240.0 242.0 Q240.0 246.0 244.0 246.0 L330 246.0 Z" fill="#e34948"/>
+<text x="233.0" y="242" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="600" fill="#0b0b0b" text-anchor="end">−2.5</text>
+<text x="186" y="278" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#0b0b0b" text-anchor="end">Wise-IoU v3</text>
+<path d="M330 262.0 L344.0 262.0 Q348.0 262.0 348.0 266.0 L348.0 278.0 Q348.0 282.0 344.0 282.0 L330 282.0 Z" fill="#2a78d6"/>
+<text x="355.0" y="278" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="600" fill="#0b0b0b" text-anchor="start">+0.5</text>
+<text x="38" y="306" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">Sum of isolated effects:</text>
+<text x="222" y="306" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="700" fill="#0b0b0b" text-anchor="start">−3.0 points</text>
+<rect x="318" y="295" width="13" height="13" rx="3" fill="#e34948"/>
+<text x="337" y="306" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">loss</text>
+<rect x="391.4" y="295" width="13" height="13" rx="3" fill="#2a78d6"/>
+<text x="410.4" y="306" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">gain</text>
+<rect x="480" y="96" width="460" height="222" rx="14" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<text x="498" y="126" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="19" font-weight="700" fill="#0b0b0b" text-anchor="start">Stacked: modules added in sequence</text>
+<line x1="523" y1="158.5" x2="557" y2="158.5" stroke="#0b0b0b" stroke-width="2.4" stroke-linecap="round"/>
+<text x="540" y="306" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="middle">base</text>
+<line x1="557" y1="158.5" x2="603" y2="158.5" stroke="#c3c2b7" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="608" y="158.5" width="24" height="38.0" rx="3" fill="#e34948"/>
+<text x="638" y="183.5" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="start">−2.0</text>
+<line x1="603" y1="196.5" x2="637" y2="196.5" stroke="#0b0b0b" stroke-width="2.4" stroke-linecap="round"/>
+<text x="620" y="306" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="middle">PC-C2f</text>
+<line x1="637" y1="196.5" x2="683" y2="196.5" stroke="#c3c2b7" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="688" y="177.5" width="24" height="19.0" rx="3" fill="#2a78d6"/>
+<text x="718" y="193.0" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="start">+1.0</text>
+<line x1="683" y1="177.5" x2="717" y2="177.5" stroke="#0b0b0b" stroke-width="2.4" stroke-linecap="round"/>
+<text x="700" y="306" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="middle">AG-FPN</text>
+<line x1="717" y1="177.5" x2="763" y2="177.5" stroke="#c3c2b7" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="768" y="177.5" width="24" height="95.0" rx="3" fill="#e34948"/>
+<text x="798" y="231.0" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="start">−5.0</text>
+<line x1="763" y1="272.5" x2="797" y2="272.5" stroke="#0b0b0b" stroke-width="2.4" stroke-linecap="round"/>
+<text x="780" y="306" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="middle">P2, −P5</text>
+<line x1="797" y1="272.5" x2="843" y2="272.5" stroke="#c3c2b7" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="848" y="263.0" width="24" height="9.5" rx="3" fill="#2a78d6"/>
+<text x="878" y="273.75" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="start">+0.5</text>
+<line x1="843" y1="263.0" x2="877" y2="263.0" stroke="#0b0b0b" stroke-width="2.4" stroke-linecap="round"/>
+<text x="860" y="306" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="middle">WIoU</text>
+<text x="540" y="149.5" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="middle">31.5</text>
+<text x="860" y="285.0" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="middle">26.0</text>
+<rect x="808" y="140" width="122" height="58" rx="8" fill="#ffffff" stroke="#e34948" stroke-width="1.8"/>
+<text x="869" y="164" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="middle">interaction</text>
+<text x="869" y="187" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="700" fill="#0b0b0b" text-anchor="middle">penalty −2.5</text>
+<path d="M818 198 L796 222" fill="none" stroke="#e34948" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="20" y="334" width="440" height="290" rx="14" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<text x="38" y="364" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="19" font-weight="700" fill="#0b0b0b" text-anchor="start">Why: a partial weight transplant</text>
+<rect x="40" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="57" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="74" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="91" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="108" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="125" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="142" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="159" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="176" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="193" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="210" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="227" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="244" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="261" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="278" y="384" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="40" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="57" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="74" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="91" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="108" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="125" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="142" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="159" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="176" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="193" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="210" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="227" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="244" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="261" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="278" y="401" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="40" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="57" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="74" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="91" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="108" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="125" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="142" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="159" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="176" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="193" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="210" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="227" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="244" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="261" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="278" y="418" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="40" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="57" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="74" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="91" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="108" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="125" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="142" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="159" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="176" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="193" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="210" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="227" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="244" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="261" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="278" y="435" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="40" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="57" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="74" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="91" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="108" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="125" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="142" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="159" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="176" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="193" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="210" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="227" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="244" y="452" width="13" height="13" rx="2.5" fill="#2a78d6"/>
+<rect x="261" y="452" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="278" y="452" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="40" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="57" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="74" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="91" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="108" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="125" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="142" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="159" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="176" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="193" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="210" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="227" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="244" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="261" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="278" y="469" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="40" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="57" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="74" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="91" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="108" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="125" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="142" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="159" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="176" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="193" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="210" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="227" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="244" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="261" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="278" y="486" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="40" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="57" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="74" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="91" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="108" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="125" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="142" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="159" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="176" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="193" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="210" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="227" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="244" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="261" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="278" y="503" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="40" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="57" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="74" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="91" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="108" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="125" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="142" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="159" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="176" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="193" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="210" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="227" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="244" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="261" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="278" y="520" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="40" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="57" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="74" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="91" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="108" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="125" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="142" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="159" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="176" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="193" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="210" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="227" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="244" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="261" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<rect x="278" y="537" width="13" height="13" rx="2.5" fill="#e3e3e3"/>
+<text x="40" y="584" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">73 of 150 backbone tensors</text>
+<text x="40" y="606" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">shape-match the COCO checkpoint</text>
+<rect x="312" y="387" width="13" height="13" rx="3" fill="#2a78d6"/>
+<text x="331" y="398" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">copied</text>
+<rect x="312" y="413" width="13" height="13" rx="3" fill="#e3e3e3"/>
+<text x="331" y="424" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">random init</text>
+<text x="312" y="470" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="14" font-weight="400" fill="#52514e" text-anchor="start">PC-C2f reshapes</text>
+<text x="312" y="490" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="14" font-weight="400" fill="#52514e" text-anchor="start">backbone channels,</text>
+<text x="312" y="510" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="14" font-weight="400" fill="#52514e" text-anchor="start">so shape-matched</text>
+<text x="312" y="530" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="14" font-weight="400" fill="#52514e" text-anchor="start">loading leaves half</text>
+<text x="312" y="550" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="14" font-weight="400" fill="#52514e" text-anchor="start">the backbone random</text>
+<rect x="480" y="334" width="460" height="290" rx="14" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<text x="498" y="364" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="19" font-weight="700" fill="#0b0b0b" text-anchor="start">Where accuracy went: TIDE error shift</text>
+<rect x="498" y="379" width="13" height="13" rx="3" fill="#e34948"/>
+<text x="517" y="390" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">more error than YOLOv10n</text>
+<rect x="733.4" y="379" width="13" height="13" rx="3" fill="#2a78d6"/>
+<text x="752.4" y="390" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">less error</text>
+<line x1="630" y1="404" x2="630" y2="600" stroke="#c3c2b7" stroke-width="1.5" stroke-linecap="round"/>
+<text x="498" y="426" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#0b0b0b" text-anchor="start">Miss</text>
+<path d="M630 411.0 L803.1 411.0 Q807.1 411.0 807.1 415.0 L807.1 425.0 Q807.1 429.0 803.1 429.0 L630 429.0 Z" fill="#e34948"/>
+<text x="814.1" y="426" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="start">+15.4</text>
+<text x="498" y="458" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#0b0b0b" text-anchor="start">Cls</text>
+<path d="M630 443.0 L714.55 443.0 Q718.55 443.0 718.55 447.0 L718.55 457.0 Q718.55 461.0 714.55 461.0 L630 461.0 Z" fill="#e34948"/>
+<text x="725.55" y="458" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="start">+7.7</text>
+<text x="498" y="490" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#0b0b0b" text-anchor="start">Loc</text>
+<path d="M630 475.0 L605.25 475.0 Q601.25 475.0 601.25 479.0 L601.25 489.0 Q601.25 493.0 605.25 493.0 L630 493.0 Z" fill="#2a78d6"/>
+<text x="637" y="490" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="start">−2.5</text>
+<text x="498" y="522" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#0b0b0b" text-anchor="start">Both</text>
+<path d="M630 507.0 L619.05 507.0 Q615.05 507.0 615.05 511.0 L615.05 521.0 Q615.05 525.0 619.05 525.0 L630 525.0 Z" fill="#2a78d6"/>
+<text x="637" y="522" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="start">−1.3</text>
+<text x="498" y="554" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#0b0b0b" text-anchor="start">Dupe</text>
+<rect x="623.675" y="539.0" width="6.3250000000000455" height="18" rx="1" fill="#2a78d6"/>
+<text x="637" y="554" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="start">−0.55</text>
+<text x="498" y="586" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#0b0b0b" text-anchor="start">Bkg</text>
+<path d="M630 571.0 L541.31 571.0 Q537.31 571.0 537.31 575.0 L537.31 585.0 Q537.31 589.0 541.31 589.0 L630 589.0 Z" fill="#2a78d6"/>
+<text x="637" y="586" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="start">−8.06</text>
+<text x="820" y="610" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#898781" text-anchor="middle">mAP@0.5 penalty, points</text></svg>

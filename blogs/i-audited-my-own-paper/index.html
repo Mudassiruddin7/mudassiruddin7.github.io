@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I audited my own paper | Mohammed Mudassir Uddin</title>
+<meta name="description" content="HAGD&#x27;s search is fast. The circuit it found in GPT-2 Small kept no more behaviour than random features, and the preprint&#x27;s larger results were not in the code. What the audit found, and what I changed.">
+<meta name="author" content="Mohammed Mudassir Uddin">
+<link rel="canonical" href="https://mudassiruddin7.github.io/blogs/i-audited-my-own-paper/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="I audited my own paper | Mohammed Mudassir Uddin">
+<meta property="og:description" content="HAGD&#x27;s search is fast. The circuit it found in GPT-2 Small kept no more behaviour than random features, and the preprint&#x27;s larger results were not in the code. What the audit found, and what I changed.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/blogs/i-audited-my-own-paper/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/images/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="Mohammed Mudassir Uddin: blog" href="https://mudassiruddin7.github.io/blogs/feed.xml">
+<link rel="icon" href="../../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/paper/paper.css">
+<link rel="stylesheet" href="../../assets/blog/blog.css">
+</head>
+<body class="acc-blue">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Site"><a href="../../blogs/">Blog</a><a href="../../#-publications">Research</a><a href="https://drive.google.com/file/d/1gz7MvatR6PW-qhG1u03cm1_K6LDS6_O4/view">CV</a></nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="wrap">
+  <header class="post-hero">
+    <p class="eyebrow"><span class="name"><a href="../">Blog</a></span><span>August 2026</span><span>interpretability</span><span>reproducibility</span></p>
+    <h1 class="title">I audited my own paper</h1>
+    <p class="subtitle">HAGD&#x27;s search is fast. The circuit it found in GPT-2 Small kept no more behaviour than random features, and the preprint&#x27;s larger results were not in the code. What the audit found, and what I changed.</p>
+  </header>
+  <main id="main" class="post">
+<p>In August I re-ran <a href="../searching-a-hierarchy/">HAGD</a>, our January circuit-extraction preprint, from the released notebooks, with five seeds, an accuracy gate and three controls, and published the <a href="https://github.com/Mudassiruddin7/HAGD">code and results</a> on 21 August. This is what came out.</p>
+
+<h2>What runs</h2>
+
+<p>The whole pipeline runs on GPT-2 Small fine-tuned for addition modulo 23, on one Tesla T4, in 22.7 minutes end to end. The search itself is the cheap part: 0.09 seconds to narrow 413 active features to a 10-feature circuit. For seed 0 the fine-tuned model reaches 83.8% on held-out prompts. The other four seeds failed the 80% accuracy gate, so only seed 0 went on to circuit extraction.</p>
+
+<h2>What the circuit is worth</h2>
+
+<p>The test: replace every feature outside a set with its mean at the generation steps, and measure how much of the model's behaviour survives. The repository's control comparison puts the HAGD circuit next to three alternatives.</p>
+
+<figure>
+  <p class="fig-title">Behaviour kept at generation steps, seed 0. The full model is 100%.</p>
+  <div class="panel"><div class="chart" data-chart="audit"></div></div>
+  <figcaption><b>The circuit is no better than the controls.</b> From the repository's control comparison (<code>results/controls_seed0.json</code>). Restricting every position, prompt reading included, drops the circuit to 0%.</figcaption>
+</figure>
+
+<p>And the larger numbers in the preprint, 91% behavioural preservation, runs on Pythia and Llama models up to 70B parameters, and cross-architecture transfer, are not in the released code at all. The repository's automated claim audit marks each of them unsupported.</p>
+
+<h2>Where it breaks</h2>
+
+<ul>
+  <li><span class="lead-in">Candidate generation is the bottleneck.</span> Of the 10 features with the largest individual necessity scores, 7 never entered the candidate pool. Traversal recall is 20 to 31% across budgets.</li>
+  <li><span class="lead-in">Necessity scores carry little signal here.</span> The 10 least necessary features preserve as much behaviour as the circuit does.</li>
+  <li><span class="lead-in">The first answer token carries the work.</span> Restricting only that token already leaves 30% of the behaviour, not far from the 23% left when every generation step is restricted.</li>
+  <li><span class="lead-in">Features act together.</span> Some add more alongside others than alone, so ranking them one at a time undersells them.</li>
+</ul>
+
+<h2>What I changed</h2>
+
+<p>The <a href="../../hagd/">project page</a> reports only numbers the released code produces. The README prints the audit next to the claims it checks. I am revising the preprint to match. The next experiments follow from the diagnostics: fix recall before improving the scoring, measure sufficiency where the computation happens, and select features jointly.</p>
+
+<p>It was not the result I wanted to publish. It is the most useful thing I did this year.</p>
+
+<script>
+window.CHARTS = {
+  audit: {
+    type: 'hbar', domain: [0, 100], ticks: [0, 25, 50, 75, 100], barH: 18, gap: 14, narrowAt: 460,
+    valueName: 'behaviour kept',
+    fmt: function (v) { return v.toFixed(1) + '%'; }, tickFmt: function (v) { return v + '%'; },
+    refs: [{ value: 100, label: 'full model', anchor: 'end' }],
+    aria: 'Behaviour kept at generation steps for seed 0. HAGD circuit 27.3 percent. Zero-features baseline 27.3 percent. Random features control 26.9 percent. Greedy search control 28.4 percent. The full model is 100 percent.',
+    rows: [
+      { label: 'HAGD circuit, 10 features', value: 27.3, hl: true },
+      { label: 'Zero-features baseline', value: 27.3 },
+      { label: 'Random features control', value: 26.9 },
+      { label: 'Greedy search control', value: 28.4 }
+    ],
+    data: { cols: ['Set', 'Behaviour kept'], rows: [
+      ['HAGD circuit, 10 features', '27.3%'], ['Zero-features baseline', '27.3%'],
+      ['Random features control', '26.9%'], ['Greedy search control', '28.4%'], ['Full model', '100%']] }
+  }
+};
+</script>
+  </main>
+  <nav class="post-nav" aria-label="More posts">
+<a class="prev" href="../what-the-agentcompress-notebook-shows/"><span class="pn-l">Earlier</span><span class="pn-t">What our AgentCompress notebook shows, and what it doesn&#x27;t</span></a>
+<a class="next" href="../text-never-leaves-the-device/"><span class="pn-l">Later</span><span class="pn-t">A data node where the text never leaves the device</span></a>
+</nav>
+</div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../../">Mohammed Mudassir Uddin</a> &middot; Blog</span>
+    <nav aria-label="More"><a href="../../blogs/">All posts</a><a href="../../blogs/feed.xml">RSS</a><a href="../../#-publications">Research</a><a href="https://github.com/Mudassiruddin7">GitHub</a></nav>
+  </div>
+</footer>
+<script src="../../assets/paper/paper.js" defer></script>
+</body>
+</html>

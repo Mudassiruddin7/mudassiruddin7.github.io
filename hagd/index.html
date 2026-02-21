@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HAGD | Hierarchical Sparse Circuit Extraction</title>
+<meta name="description" content="HAGD searches for transformer circuits over a spectral hierarchy of the attribution graph instead of the flat graph, with a graph attention network deciding which branches to open and causal tests deciding what counts. Method, released code and an audited GPT-2 Small study.">
+<link rel="canonical" href="https://mudassiruddin7.github.io/hagd/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="HAGD: Hierarchical Sparse Circuit Extraction via Scalable Attribution Graph Decomposition">
+<meta property="og:description" content="Circuit search over a spectral hierarchy of the attribution graph, guided by a graph attention network and checked by causal interventions.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/hagd/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/hagd/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../assets/paper/paper.css">
+</head>
+<body class="acc-violet">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Research pages">
+      <a href="../agentcompress/">AgentCompress</a>
+      <a href="../hagd/" aria-current="page">HAGD</a>
+      <a href="../pmp-dacis/">PMP-DACIS</a>
+      <a href="../laf-yolov10/">LAF-YOLOv10</a>
+    </nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow"><span class="name">HAGD</span><span>arXiv 2601.12879</span><span>Mechanistic interpretability</span><span>Under review</span></p>
+    <h1 class="title">Hierarchical Sparse Circuit Extraction via Scalable Attribution Graph Decomposition</h1>
+    <div class="byline">
+      <p class="authors"><span class="me">Mohammed Mudassir Uddin</span> &middot; Shahnawaz Alam &middot; Mohammed Kaif Pasha</p>
+      <p class="affil">Department of Computer Science and Engineering, Muffakham Jah College of Engineering and Technology, Hyderabad</p>
+    </div>
+    <div class="links">
+      <a class="btn primary" href="https://arxiv.org/abs/2601.12879"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L13 5v9.5H4z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M9.5 1.5V5H13M6 8.5h5M6 11h5" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>Paper <span class="meta">arXiv</span></a>
+      <a class="btn" href="https://github.com/Mudassiruddin7/HAGD"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>Code <span class="meta">GitHub</span></a>
+      <a class="btn" href="https://github.com/Mudassiruddin7/HAGD/blob/main/hagd_circuit_extraction.ipynb"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2.5h10v11H3zM5.5 2.5v11" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 6v4l3-2z" fill="currentColor"/></svg>Pipeline notebook</a>
+      <a class="btn" href="https://github.com/Mudassiruddin7/HAGD/blob/main/hagd_verification_suite.ipynb"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.2 11.5 13 4.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Verification suite</a>
+      <a class="btn" href="#cite" target="_self"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M2.5 10c0-2.6 1.2-4.4 3.4-5.2l.5.9C5 6.3 4.5 7.3 4.4 8.5h2v4h-3.9zM8.8 10c0-2.6 1.2-4.4 3.4-5.2l.5.9c-1.4.6-1.9 1.6-2 2.8h2v4H8.8z"/></svg>Cite</a>
+    </div>
+
+    <p class="thesis">Finding the circuit behind a behavior means picking a few features out of thousands, and trying subsets exhaustively costs O(2<sup><i>n</i></sup>). <strong>HAGD never searches the flat graph.</strong> It groups the attribution graph into a spectral hierarchy of supernodes, lets a graph attention network decide which branches to open, and admits a circuit only after it passes causal tests. Worst-case search drops to O(<i>n</i><sup>2</sup>&nbsp;log&nbsp;<i>n</i>).</p>
+
+    <div class="stats" role="list">
+      <div class="stat" role="listitem"><div class="v">O(n&sup2;&thinsp;log&thinsp;n)</div><div class="l">worst-case search, down from O(2<sup>n</sup>) subsets</div></div>
+      <div class="stat" role="listitem"><div class="v">0.09<small>s</small></div><div class="l">for the hierarchical search over 413 active features (22.7&nbsp;min end to end on one T4)</div></div>
+      <div class="stat" role="listitem"><div class="v">r = 0.97</div><div class="l">agreement of cheap gradient&nbsp;&times;&nbsp;activation edges with 20-step Integrated Gradients</div></div>
+      <div class="stat" role="listitem"><div class="v">4<small>gates</small></div><div class="l">a circuit must clear before anything is reported: accuracy, reconstruction, size, sufficiency</div></div>
+    </div>
+  </header>
+
+  <div class="page">
+    <nav class="toc" aria-label="On this page">
+      <p>On this page</p>
+      <ol>
+        <li><a href="#idea" target="_self">The idea</a></li>
+        <li><a href="#new" target="_self">What is new</a></li>
+        <li><a href="#method" target="_self">How it works</a></li>
+        <li><a href="#evidence" target="_self">Released results</a></li>
+        <li><a href="#diagnosis" target="_self">Why it falls short</a></li>
+        <li><a href="#status" target="_self">About the arXiv numbers</a></li>
+        <li><a href="#next" target="_self">Next steps</a></li>
+        <li><a href="#cite" target="_self">Citation</a></li>
+      </ol>
+    </nav>
+
+    <main id="main">
+      <section id="idea">
+        <h2><span class="kicker">The idea</span>Search a hierarchy, not the graph</h2>
+        <p>Mechanistic interpretability tries to explain a model behavior as a small circuit: a set of interpretable features and the causal edges between them. Sparse dictionaries (transcoders) make the features readable and attribution graphs give the edges. The step that does not scale is the search itself. Methods like ACDC patch edges one at a time across every layer, and exhaustive search over feature subsets grows as 2<sup><i>n</i></sup>.</p>
+        <p>HAGD borrows the coarse-to-fine idea from graph partitioning. Features that attribute strongly to each other are clustered into supernodes, the clusters are clustered again, and the search starts at the top. At each level only the most promising branches are opened, so most of the graph is never touched.</p>
+
+        <figure>
+          <div class="panel scroll">
+            <svg class="dg" viewBox="0 0 960 330" role="img" aria-label="Left: exhaustive search treats the attribution graph as flat, a layered graph of features with many edges, so 413 active features give 2 to the power 413 candidate subsets. Right: HAGD builds a hierarchy of supernodes (levels 3, 2, 1 above the features) and opens only the top-scoring branches at each level, which narrows 413 features to 48 candidates for causal testing.">
+              <text class="t-b" x="0" y="20">Exhaustive search</text>
+              <text class="t-m" x="0" y="38">every subset of the flat attribution graph</text>
+              <line class="ln-soft" x1="50" y1="80" x2="150" y2="80"/>
+<line class="ln-soft" x1="50" y1="80" x2="150" y2="110"/>
+<line class="ln-soft" x1="50" y1="80" x2="150" y2="170"/>
+<line class="ln-soft" x1="50" y1="110" x2="150" y2="80"/>
+<line class="ln-soft" x1="50" y1="110" x2="150" y2="140"/>
+<line class="ln-soft" x1="50" y1="110" x2="150" y2="200"/>
+<line class="ln-soft" x1="50" y1="140" x2="150" y2="110"/>
+<line class="ln-soft" x1="50" y1="140" x2="150" y2="200"/>
+<line class="ln-soft" x1="50" y1="170" x2="150" y2="80"/>
+<line class="ln-soft" x1="50" y1="170" x2="150" y2="170"/>
+<line class="ln-soft" x1="50" y1="170" x2="150" y2="260"/>
+<line class="ln-soft" x1="50" y1="200" x2="150" y2="80"/>
+<line class="ln-soft" x1="50" y1="200" x2="150" y2="170"/>
+<line class="ln-soft" x1="50" y1="200" x2="150" y2="200"/>
+<line class="ln-soft" x1="50" y1="230" x2="150" y2="80"/>
+<line class="ln-soft" x1="50" y1="230" x2="150" y2="110"/>
+<line class="ln-soft" x1="50" y1="260" x2="150" y2="80"/>
+<line class="ln-soft" x1="50" y1="260" x2="150" y2="200"/>
+<line class="ln-soft" x1="150" y1="80" x2="250" y2="80"/>
+<line class="ln-soft" x1="150" y1="80" x2="250" y2="170"/>
+<line class="ln-soft" x1="150" y1="110" x2="250" y2="80"/>
+<line class="ln-soft" x1="150" y1="110" x2="250" y2="200"/>
+<line class="ln-soft" x1="150" y1="140" x2="250" y2="140"/>
+<line class="ln-soft" x1="150" y1="140" x2="250" y2="170"/>
+<line class="ln-soft" x1="150" y1="170" x2="250" y2="80"/>
+<line class="ln-soft" x1="150" y1="170" x2="250" y2="140"/>
+<line class="ln-soft" x1="150" y1="170" x2="250" y2="200"/>
+<line class="ln-soft" x1="150" y1="200" x2="250" y2="110"/>
+<line class="ln-soft" x1="150" y1="200" x2="250" y2="230"/>
+<line class="ln-soft" x1="150" y1="230" x2="250" y2="110"/>
+<line class="ln-soft" x1="150" y1="230" x2="250" y2="200"/>
+<line class="ln-soft" x1="150" y1="230" x2="250" y2="230"/>
+<line class="ln-soft" x1="150" y1="260" x2="250" y2="80"/>
+<line class="ln-soft" x1="150" y1="260" x2="250" y2="200"/>
+<line class="ln-soft" x1="150" y1="260" x2="250" y2="230"/>
+<line class="ln-soft" x1="250" y1="80" x2="350" y2="110"/>
+<line class="ln-soft" x1="250" y1="80" x2="350" y2="200"/>
+<line class="ln-soft" x1="250" y1="110" x2="350" y2="140"/>
+<line class="ln-soft" x1="250" y1="110" x2="350" y2="170"/>
+<line class="ln-soft" x1="250" y1="110" x2="350" y2="200"/>
+<line class="ln-soft" x1="250" y1="140" x2="350" y2="140"/>
+<line class="ln-soft" x1="250" y1="140" x2="350" y2="170"/>
+<line class="ln-soft" x1="250" y1="140" x2="350" y2="230"/>
+<line class="ln-soft" x1="250" y1="170" x2="350" y2="110"/>
+<line class="ln-soft" x1="250" y1="170" x2="350" y2="230"/>
+<line class="ln-soft" x1="250" y1="170" x2="350" y2="260"/>
+<line class="ln-soft" x1="250" y1="200" x2="350" y2="140"/>
+<line class="ln-soft" x1="250" y1="200" x2="350" y2="170"/>
+<line class="ln-soft" x1="250" y1="200" x2="350" y2="200"/>
+<line class="ln-soft" x1="250" y1="230" x2="350" y2="170"/>
+<line class="ln-soft" x1="250" y1="230" x2="350" y2="230"/>
+<line class="ln-soft" x1="250" y1="260" x2="350" y2="80"/>
+<line class="ln-soft" x1="250" y1="260" x2="350" y2="200"/>
+<line class="ln-soft" x1="250" y1="260" x2="350" y2="260"/>
+<circle class="f-ink2" cx="50" cy="80" r="5"/>
+<circle class="f-ink2" cx="50" cy="110" r="5"/>
+<circle class="f-ink2" cx="50" cy="140" r="5"/>
+<circle class="f-ink2" cx="50" cy="170" r="5"/>
+<circle class="f-ink2" cx="50" cy="200" r="5"/>
+<circle class="f-ink2" cx="50" cy="230" r="5"/>
+<circle class="f-ink2" cx="50" cy="260" r="5"/>
+<circle class="f-ink2" cx="150" cy="80" r="5"/>
+<circle class="f-ink2" cx="150" cy="110" r="5"/>
+<circle class="f-ink2" cx="150" cy="140" r="5"/>
+<circle class="f-ink2" cx="150" cy="170" r="5"/>
+<circle class="f-ink2" cx="150" cy="200" r="5"/>
+<circle class="f-ink2" cx="150" cy="230" r="5"/>
+<circle class="f-ink2" cx="150" cy="260" r="5"/>
+<circle class="f-ink2" cx="250" cy="80" r="5"/>
+<circle class="f-ink2" cx="250" cy="110" r="5"/>
+<circle class="f-ink2" cx="250" cy="140" r="5"/>
+<circle class="f-ink2" cx="250" cy="170" r="5"/>
+<circle class="f-ink2" cx="250" cy="200" r="5"/>
+<circle class="f-ink2" cx="250" cy="230" r="5"/>
+<circle class="f-ink2" cx="250" cy="260" r="5"/>
+<circle class="f-ink2" cx="350" cy="80" r="5"/>
+<circle class="f-ink2" cx="350" cy="110" r="5"/>
+<circle class="f-ink2" cx="350" cy="140" r="5"/>
+<circle class="f-ink2" cx="350" cy="170" r="5"/>
+<circle class="f-ink2" cx="350" cy="200" r="5"/>
+<circle class="f-ink2" cx="350" cy="230" r="5"/>
+<circle class="f-ink2" cx="350" cy="260" r="5"/>
+              <text class="t-m" x="50" y="288" text-anchor="middle">L3</text>
+              <text class="t-m" x="150" y="288" text-anchor="middle">L4</text>
+              <text class="t-m" x="250" y="288" text-anchor="middle">L5</text>
+              <text class="t-m" x="350" y="288" text-anchor="middle">L6</text>
+              <text class="t-mi" x="0" y="318">413 active features &#8594; 2<tspan baseline-shift="super" font-size="9">413</tspan> candidate subsets</text>
+
+              <line class="ln-soft" x1="455" y1="8" x2="455" y2="322"/>
+
+              <text class="t-b t-acc" x="490" y="20">HAGD</text>
+              <text class="t-m" x="490" y="38">open only the top-scoring branches, level by level</text>
+              <text class="t-m" x="490" y="88">level 3</text>
+              <text class="t-m" x="490" y="148">level 2</text>
+              <text class="t-m" x="490" y="208">level 1</text>
+              <text class="t-m" x="490" y="260">features</text>
+              <line class="ln-soft" x1="675" y1="84" x2="615" y2="144"/>
+<line class="ln-soft" x1="675" y1="84" x2="675" y2="144"/>
+<line class="ln-new" x1="675" y1="84" x2="735" y2="144"/>
+<line class="ln-new" x1="855" y1="84" x2="795" y2="144"/>
+<line class="ln-soft" x1="855" y1="84" x2="855" y2="144"/>
+<line class="ln-soft" x1="855" y1="84" x2="915" y2="144"/>
+<line class="ln-soft" x1="615" y1="144" x2="601" y2="204"/>
+<line class="ln-soft" x1="615" y1="144" x2="629" y2="204"/>
+<line class="ln-soft" x1="675" y1="144" x2="661" y2="204"/>
+<line class="ln-soft" x1="675" y1="144" x2="689" y2="204"/>
+<line class="ln-soft" x1="735" y1="144" x2="721" y2="204"/>
+<line class="ln-new" x1="735" y1="144" x2="749" y2="204"/>
+<line class="ln-new" x1="795" y1="144" x2="781" y2="204"/>
+<line class="ln-soft" x1="795" y1="144" x2="809" y2="204"/>
+<line class="ln-soft" x1="855" y1="144" x2="841" y2="204"/>
+<line class="ln-soft" x1="855" y1="144" x2="869" y2="204"/>
+<line class="ln-soft" x1="915" y1="144" x2="901" y2="204"/>
+<line class="ln-soft" x1="915" y1="144" x2="929" y2="204"/>
+<line class="ln-soft" x1="601" y1="204" x2="594" y2="256"/>
+<line class="ln-soft" x1="601" y1="204" x2="601" y2="256"/>
+<line class="ln-soft" x1="601" y1="204" x2="608" y2="256"/>
+<line class="ln-soft" x1="629" y1="204" x2="622" y2="256"/>
+<line class="ln-soft" x1="629" y1="204" x2="629" y2="256"/>
+<line class="ln-soft" x1="629" y1="204" x2="636" y2="256"/>
+<line class="ln-soft" x1="661" y1="204" x2="654" y2="256"/>
+<line class="ln-soft" x1="661" y1="204" x2="661" y2="256"/>
+<line class="ln-soft" x1="661" y1="204" x2="668" y2="256"/>
+<line class="ln-soft" x1="689" y1="204" x2="682" y2="256"/>
+<line class="ln-soft" x1="689" y1="204" x2="689" y2="256"/>
+<line class="ln-soft" x1="689" y1="204" x2="696" y2="256"/>
+<line class="ln-soft" x1="721" y1="204" x2="714" y2="256"/>
+<line class="ln-soft" x1="721" y1="204" x2="721" y2="256"/>
+<line class="ln-soft" x1="721" y1="204" x2="728" y2="256"/>
+<line class="ln-new" x1="749" y1="204" x2="742" y2="256"/>
+<line class="ln-new" x1="749" y1="204" x2="749" y2="256"/>
+<line class="ln-new" x1="749" y1="204" x2="756" y2="256"/>
+<line class="ln-new" x1="781" y1="204" x2="774" y2="256"/>
+<line class="ln-new" x1="781" y1="204" x2="781" y2="256"/>
+<line class="ln-new" x1="781" y1="204" x2="788" y2="256"/>
+<line class="ln-soft" x1="809" y1="204" x2="802" y2="256"/>
+<line class="ln-soft" x1="809" y1="204" x2="809" y2="256"/>
+<line class="ln-soft" x1="809" y1="204" x2="816" y2="256"/>
+<line class="ln-soft" x1="841" y1="204" x2="834" y2="256"/>
+<line class="ln-soft" x1="841" y1="204" x2="841" y2="256"/>
+<line class="ln-soft" x1="841" y1="204" x2="848" y2="256"/>
+<line class="ln-soft" x1="869" y1="204" x2="862" y2="256"/>
+<line class="ln-soft" x1="869" y1="204" x2="869" y2="256"/>
+<line class="ln-soft" x1="869" y1="204" x2="876" y2="256"/>
+<line class="ln-soft" x1="901" y1="204" x2="894" y2="256"/>
+<line class="ln-soft" x1="901" y1="204" x2="901" y2="256"/>
+<line class="ln-soft" x1="901" y1="204" x2="908" y2="256"/>
+<line class="ln-soft" x1="929" y1="204" x2="922" y2="256"/>
+<line class="ln-soft" x1="929" y1="204" x2="929" y2="256"/>
+<line class="ln-soft" x1="929" y1="204" x2="936" y2="256"/>
+<circle class="f-acc" cx="675" cy="84" r="10"/>
+<circle class="f-acc" cx="855" cy="84" r="10"/>
+<circle class="f-mute" cx="615" cy="144" r="7.5"/>
+<circle class="f-mute" cx="675" cy="144" r="7.5"/>
+<circle class="f-acc" cx="735" cy="144" r="7.5"/>
+<circle class="f-acc" cx="795" cy="144" r="7.5"/>
+<circle class="f-mute" cx="855" cy="144" r="7.5"/>
+<circle class="f-mute" cx="915" cy="144" r="7.5"/>
+<circle class="f-mute" cx="601" cy="204" r="5"/>
+<circle class="f-mute" cx="629" cy="204" r="5"/>
+<circle class="f-mute" cx="661" cy="204" r="5"/>
+<circle class="f-mute" cx="689" cy="204" r="5"/>
+<circle class="f-mute" cx="721" cy="204" r="5"/>
+<circle class="f-acc" cx="749" cy="204" r="5"/>
+<circle class="f-acc" cx="781" cy="204" r="5"/>
+<circle class="f-mute" cx="809" cy="204" r="5"/>
+<circle class="f-mute" cx="841" cy="204" r="5"/>
+<circle class="f-mute" cx="869" cy="204" r="5"/>
+<circle class="f-mute" cx="901" cy="204" r="5"/>
+<circle class="f-mute" cx="929" cy="204" r="5"/>
+<circle class="f-mute" cx="594" cy="256" r="2.8"/>
+<circle class="f-mute" cx="601" cy="256" r="2.8"/>
+<circle class="f-mute" cx="608" cy="256" r="2.8"/>
+<circle class="f-mute" cx="622" cy="256" r="2.8"/>
+<circle class="f-mute" cx="629" cy="256" r="2.8"/>
+<circle class="f-mute" cx="636" cy="256" r="2.8"/>
+<circle class="f-mute" cx="654" cy="256" r="2.8"/>
+<circle class="f-mute" cx="661" cy="256" r="2.8"/>
+<circle class="f-mute" cx="668" cy="256" r="2.8"/>
+<circle class="f-mute" cx="682" cy="256" r="2.8"/>
+<circle class="f-mute" cx="689" cy="256" r="2.8"/>
+<circle class="f-mute" cx="696" cy="256" r="2.8"/>
+<circle class="f-mute" cx="714" cy="256" r="2.8"/>
+<circle class="f-mute" cx="721" cy="256" r="2.8"/>
+<circle class="f-mute" cx="728" cy="256" r="2.8"/>
+<circle class="f-acc" cx="742" cy="256" r="2.8"/>
+<circle class="f-acc" cx="749" cy="256" r="2.8"/>
+<circle class="f-acc" cx="756" cy="256" r="2.8"/>
+<circle class="f-acc" cx="774" cy="256" r="2.8"/>
+<circle class="f-acc" cx="781" cy="256" r="2.8"/>
+<circle class="f-acc" cx="788" cy="256" r="2.8"/>
+<circle class="f-mute" cx="802" cy="256" r="2.8"/>
+<circle class="f-mute" cx="809" cy="256" r="2.8"/>
+<circle class="f-mute" cx="816" cy="256" r="2.8"/>
+<circle class="f-mute" cx="834" cy="256" r="2.8"/>
+<circle class="f-mute" cx="841" cy="256" r="2.8"/>
+<circle class="f-mute" cx="848" cy="256" r="2.8"/>
+<circle class="f-mute" cx="862" cy="256" r="2.8"/>
+<circle class="f-mute" cx="869" cy="256" r="2.8"/>
+<circle class="f-mute" cx="876" cy="256" r="2.8"/>
+<circle class="f-mute" cx="894" cy="256" r="2.8"/>
+<circle class="f-mute" cx="901" cy="256" r="2.8"/>
+<circle class="f-mute" cx="908" cy="256" r="2.8"/>
+<circle class="f-mute" cx="922" cy="256" r="2.8"/>
+<circle class="f-mute" cx="929" cy="256" r="2.8"/>
+<circle class="f-mute" cx="936" cy="256" r="2.8"/>
+              <rect x="733" y="246" width="64" height="20" rx="4" fill="none" class="st-acc" stroke-width="1.4"/>
+              <text class="t-mi" x="490" y="318">413 features &#8594; 48 candidates &#8594; causal tests</text>
+            </svg>
+          </div>
+          <figcaption><b>Figure 1.</b> Flat search against hierarchical search, drawn schematically. Supernodes are spectral clusters of the attribution graph, and a graph attention network scores them. Only the highlighted branches are expanded, and the features under them become candidates for causal testing. The counts are from the released seed-0 run.</figcaption>
+        </figure>
+      </section>
+
+      <section id="new">
+        <h2><span class="kicker">What is new</span>Coarse-to-fine search with the checks built in</h2>
+        <table class="contrast">
+          <thead><tr><th scope="col"></th><th scope="col">Flat search</th><th scope="col" class="new">HAGD</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">What is searched</th><td class="old">Every edge or feature subset of the full graph</td><td class="new">A multi-resolution hierarchy of supernodes, expanded from the top</td></tr>
+            <tr><th scope="row">Worst-case cost</th><td class="old">O(2<sup>n</sup>) subsets, or one patching pass per edge across all layers</td><td class="new">O(n<sup>2</sup>&nbsp;log&nbsp;n), with O(n&nbsp;log&nbsp;n) to build the hierarchy</td></tr>
+            <tr><th scope="row">What decides where to look</th><td class="old">A fixed threshold on each edge&rsquo;s effect</td><td class="new">A graph attention network trained on real ablation outcomes</td></tr>
+            <tr><th scope="row">Directed edges</th><td class="old">Clustering methods usually need a symmetric graph</td><td class="new">Clusters are built on a symmetric magnitude skeleton; search and patching keep the true edge direction</td></tr>
+            <tr><th scope="row">When a circuit counts</th><td class="old">Often judged by its size or by attribution scores</td><td class="new">Only after necessity and sufficiency tests on held-out prompts, behind hard gates</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="method">
+        <h2><span class="kicker">How it works</span>Four stages, each with a stopping rule</h2>
+        <figure>
+          <div class="panel scroll">
+            <svg class="dg" viewBox="0 0 960 360" role="img" aria-label="Pipeline in four stages. Stage 1, cross-layer transcoders, turns each layer's dense state into a sparse code. Stage 2 builds an attribution graph with gradient times activation edge weights and keeps the top 16 edges per feature. Stage 3, highlighted as new, clusters the graph into a spectral hierarchy while keeping edge directions. Stage 4, highlighted as new, uses a graph attention network to open the top branches level by level, then tests necessity by ablation and sufficiency by the preservation ratio phi. Gates: task accuracy at least 0.80 before stage 1, at most 40 percent unexplained variance after stage 1, and at least 10 nodes with phi at least 0.3 at the end.">
+              <defs>
+                <marker id="hg-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="ah" d="M0,1 L10,5 L0,9 z"/></marker>
+                <marker id="hg-ahn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="ah-new" d="M0,1 L10,5 L0,9 z"/></marker>
+              </defs>
+              <path class="f-ink2" d="M16,11 L21,16 L16,21 L11,16 Z"/>
+              <text class="t-mi" x="28" y="20">input gate: fine-tuned task accuracy &#8805; 0.80 on held-out prompts</text>
+
+              <!-- stage boxes -->
+              <rect class="box" x="0" y="36" width="212" height="262" rx="3"/>
+              <rect class="box" x="244" y="36" width="212" height="262" rx="3"/>
+              <rect class="band-new" x="488" y="36" width="212" height="262" rx="3"/>
+              <rect class="band-new" x="732" y="36" width="212" height="262" rx="3"/>
+
+              <circle class="f-ink2" cx="22" cy="62" r="11"/><text class="t-b" x="22" y="66.5" text-anchor="middle" style="fill:var(--bg);font-size:12px">1</text>
+              <text class="t-b" x="40" y="67" style="font-size:13px">Cross-layer transcoders</text>
+              <circle class="f-ink2" cx="266" cy="62" r="11"/><text class="t-b" x="266" y="66.5" text-anchor="middle" style="fill:var(--bg);font-size:12px">2</text>
+              <text class="t-b" x="284" y="67" style="font-size:13px">Attribution graph</text>
+              <circle class="f-acc" cx="510" cy="62" r="11"/><text class="t-b" x="510" y="66.5" text-anchor="middle" style="fill:var(--bg);font-size:12px">3</text>
+              <text class="t-b t-acc" x="528" y="67" style="font-size:13px">Spectral hierarchy</text>
+              <circle class="f-acc" cx="754" cy="62" r="11"/><text class="t-b" x="754" y="66.5" text-anchor="middle" style="fill:var(--bg);font-size:12px">4</text>
+              <text class="t-b t-acc" x="772" y="67" style="font-size:13px">Guided search + tests</text>
+
+              <!-- stage 1 illustration: dense -> sparse -->
+              <text class="t-m" x="16" y="96">dense state h (768 values)</text>
+              <g>
+                <rect class="f-mute" x="16" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="29.5" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="43" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="56.5" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="70" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="83.5" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="97" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="110.5" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="124" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="137.5" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="151" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="164.5" y="104" width="11" height="11" rx="1.5"/><rect class="f-mute" x="178" y="104" width="11" height="11" rx="1.5"/>
+              </g>
+              <path class="ln" d="M102,120 V140" marker-end="url(#hg-ah)"/>
+              <g>
+                <rect class="f-mute2" x="16" y="146" width="11" height="11" rx="1.5"/><rect class="f-ink2" x="29.5" y="146" width="11" height="11" rx="1.5"/><rect class="f-mute2" x="43" y="146" width="11" height="11" rx="1.5"/><rect class="f-mute2" x="56.5" y="146" width="11" height="11" rx="1.5"/><rect class="f-mute2" x="70" y="146" width="11" height="11" rx="1.5"/><rect class="f-mute2" x="83.5" y="146" width="11" height="11" rx="1.5"/><rect class="f-ink2" x="97" y="146" width="11" height="11" rx="1.5"/><rect class="f-mute2" x="110.5" y="146" width="11" height="11" rx="1.5"/><rect class="f-mute2" x="124" y="146" width="11" height="11" rx="1.5"/><rect class="f-mute2" x="137.5" y="146" width="11" height="11" rx="1.5"/><rect class="f-ink2" x="151" y="146" width="11" height="11" rx="1.5"/><rect class="f-mute2" x="164.5" y="146" width="11" height="11" rx="1.5"/><rect class="f-mute2" x="178" y="146" width="11" height="11" rx="1.5"/>
+              </g>
+              <text class="t-m" x="16" y="176">sparse: 32 of 6,144 on</text>
+
+              <!-- stage 2 illustration: layered weighted graph -->
+              <g>
+                <line class="ln-soft" x1="290" y1="100" x2="350" y2="112" style="stroke-width:2.6"/>
+                <line class="ln-soft" x1="290" y1="124" x2="350" y2="112"/>
+                <line class="ln-soft" x1="290" y1="124" x2="350" y2="148" style="stroke-width:1.8"/>
+                <line class="ln-soft" x1="290" y1="148" x2="350" y2="148"/>
+                <line class="ln-soft" x1="290" y1="172" x2="350" y2="148" style="stroke-width:2.2"/>
+                <line class="ln-soft" x1="350" y1="112" x2="410" y2="100" style="stroke-width:1.8"/>
+                <line class="ln-soft" x1="350" y1="112" x2="410" y2="136" style="stroke-width:2.8"/>
+                <line class="ln-soft" x1="350" y1="148" x2="410" y2="136"/>
+                <line class="ln-soft" x1="350" y1="148" x2="410" y2="172" style="stroke-width:2"/>
+                <circle class="f-ink2" cx="290" cy="100" r="5"/><circle class="f-ink2" cx="290" cy="124" r="5"/><circle class="f-ink2" cx="290" cy="148" r="5"/><circle class="f-ink2" cx="290" cy="172" r="5"/>
+                <circle class="f-ink2" cx="350" cy="112" r="5"/><circle class="f-ink2" cx="350" cy="148" r="5"/>
+                <circle class="f-ink2" cx="410" cy="100" r="5"/><circle class="f-ink2" cx="410" cy="136" r="5"/><circle class="f-ink2" cx="410" cy="172" r="5"/>
+              </g>
+
+              <!-- stage 3 illustration: clusters under supernodes -->
+              <g>
+                <circle class="f-acc" cx="594" cy="94" r="7"/>
+                <line class="ln-new" x1="594" y1="94" x2="530" y2="118"/><line class="ln-new" x1="594" y1="94" x2="594" y2="118"/><line class="ln-new" x1="594" y1="94" x2="658" y2="118"/>
+                <circle class="f-acc" cx="530" cy="118" r="5.5"/><circle class="f-acc" cx="594" cy="118" r="5.5"/><circle class="f-acc" cx="658" cy="118" r="5.5"/>
+                <line class="ln-soft" x1="530" y1="118" x2="530" y2="134"/><line class="ln-soft" x1="594" y1="118" x2="594" y2="134"/><line class="ln-soft" x1="658" y1="118" x2="658" y2="134"/>
+                <rect class="f-bg st-acc" x="504" y="134" width="52" height="42" rx="6" stroke-width="1.2"/>
+                <rect class="f-bg st-acc" x="568" y="134" width="52" height="42" rx="6" stroke-width="1.2"/>
+                <rect class="f-bg st-acc" x="632" y="134" width="52" height="42" rx="6" stroke-width="1.2"/>
+                <circle class="f-ink2" cx="518" cy="148" r="4"/><circle class="f-ink2" cx="538" cy="160" r="4"/><circle class="f-ink2" cx="520" cy="166" r="4"/><circle class="f-ink2" cx="544" cy="146" r="4"/>
+                <circle class="f-ink2" cx="582" cy="150" r="4"/><circle class="f-ink2" cx="604" cy="146" r="4"/><circle class="f-ink2" cx="596" cy="166" r="4"/>
+                <circle class="f-ink2" cx="646" cy="146" r="4"/><circle class="f-ink2" cx="670" cy="152" r="4"/><circle class="f-ink2" cx="652" cy="166" r="4"/><circle class="f-ink2" cx="672" cy="168" r="4"/>
+              </g>
+
+              <!-- stage 4 illustration: guided tree -->
+              <g>
+                <circle class="f-acc" cx="838" cy="94" r="7"/>
+                <line class="ln-soft" x1="838" y1="94" x2="790" y2="120"/><line class="ln-new" x1="838" y1="94" x2="838" y2="120"/><line class="ln-soft" x1="838" y1="94" x2="886" y2="120"/>
+                <circle class="f-mute" cx="790" cy="120" r="5.5"/><circle class="f-acc" cx="838" cy="120" r="5.5"/><circle class="f-mute" cx="886" cy="120" r="5.5"/>
+                <line class="ln-soft" x1="790" y1="120" x2="778" y2="146"/><line class="ln-soft" x1="790" y1="120" x2="802" y2="146"/>
+                <line class="ln-new" x1="838" y1="120" x2="826" y2="146"/><line class="ln-new" x1="838" y1="120" x2="850" y2="146"/>
+                <line class="ln-soft" x1="886" y1="120" x2="874" y2="146"/><line class="ln-soft" x1="886" y1="120" x2="898" y2="146"/>
+                <circle class="f-mute" cx="778" cy="146" r="4"/><circle class="f-mute" cx="802" cy="146" r="4"/><circle class="f-acc" cx="826" cy="146" r="4"/><circle class="f-acc" cx="850" cy="146" r="4"/><circle class="f-mute" cx="874" cy="146" r="4"/><circle class="f-mute" cx="898" cy="146" r="4"/>
+                <path class="ln-new" d="M816,168 L823,175 L836,160"/>
+                <text class="t-mi t-acc" x="844" y="173">&#966;(C) &#8805; &#952;</text>
+              </g>
+
+              <!-- stage text -->
+              <text class="t-2" x="16" y="212">sparse TopK code per layer</text>
+              <text class="t-2" x="16" y="230">decoder bias = mean state</text>
+              <text class="t-2" x="16" y="248">head predicts the next layer</text>
+              <text class="t-m" x="16" y="276">layers 3&#8211;6, 6,144 each</text>
+
+              <text class="t-2" x="260" y="212">weight = &#8706;f<tspan baseline-shift="sub" font-size="9">j</tspan>/&#8706;f<tspan baseline-shift="sub" font-size="9">i</tspan> &#183; f<tspan baseline-shift="sub" font-size="9">i</tspan></text>
+              <text class="t-2" x="260" y="230">(gradient &#215; activation)</text>
+              <text class="t-2" x="260" y="248">top 16 edges per feature</text>
+              <text class="t-m" x="260" y="276">413 nodes, 4,752 edges</text>
+
+              <text class="t-2" x="504" y="212">cluster on &#189;(|A| + |A|&#7488;)</text>
+              <text class="t-2" x="504" y="230">Laplacian eigenvectors</text>
+              <text class="t-2" x="504" y="248">directions kept for search</text>
+              <text class="t-m" x="504" y="276">4 levels in 0.14 s</text>
+
+              <text class="t-2" x="748" y="212">GAT scores the supernodes</text>
+              <text class="t-2" x="748" y="230">open the top 2 per level</text>
+              <text class="t-2" x="748" y="248">ablate, then measure &#966;(C)</text>
+              <text class="t-m" x="748" y="276">48 candidates &#8594; 10 nodes</text>
+
+              <!-- arrows between stages -->
+              <line class="ln" x1="212" y1="160" x2="242" y2="160" marker-end="url(#hg-ah)"/>
+              <line class="ln" x1="456" y1="160" x2="486" y2="160" marker-end="url(#hg-ah)"/>
+              <line class="ln-new" x1="700" y1="160" x2="730" y2="160" marker-end="url(#hg-ahn)"/>
+
+              <!-- gates -->
+              <path class="f-ink2" d="M16,319 L21,324 L16,329 L11,324 Z"/>
+              <text class="t-mi" x="28" y="328">gate: &#8804; 40% variance unexplained</text>
+              <path class="f-acc" d="M748,319 L753,324 L748,329 L743,324 Z"/>
+              <text class="t-mi t-acc" x="760" y="328">gate: &#8805; 10 nodes, &#966; &#8805; 0.3</text>
+            </svg>
+          </div>
+          <figcaption><b>Figure 2.</b> The four stages. Stages 1 and 2 build on existing transcoder and attribution-graph work. The hierarchy and the guided, causally tested search (highlighted) are HAGD&rsquo;s contribution. When a gate fails, the released pipeline stops rather than report a circuit. The grey figures under each stage are from the seed-0 run.</figcaption>
+        </figure>
+
+        <h3>1 &middot; Cross-layer transcoders</h3>
+        <p>For each analyzed layer, a transcoder maps the residual stream <b>h</b><sub>&#8467;</sub> to a sparse, overcomplete code and back. The decoder bias starts at the dataset&rsquo;s mean activation, so features describe departures from a typical state rather than the state itself.</p>
+        <div class="eq"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>𝐟</mi><mi mathvariant="normal">ℓ</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">K</mi></mrow><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">(</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">U</mi></mrow><mo stretchy="false">(</mo><msubsup><mi>W</mi><mi mathvariant="normal">ℓ</mi><mi>E</mi></msubsup><mtext> </mtext><msub><mi>𝐡</mi><mi mathvariant="normal">ℓ</mi></msub><mo>+</mo><msubsup><mi>𝐛</mi><mi mathvariant="normal">ℓ</mi><mi>E</mi></msubsup><mo stretchy="false">)</mo><mo separator="true">,</mo><mtext> </mtext><mi>k</mi><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">)</mo><mo separator="true">,</mo><mspace width="2em"/><msub><mover accent="true"><mi>𝐡</mi><mo>^</mo></mover><mi mathvariant="normal">ℓ</mi></msub><mo>=</mo><msub><mi>D</mi><mi mathvariant="normal">ℓ</mi></msub><mtext> </mtext><msub><mi>𝐟</mi><mi mathvariant="normal">ℓ</mi></msub><mo>+</mo><msubsup><mi>𝐛</mi><mi mathvariant="normal">ℓ</mi><mi>D</mi></msubsup></mrow><annotation encoding="application/x-tex">\mathbf{f}_\ell = \mathrm{TopK}\big(\mathrm{ReLU}(W^{E}_{\ell}\,\mathbf{h}_\ell + \mathbf{b}^{E}_{\ell}),\,k\big),\qquad \hat{\mathbf{h}}_\ell = D_\ell\,\mathbf{f}_\ell + \mathbf{b}^{D}_\ell</annotation></semantics></math></span></div>
+        <p>Training balances reconstruction, a cross-layer term (a small predictor <i>P</i><sub>&#8467;</sub> maps this layer&rsquo;s code to the next layer&rsquo;s) and sparsity:</p>
+        <div class="eq"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>ℒ</mi><mo>=</mo><munder><mo>∑</mo><mi mathvariant="normal">ℓ</mi></munder><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">∥</mo><msub><mi>𝐡</mi><mi mathvariant="normal">ℓ</mi></msub><mo>−</mo><msub><mover accent="true"><mi>𝐡</mi><mo>^</mo></mover><mi mathvariant="normal">ℓ</mi></msub><msubsup><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">∥</mo><mn>2</mn><mn>2</mn></msubsup><mtext>  </mtext><mo>+</mo><mtext>  </mtext><msub><mi>λ</mi><mn>1</mn></msub><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">∥</mo><msub><mi>𝐟</mi><mrow><mi mathvariant="normal">ℓ</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>P</mi><mi mathvariant="normal">ℓ</mi></msub><mo stretchy="false">(</mo><msub><mi>𝐟</mi><mi mathvariant="normal">ℓ</mi></msub><mo stretchy="false">)</mo><msubsup><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">∥</mo><mn>2</mn><mn>2</mn></msubsup><mtext>  </mtext><mo>+</mo><mtext>  </mtext><msub><mi>λ</mi><mn>2</mn></msub><mo stretchy="false">∥</mo><msub><mi>𝐟</mi><mi mathvariant="normal">ℓ</mi></msub><msub><mo stretchy="false">∥</mo><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\mathcal{L} = \sum_{\ell}\big\lVert \mathbf{h}_\ell - \hat{\mathbf{h}}_\ell\big\rVert_2^2 \;+\; \lambda_1\big\lVert \mathbf{f}_{\ell+1} - P_\ell(\mathbf{f}_\ell)\big\rVert_2^2 \;+\; \lambda_2\lVert \mathbf{f}_\ell\rVert_1</annotation></semantics></math></span></div>
+
+        <h3>2 &middot; Attribution graph</h3>
+        <p>An edge from feature <i>i</i> to a downstream feature <i>j</i> is weighted by gradient &times; activation, which needs one backward pass per example:</p>
+        <div class="eq"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>A</mi><mrow><mi>i</mi><mo>→</mo><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><mi mathvariant="normal">∂</mi><msub><mi>f</mi><mi>j</mi></msub></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>f</mi><mi>i</mi></msub></mrow></mfrac><mtext>  </mtext><msub><mi>f</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">A_{i\to j} = \frac{\partial f_j}{\partial f_i}\; f_i</annotation></semantics></math></span></div>
+        <p>Path-integrated Integrated Gradients needs one backward pass per integration step. On the released run the two orderings agree closely: correlation 0.970 over 366 shared edges against 20-step IG. Keeping each feature&rsquo;s strongest 16 outgoing edges holds the graph at |<i>E</i>| = O(<i>n</i>).</p>
+
+        <h3>3 &middot; Spectral hierarchy</h3>
+        <p>The normalized graph Laplacian needs a symmetric matrix, and attribution graphs are directed. HAGD separates the two jobs. Clustering runs on a symmetric magnitude skeleton, while the original directed edges are kept for search and patching:</p>
+        <div class="eq"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>A</mi><mtext>sym</mtext></msub><mo>=</mo><mstyle displaystyle="false" scriptlevel="0"><mfrac><mn>1</mn><mn>2</mn></mfrac></mstyle><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">(</mo><mi mathvariant="normal">∣</mi><mi>A</mi><mi mathvariant="normal">∣</mi><mo>+</mo><mi mathvariant="normal">∣</mi><mi>A</mi><msup><mi mathvariant="normal">∣</mi><mi mathvariant="normal">⊤</mi></msup><mo fence="false" stretchy="true" minsize="1.2em" maxsize="1.2em">)</mo><mo separator="true">,</mo><mspace width="2em"/><mi>L</mi><mo>=</mo><mi>I</mi><mo>−</mo><msup><mi>D</mi><mrow><mo>−</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup><msub><mi>A</mi><mtext>sym</mtext></msub><mtext> </mtext><msup><mi>D</mi><mrow><mo>−</mo><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">A_{\text{sym}} = \tfrac{1}{2}\big(|A| + |A|^{\top}\big),\qquad L = I - D^{-1/2}A_{\text{sym}}\,D^{-1/2}</annotation></semantics></math></span></div>
+        <p>The smallest eigenvectors of <i>L</i> embed the features, k-means groups them into supernodes, and the process repeats on the coarsened graph to give levels <i>G</i><sup>(0)</sup> &hellip; <i>G</i><sup>(R)</sup> with branching factor 4. With sparse (Lanczos) eigensolvers each level costs O(|<i>E</i>|), so the hierarchy costs O(<i>n</i>&nbsp;log&nbsp;<i>n</i>).</p>
+
+        <h3>4 &middot; Guided search and causal tests</h3>
+        <p>A two-layer graph attention network, trained on necessity labels from real ablations, scores the features. Each supernode&rsquo;s score is the mean over its members, and the search keeps only the top 2 supernodes per level on its way down. The surviving region then faces two tests on held-out prompts. For <em>necessity</em>, each feature is ablated alone and kept only if the task loss rises by at least &epsilon;. For <em>sufficiency</em>, every feature outside the circuit is replaced by its mean and the remaining behavior is measured:</p>
+        <div class="eq"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>𝒞</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><mrow><mi mathvariant="normal">A</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">c</mi></mrow><mo stretchy="false">(</mo><msub><mi>M</mi><mi>𝒞</mi></msub><mo stretchy="false">)</mo></mrow><mrow><mrow><mi mathvariant="normal">A</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">c</mi></mrow><mo stretchy="false">(</mo><msub><mi>M</mi><mtext>full</mtext></msub><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\phi(\mathcal{C}) = \frac{\mathrm{Acc}(M_{\mathcal{C}})}{\mathrm{Acc}(M_{\text{full}})}</annotation></semantics></math></span></div>
+        <p class="eq-note">The worst-case cost of the search is O(<i>n</i><sup>2</sup>&nbsp;log&nbsp;<i>n</i>). Hierarchy construction is O(<i>n</i>&nbsp;log&nbsp;<i>n</i>), and patching is restricted to candidate features.</p>
+      </section>
+
+      <section id="evidence">
+        <h2><span class="kicker">Released results</span>What the public code shows</h2>
+        <p>The released notebooks run the whole pipeline on GPT-2 Small (124M parameters) fine-tuned for <i>a</i>&nbsp;+&nbsp;<i>b</i>&nbsp;mod&nbsp;23, on a single Tesla T4. The fine-tuned model reaches 83.8% exact-match accuracy on 105 held-out prompts, none of which appear in the 3,000 training prompts. Transcoders on layers 3&ndash;6 leave 0.1&ndash;0.3% of held-out variance unexplained on the task and 1.8&ndash;2.5% on generic English text.</p>
+
+        <figure>
+          <h3 class="fig-title">The search narrows 413 active features to a 10-node circuit</h3>
+          <div class="panel"><div class="chart" data-chart="funnel"></div></div>
+          <figcaption><b>Figure 3.</b> Features remaining after each stage of the seed-0 run. The four analyzed layers hold 24,576 dictionary features in total, of which 413 carry an edge after sparsification. The final circuit has 9 directed edges: one node in layer&nbsp;5 and nine in layer&nbsp;6.</figcaption>
+        </figure>
+
+        <figure>
+          <h3 class="fig-title">The 10-node circuit preserves no more behavior than the controls</h3>
+          <div class="panel"><div class="chart" data-chart="controls"></div></div>
+          <figcaption><b>Figure 4.</b> Behavioral preservation &phi; when every feature outside the set is replaced by its mean at generation steps; the full model scores 1.0. Restricting every position instead, prompt reading included, drops the circuit to &phi; = 0.00. This is the extraction notebook&rsquo;s seed-0 run. The verification suite&rsquo;s seed-0 run, repeated twice with identical results, gives 0.27 for its circuit.</figcaption>
+        </figure>
+
+        <div class="table-fig">
+          <div class="tbl-wrap">
+            <table class="bt small">
+              <caption><b>Table 1.</b> Wall-clock time per stage, seed-0 run on one Tesla T4 (float32, 2 CPU cores).</caption>
+              <thead><tr><th scope="col">Stage</th><th scope="col">Time</th><th scope="col" class="l">Output</th></tr></thead>
+              <tbody>
+                <tr><td>Fine-tune GPT-2 Small on <i>a</i> + <i>b</i> mod 23</td><td>969 s</td><td class="l">83.8% held-out exact match</td></tr>
+                <tr><td>Cache activations, layers 3&ndash;6</td><td>13.6 s</td><td class="l">10,656 training positions</td></tr>
+                <tr><td>Train transcoders</td><td>151 s</td><td class="l">&le; 0.3% unexplained variance on the task</td></tr>
+                <tr><td>Build attribution graph</td><td>4.5 s</td><td class="l">15,362 edges, 4,752 after top-16 pruning</td></tr>
+                <tr class="ours"><td>Spectral coarsening</td><td>0.14 s</td><td class="l">4 levels, 413 features to 2 supernodes</td></tr>
+                <tr><td>Ablation labels for the GNN</td><td>199 s</td><td class="l">57 of 160 candidates necessary</td></tr>
+                <tr><td>Train the graph attention network</td><td>1.7 s</td><td class="l">held-out AUROC 0.71</td></tr>
+                <tr class="ours"><td>Hierarchical search</td><td>0.09 s</td><td class="l">48 connected candidates</td></tr>
+                <tr><td>Causal validation</td><td>20.9 s</td><td class="l">10-node circuit, &phi; = 0.23</td></tr>
+                <tr class="mid"><td><b>Total</b></td><td><b>1,360 s</b></td><td class="l">22.7 minutes end to end</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p>The search itself is the cheap part: 0.09&nbsp;s, against 969&nbsp;s to fine-tune the model and 199&nbsp;s of ablations to label training data for the graph network. The pipeline is also deterministic. Running seed 0 twice in the verification suite reproduced every preservation value exactly.</p>
+
+        <div class="table-fig">
+          <div class="tbl-wrap">
+            <table class="bt small">
+              <caption><b>Table 2.</b> The five-seed verification suite. A seed only proceeds to circuit extraction if the fine-tuned model reaches 80% held-out accuracy.</caption>
+              <thead><tr><th scope="col">Seed</th><th scope="col">Held-out accuracy</th><th scope="col" class="l">Accuracy gate</th><th scope="col">&phi; all positions</th><th scope="col">&phi; generation steps</th><th scope="col">&phi; first step</th></tr></thead>
+              <tbody>
+                <tr><td>0</td><td>83.8%</td><td class="l"><span class="status pass"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5 5.5 10.5 11.5 3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>pass</span></td><td>0.000</td><td>0.273</td><td>0.330</td></tr>
+                <tr><td>1</td><td>67.6%</td><td class="l"><span class="status fail"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 3.5 10.5 10.5M10.5 3.5 3.5 10.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>fail</span></td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+                <tr><td>2</td><td>59.0%</td><td class="l"><span class="status fail"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 3.5 10.5 10.5M10.5 3.5 3.5 10.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>fail</span></td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+                <tr><td>3</td><td>59.0%</td><td class="l"><span class="status fail"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 3.5 10.5 10.5M10.5 3.5 3.5 10.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>fail</span></td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+                <tr><td>4</td><td>46.7%</td><td class="l"><span class="status fail"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 3.5 10.5 10.5M10.5 3.5 3.5 10.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>fail</span></td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="diagnosis">
+        <h2><span class="kicker">Why it falls short</span>The released notebook locates the problem</h2>
+        <p>The extraction notebook does not stop at &ldquo;&phi; is low&rdquo;. It runs a series of diagnostic tests, each designed to rule an explanation in or out. Four findings stand out.</p>
+
+        <figure>
+          <h3 class="fig-title">The traversal misses most useful features, and restricting more layers compounds the loss</h3>
+          <div class="fig-pair">
+            <div class="panel"><p class="sub">(a) Share of the top-N most necessary features the traversal reaches</p><div class="chart" data-chart="recall"></div></div>
+            <div class="panel"><p class="sub">(b) &phi; when the circuit is enforced only in some layers</p><div class="chart" data-chart="layers"></div></div>
+          </div>
+          <figcaption><b>Figure 5.</b> (a) Traversal recall. Of the 10 features with the largest individual necessity scores, 7 never entered the 48-feature candidate pool. (b) Enforcing the circuit only in layer 6 gives &phi; = 0.33. Adding layer 5, which holds a single circuit node, drops it to 0.22, because restricting an earlier layer degrades what later layers receive.</figcaption>
+        </figure>
+
+        <figure>
+          <h3 class="fig-title">Behavior returns only when most of each activation is let through</h3>
+          <div class="panel"><div class="chart" data-chart="alpha"></div></div>
+          <figcaption><b>Figure 6.</b> Blending the circuit-only features with the full features, <i>f</i> = &alpha;&middot;<i>f</i><sub>full</sub> + (1 &minus; &alpha;)&middot;<i>f</i><sub>circuit</sub>, at generation steps. Preservation stays under 0.25 up to &alpha; = 0.5, then climbs steadily to 0.955. That is a gradual cost of withheld information, not a cliff at one threshold.</figcaption>
+        </figure>
+
+        <ul>
+          <li><span class="lead-in">Candidate generation is the bottleneck.</span> Traversal recall is 20&ndash;31% across budgets. Adding the missed features back without re-filtering does not help on its own (&phi; = 0.23 for a 60-feature union).</li>
+          <li><span class="lead-in">Necessity scores carry little signal here.</span> The 10 <em>least</em> necessary features preserve as much (0.273) as the circuit (0.227). Necessity-ranked sets from 5 to 80 features fall within the random-draw range at 5 of 7 sizes.</li>
+          <li><span class="lead-in">The first answer token carries the work.</span> Restricting only the first generated token gives &phi; = 0.30, against 0.23 when every generation step is restricted. The biggest jump in the depth sweep comes between one and two restricted steps.</li>
+          <li><span class="lead-in">Features act together.</span> In the greedy trace, some features add more accuracy alongside others than they do alone, so ranking features one at a time undersells them.</li>
+          <li><span class="lead-in">Preservation depends on the prompt.</span> &phi; differs by 0.133 between sums that wrap past 23 and sums that do not.</li>
+        </ul>
+      </section>
+
+      <section id="status">
+        <h2><span class="kicker">About the arXiv numbers</span>What this page does and does not report</h2>
+        <div class="note">
+          <span class="label">Scope</span>
+          <p>arXiv v2 (June 2026) also reports runs on Pythia and Llama models up to 70B parameters, 91% (&plusmn;2.3%) behavioral preservation with 49&ndash;347-node circuits, and cross-architecture transfer coefficients of 0.38&ndash;0.82. <strong>The released code does not contain those runs</strong>, and the repository&rsquo;s own automated claim audit (<a href="https://github.com/Mudassiruddin7/HAGD/blob/main/results/manuscript_claim_audit.json"><code>manuscript_claim_audit.json</code></a>) marks them unsupported. This page reports only numbers that the released notebooks produce.</p>
+        </div>
+        <div class="table-fig">
+          <div class="tbl-wrap">
+            <table class="bt small">
+              <caption><b>Table 3.</b> The repository&rsquo;s claim audit, as published in its README.</caption>
+              <thead><tr><th scope="col">Claim in the manuscript</th><th scope="col" class="l">Audit</th><th scope="col" class="l">What the released code shows</th></tr></thead>
+              <tbody>
+                <tr><td>91% (&plusmn;2.3%) behavioral preservation</td><td class="l"><span class="status fail"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 3.5 10.5 10.5M10.5 3.5 3.5 10.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>unsupported</span></td><td class="l">&phi; = 0.00 at all positions, 0.27 at generation steps</td></tr>
+                <tr><td>Modulus-113 task</td><td class="l"><span class="status fail"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 3.5 10.5 10.5M10.5 3.5 3.5 10.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>unsupported</span></td><td class="l">the notebooks use <i>a</i> + <i>b</i> mod 23</td></tr>
+                <tr><td>49&ndash;347-node circuits across models</td><td class="l"><span class="status fail"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 3.5 10.5 10.5M10.5 3.5 3.5 10.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>unsupported</span></td><td class="l">one 10-node circuit, GPT-2 Small only</td></tr>
+                <tr><td>52&ndash;82% cross-architecture transfer</td><td class="l"><span class="status fail"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 3.5 10.5 10.5M10.5 3.5 3.5 10.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>unsupported</span></td><td class="l">transfer code exists but was never run</td></tr>
+                <tr><td>Symmetrization &frac12;(A + A<sup>&#8868;</sup>)</td><td class="l"><span class="status fix"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 12 12 2M8.5 2H12v3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>corrected</span></td><td class="l">the code uses &frac12;(|A| + |A|<sup>&#8868;</sup>)</td></tr>
+                <tr><td>Integrated Gradients attribution</td><td class="l"><span class="status fix"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 12 12 2M8.5 2H12v3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>corrected</span></td><td class="l">gradient &times; activation is primary; IG is a check</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="next">
+        <h2><span class="kicker">Next steps</span>What the diagnostics point to</h2>
+        <ul>
+          <li><span class="lead-in">Fix recall before anything else.</span> The hierarchy currently discards most of the features that matter, so better candidates should come before better scoring.</li>
+          <li><span class="lead-in">Measure sufficiency where the computation happens.</span> Score circuits at generation steps, or at the first answer token, rather than at every position.</li>
+          <li><span class="lead-in">Restrict the deepest layer first.</span> Restriction costs compound through earlier layers.</li>
+          <li><span class="lead-in">Select features jointly.</span> The synergy result argues for interaction-aware selection over independent ranking.</li>
+          <li><span class="lead-in">Get more seeds past the accuracy gate</span> with a larger fine-tuning budget, then run the untouched second-task (parity) and transfer experiments that the code already contains.</li>
+        </ul>
+      </section>
+
+      <section id="cite">
+        <h2><span class="kicker">Citation</span>Cite this work</h2>
+        <div class="cite">
+          <button class="copy" type="button" data-copy="bib-hagd">Copy BibTeX</button>
+<pre id="bib-hagd">@article{uddin2026hagd,
+  title   = {Hierarchical Sparse Circuit Extraction from Billion-Parameter
+             Language Models through Scalable Attribution Graph Decomposition},
+  author  = {Uddin, Mohammed Mudassir and Alam, Shahnawaz
+             and Pasha, Mohammed Kaif},
+  journal = {arXiv preprint arXiv:2601.12879},
+  year    = {2026}
+}</pre>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../">Mohammed Mudassir Uddin</a> &middot; Research pages</span>
+    <nav aria-label="Other papers"><a href="../agentcompress/">AgentCompress</a><a href="../pmp-dacis/">PMP-DACIS</a><a href="../laf-yolov10/">LAF-YOLOv10</a><a href="https://github.com/Mudassiruddin7/HAGD">Code on GitHub</a></nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function f3(v) { return v.toFixed(3); }
+  function f1(v) { return v.toFixed(1); }
+  window.CHARTS = {
+    funnel: {
+      type: 'hbar', domain: [0, 450], ticks: [0, 100, 200, 300, 400], fmt: 0, color: 'accent', valueName: 'features',
+      aria: 'Features remaining after each stage: 413 active, 261 after traversal, 48 connected candidates, 13 pass necessity, 10 in the final circuit.',
+      rows: [
+        { label: 'Active features with an edge', value: 413 },
+        { label: 'Kept by coarse-to-fine traversal', value: 261 },
+        { label: 'Connected candidate region', value: 48 },
+        { label: 'Pass the necessity test', value: 13 },
+        { label: 'Largest connected circuit', value: 10 }
+      ],
+      data: { cols: ['Stage', 'Features'], rows: [['Active features with an edge', '413'], ['Kept by coarse-to-fine traversal', '261'], ['Connected candidate region', '48'], ['Pass the necessity test', '13'], ['Largest connected circuit', '10']] }
+    },
+    controls: {
+      type: 'hbar', domain: [0, 1], ticks: [0, 0.2, 0.4, 0.6, 0.8, 1], fmt: f3, tickFmt: f1, valueName: 'preservation φ',
+      aria: 'Preservation phi at generation steps: HAGD circuit 0.227, keep no features 0.273, 10 least necessary features 0.273, 10 random features 0.277, greedy search 0.284. Reporting gate at 0.3, sufficiency threshold at 0.9.',
+      rows: [
+        { label: 'HAGD circuit (10 nodes)', value: 0.227, hl: true },
+        { label: 'Keep no features at all', value: 0.273 },
+        { label: '10 least necessary features', value: 0.273 },
+        { label: '10 random features, mean of 3', value: 0.277 },
+        { label: 'Greedy search for accuracy, 10', value: 0.284 }
+      ],
+      refs: [{ value: 0.3, label: 'reporting gate 0.3', anchor: 'start' }, { value: 0.9, label: 'sufficient at 0.9', anchor: 'end' }],
+      data: { cols: ['Feature set', 'φ (generation steps)'], rows: [['HAGD circuit (10 nodes)', '0.227'], ['Keep no features at all', '0.273'], ['10 least necessary features', '0.273'], ['10 random features, mean of 3 draws', '0.277'], ['Greedy search for accuracy, 10 features', '0.284'], ['HAGD circuit, all positions restricted', '0.000']] }
+    },
+    recall: {
+      type: 'cols', height: 170, domain: [0, 100], ticks: [0, 25, 50, 75, 100], valueLabels: true,
+      fmt: function (v) { return v + '%'; }, tickFmt: function (v) { return v + '%'; },
+      aria: 'Traversal recall of the top-N most necessary features: top 5, 20 percent; top 10, 30; top 20, 30; top 30, 27; top 48, 31.',
+      categories: ['top 5', 'top 10', 'top 20', 'top 30', 'top 48'],
+      series: [{ name: 'reached by traversal', color: 'accent', values: [20, 30, 30, 27, 31] }],
+      data: { cols: ['Top-N features by necessity', 'Share reached by the traversal'], rows: [['5', '20%'], ['10', '30%'], ['20', '30%'], ['30', '27%'], ['48', '31%']] }
+    },
+    layers: {
+      type: 'hbar', domain: [0, 0.4], ticks: [0, 0.1, 0.2, 0.3, 0.4], fmt: f3, tickFmt: f1, color: 'accent', valueName: 'φ', barH: 16, gap: 12, narrowAt: 420,
+      aria: 'Preservation when the circuit is enforced in some layers only: layer 6 only 0.330, layer 5 only 0.295, layers 5 and 6 0.216, layers 4 to 6 0.227, layers 3 to 6 0.227.',
+      rows: [
+        { label: 'Layer 6 only', value: 0.330 },
+        { label: 'Layer 5 only', value: 0.295 },
+        { label: 'Layers 5–6', value: 0.216 },
+        { label: 'Layers 4–6', value: 0.227 },
+        { label: 'Layers 3–6', value: 0.227 }
+      ],
+      data: { cols: ['Layers restricted', 'φ'], rows: [['6', '0.330'], ['5', '0.295'], ['5, 6', '0.216'], ['4, 5, 6', '0.227'], ['3, 4, 5, 6', '0.227']] }
+    },
+    alpha: {
+      type: 'line', height: 230,
+      aria: 'Preservation phi against alpha: 0.227 at 0, 0.239 at 0.25, 0.250 at 0.5, 0.409 at 0.75, 0.477 at 0.8, 0.659 at 0.85, 0.841 at 0.9, 0.932 at 0.95, 0.955 at 1.',
+      x: { domain: [0, 1], ticks: [0, 0.25, 0.5, 0.75, 1], label: 'α, share of the full activation let through', name: 'α =',
+           fmt: function (v) { return String(v); }, tickFmt: function (v) { return String(v); } },
+      y: { domain: [0, 1], ticks: [0, 0.25, 0.5, 0.75, 1], label: 'φ', fmt: f3, tickFmt: function (v) { return v.toFixed(2); } },
+      refs: [{ y: 0.9, label: 'sufficient at 0.9', anchor: 'start' }],
+      series: [{ name: 'φ', color: 'accent', markers: true,
+        points: [[0, 0.227], [0.25, 0.239], [0.5, 0.25], [0.75, 0.409], [0.8, 0.477], [0.85, 0.659], [0.9, 0.841], [0.95, 0.932], [1, 0.955]] }],
+      data: { cols: ['α', 'φ'], rows: [['0', '0.227'], ['0.25', '0.239'], ['0.5', '0.250'], ['0.75', '0.409'], ['0.8', '0.477'], ['0.85', '0.659'], ['0.9', '0.841'], ['0.95', '0.932'], ['1', '0.955']] }
+    }
+  };
+})();
+</script>
+<script src="../assets/paper/paper.js" defer></script>
+</body>
+</html>

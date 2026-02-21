@@ -1,0 +1,25 @@
+<!--
+title: Four validated upgrades that don't add up
+dek: LAF-YOLOv10 combined four published small-object detection techniques in one detector. Together they cost 7.8 points of mAP, and the loss traces to one interaction.
+tags: paper, computer vision, evaluation
+-->
+<p>On 13 September we posted <a href="https://arxiv.org/abs/2609.14560">Small Object Detection in Drone Aerial Imagery with LAF-YOLOv10</a>. Quratulain Nayeem is the first author, with Dr. Fahmina Taranum and me.</p>
+
+<p>Drone footage is hard for general-purpose detectors: targets span a handful of pixels, and onboard compute is small. The common recipe is to take techniques that each worked in their own paper and combine them. We did that with four: a partial-convolution backbone block (PC-C2f), an attention-guided feature pyramid (AG-FPN), a stride-4 detection head in place of the large-object head, and Wise-IoU v3 regression. Then we tested whether the gains add up.</p>
+
+<h2>They don't</h2>
+
+<p>Over three seeds on VisDrone-DET2019, LAF-YOLOv10 reaches 24.0 &plusmn; 0.4% mAP@0.5 at 2.14M parameters, against 31.8% for plain YOLOv10n. The deficit carries over to UAVDT, where it is 10 points, and holds on the held-out and test-dev splits.</p>
+
+<figure>
+  <a class="fig-link" href="{root}images/papers/laf-yolov10-composability.svg"><img class="diagram" src="{root}images/papers/laf-yolov10-composability.svg" alt="LAF-YOLOv10 composability study: four individually validated modules predict a 3.0-point mAP loss but stack to 5.5, a 2.5-point interaction penalty concentrated at the P2 head swap." loading="lazy"></a>
+  <figcaption><b>The composability test.</b> What the modules cost alone predicts one number; stacked, they cost more, and the extra sits at the head swap.</figcaption>
+</figure>
+
+<h2>The diagnosis</h2>
+
+<p>The failure is not uniform. Background false positives, localisation errors and duplicate detections all move in the direction AG-FPN and Wise-IoU were designed to push. The deficit sits in missed detections and class confusion, concentrated on vans, trucks, buses and awning tricycles: the medium-to-large vehicles the removed head used to cover.</p>
+
+<p>Ablation puts 2.5 points on the head swap alone and another 2.5 on its interaction with the backbone. The backbone is weakened because, once PC-C2f changes its channel layout, only 73 of 150 pretrained tensors transfer. That last point is the leading hypothesis, not a tested one, and a controlled run is the first item of future work.</p>
+
+<p>Composability has to be tested, not assumed. The checkpoints for all three seeds are in the <a href="https://github.com/Mudassiruddin7/Small-Object-Detection-in-UAV-Imagery">repository</a>, and the <a href="{root}laf-yolov10/">project page</a> has the detection examples.</p>

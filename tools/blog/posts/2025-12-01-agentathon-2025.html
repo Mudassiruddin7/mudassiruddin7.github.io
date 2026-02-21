@@ -1,0 +1,16 @@
+<!--
+title: 2,300 developers, one room, and a fraud-detection agent
+dek: Agentathon 2025 set a Guinness World Record for the largest agentic AI hackathon. What I built there, and the one design idea I kept.
+tags: hackathon, agents, knowledge graphs
+-->
+<p>In December I took part in Agentathon 2025 at Malla Reddy University in Hyderabad. More than 2,300 developers built at the same time, and the event set a Guinness World Record for the largest agentic AI hackathon. The record belonged to the room. What I took home was smaller.</p>
+
+<p>I built fraud-detection agents for public-spending transparency: a multi-agent system that reasons over spending records and keeps every decision in a Neo4j knowledge graph. Each decision is stored as a versioned record. When a new finding contradicts an older one, the older record is flagged rather than overwritten. By the end the graph held more than 500 nodes.</p>
+
+<h2>The part worth keeping</h2>
+
+<p>The contradiction flag. Agents that summarise financial records sound confident by default. If a later agent reads a transaction differently, the easy design lets the newest answer win, and the disagreement disappears from the record. Keeping both versions, with a flag between them, turns the disagreement into something a person can check.</p>
+
+<p>The same concern shows up in a proposal I co-wrote later in the year, <a href="{blog}four-proposals/">AetherState</a>: cached memory should keep a pointer back to the evidence it came from, so you can tell when it has gone stale.</p>
+
+<p>The record was a bonus. The lesson was humility.</p>

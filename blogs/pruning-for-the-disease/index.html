@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pruning for the disease, not for ImageNet | Mohammed Mudassir Uddin</title>
+<meta name="description" content="Our first preprint of the year keeps the channels that separate one leaf disease from another, so a few-shot model fits on a Raspberry Pi 4.">
+<meta name="author" content="Mohammed Mudassir Uddin">
+<link rel="canonical" href="https://mudassiruddin7.github.io/blogs/pruning-for-the-disease/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="Pruning for the disease, not for ImageNet | Mohammed Mudassir Uddin">
+<meta property="og:description" content="Our first preprint of the year keeps the channels that separate one leaf disease from another, so a few-shot model fits on a Raspberry Pi 4.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/blogs/pruning-for-the-disease/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/images/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="Mohammed Mudassir Uddin: blog" href="https://mudassiruddin7.github.io/blogs/feed.xml">
+<link rel="icon" href="../../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/paper/paper.css">
+<link rel="stylesheet" href="../../assets/blog/blog.css">
+</head>
+<body class="acc-blue">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Site"><a href="../../blogs/">Blog</a><a href="../../#-publications">Research</a><a href="https://drive.google.com/file/d/1gz7MvatR6PW-qhG1u03cm1_K6LDS6_O4/view">CV</a></nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="wrap">
+  <header class="post-hero">
+    <p class="eyebrow"><span class="name"><a href="../">Blog</a></span><span>January 2026</span><span>paper</span><span>edge ML</span><span>few-shot learning</span></p>
+    <h1 class="title">Pruning for the disease, not for ImageNet</h1>
+    <p class="subtitle">Our first preprint of the year keeps the channels that separate one leaf disease from another, so a few-shot model fits on a Raspberry Pi 4.</p>
+  </header>
+  <main id="main" class="post">
+<p>On 5 January we posted <a href="https://arxiv.org/abs/2601.02353">Meta-Learning Guided Pruning for Few-Shot Plant Pathology on Edge Devices</a>. I am the first author, with Shahnawaz Alam, Mohammed Kaif Pasha, Dr. Tasneem Bano Rehman, Dr. Fahmina Taranum and Afroze Begum.</p>
+
+<p>The setting: a farmer finds an unfamiliar blight, has no lab nearby and no reliable connection. The model has to run on a cheap board and learn a new disease from one to ten photos.</p>
+
+<h2>What we changed</h2>
+
+<p>Standard pruning keeps a channel because of its weight magnitude, or because the pruned layer still reconstructs its output. Neither asks whether the channel helps tell early blight from late blight, and with a handful of examples per class that is the property worth protecting.</p>
+
+<p>DACIS (disease-aware channel importance scoring) adds Fisher's discriminant ratio across disease classes to a gradient term and an activation-variance term. The PMP pipeline prunes conservatively, meta-learns, then prunes again using the meta-gradients. Pruning once from ImageNet weights would keep the channels ImageNet cared about.</p>
+
+<figure>
+  <a class="fig-link" href="../../images/papers/pmp-dacis.svg"><img class="diagram" src="../../images/papers/pmp-dacis.svg" alt="PMP-DACIS: disease-aware channel scoring guides a prune, meta-learn, prune pipeline that shrinks ResNet-18 from 11.2M to 2.5M parameters for real-time diagnosis on a Raspberry Pi 4." loading="lazy"></a>
+  <figcaption><b>The pipeline.</b> DACIS scores drive both pruning passes; the second pass also uses the gradients collected while meta-learning.</figcaption>
+</figure>
+
+<h2>What the paper reports</h2>
+
+<p>ResNet-18 goes from 11.2M to 2.5M parameters and runs at 142 ms per image on a Raspberry Pi 4, 3.6 times faster than the full model. At 30% of the parameters it is 3.8 points ahead of Meta-Prune in 5-way 1-shot and 5-shot accuracy.</p>
+
+<h2>Where it stops</h2>
+
+<ul>
+  <li>Every crop we tested belongs to one plant family: tomato, potato and pepper.</li>
+  <li>PlantVillage photos were taken in a lab. Our domain-shift split is a proxy for field conditions, not a field study.</li>
+  <li>The pruned model makes the same mistakes as the full one. Early versus late blight is still the most confused pair.</li>
+</ul>
+
+<p>More detail, tables and the device measurements are on the <a href="../../pmp-dacis/">project page</a>.</p>
+  </main>
+  <nav class="post-nav" aria-label="More posts">
+<a class="prev" href="../a-pdf-in-a-training-series-out/"><span class="pn-l">Earlier</span><span class="pn-t">A PDF in, a training series out</span></a>
+<a class="next" href="../agentcompress/"><span class="pn-l">Later</span><span class="pn-t">Not every agent step needs the whole model</span></a>
+</nav>
+</div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../../">Mohammed Mudassir Uddin</a> &middot; Blog</span>
+    <nav aria-label="More"><a href="../../blogs/">All posts</a><a href="../../blogs/feed.xml">RSS</a><a href="../../#-publications">Research</a><a href="https://github.com/Mudassiruddin7">GitHub</a></nav>
+  </div>
+</footer>
+<script src="../../assets/paper/paper.js" defer></script>
+</body>
+</html>

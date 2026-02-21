@@ -1,0 +1,16 @@
+<!--
+title: A cost check for code an agent wrote
+dek: At the OpenAI Codex Community Hackathon in Hyderabad we built Gravity, a FinOps check that runs before AI-written code is merged.
+tags: hackathon, agents, systems
+-->
+<p>In April I spent a Saturday at the OpenAI Codex Community Hackathon in Hyderabad. The conversation had moved on from whether AI can write features to how you run coding agents without burning through the cloud budget.</p>
+
+<h2>The failure we built for</h2>
+
+<p>An agent writes a script that fetches 100,000 records into memory in two seconds. It works on a laptop. On a small production server it crashes the app and forces an infrastructure upgrade nobody planned for.</p>
+
+<h2>Gravity</h2>
+
+<p>Gravity is a FinOps firewall for agentic coding. Before AI-generated code is merged, it estimates the memory footprint and compute cost of the change against the actual limits of the server it will run on. If the code will not fit, it flags the financial risk and proposes a rewrite that does fit the existing infrastructure.</p>
+
+<p>The idea I keep coming back to: the next bottleneck in developer tools is containment, not speed. Agents write code faster than anyone reviews it, and the review has to include what the code will cost to run, not only whether it passes the tests.</p>

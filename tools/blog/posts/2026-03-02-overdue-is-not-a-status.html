@@ -1,0 +1,22 @@
+<!--
+title: Overdue is not a status
+dek: A small tool for compliance analysts, and the one modelling decision in it that I would defend in any review.
+tags: engineering
+-->
+<p>In March I built <a href="https://github.com/Mudassiruddin7/Compliance-Tracker">Compliance Tracker</a>, an internal tool for compliance analysts who manage filing deadlines across many clients. It is designed for a Monday morning: pick a client, see the next deadlines at once, spot overdue work without hunting for it, update a task inline, and add a task without leaving the screen.</p>
+
+<h2>The decision</h2>
+
+<p>Overdue is not stored. The database holds three states, pending, in progress and completed, and the API computes overdue from the due date and whether the task is done.</p>
+
+<p>If overdue were a stored status, a task could end up both completed and overdue, or stay overdue after its deadline moved, and an analyst would have to set and unset it by hand. Derived, it cannot drift. The cost is that every place that cares about overdue must use the same rule, so the rule lives in one shared mapping layer used by both the local server and the deployed functions.</p>
+
+<h2>The rest, sized to the job</h2>
+
+<ul>
+  <li>Locally it runs on Express and SQLite, so a reviewer can clone and run it with no credentials.</li>
+  <li>In production the same routes run as Vercel functions on Supabase Postgres, behind one URL.</li>
+  <li>Status and category filters run on the server. Text search and sort run on the client for now, with a clear path to move them server-side if the task count grows.</li>
+</ul>
+
+<p>No authentication yet. In production that would need role-based access and per-client authorisation, and the README says so.</p>

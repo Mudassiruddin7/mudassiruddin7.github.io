@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+  <title>Mohammed Mudassir Uddin: blog</title>
+  <link>https://mudassiruddin7.github.io/blogs/</link>
+  <description>What I built, what broke, what I learned.</description>
+  <language>en</language>
+  <item>
+    <title>Three certificates, and what each was for</title>
+    <link>https://mudassiruddin7.github.io/blogs/three-certificates/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/three-certificates/</guid>
+    <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+    <description>CS50x, Anthropic&#x27;s Claude architect exam and two Neo4j certifications. None of them is research. Each covered a specific layer of what I build.</description>
+  </item>
+  <item>
+    <title>Where the global layer goes decides when a hybrid learns to retrieve</title>
+    <link>https://mudassiruddin7.github.io/blogs/bkf-layer-order/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/bkf-layer-order/</guid>
+    <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+    <description>Our ICLR 2027 submission: 49 small models, 15 designs, one mechanism changed at a time. Attention-sink size did not predict recall. Layer order and key binding did.</description>
+  </item>
+  <item>
+    <title>Four validated upgrades that don&#x27;t add up</title>
+    <link>https://mudassiruddin7.github.io/blogs/four-upgrades-that-dont-add-up/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/four-upgrades-that-dont-add-up/</guid>
+    <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+    <description>LAF-YOLOv10 combined four published small-object detection techniques in one detector. Together they cost 7.8 points of mAP, and the loss traces to one interaction.</description>
+  </item>
+  <item>
+    <title>LaTeX to Word without losing the equations</title>
+    <link>https://mudassiruddin7.github.io/blogs/latex-intelligence/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/latex-intelligence/</guid>
+    <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+    <description>Nine months of work, now on the VS Code Marketplace: editable equations, live cross-references, and failed builds explained in plain words.</description>
+  </item>
+  <item>
+    <title>Instructions hidden in log fields</title>
+    <link>https://mudassiruddin7.github.io/blogs/instructions-hidden-in-log-fields/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/instructions-hidden-in-log-fields/</guid>
+    <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+    <description>Guardian-AI v3.0 sits between untrusted security telemetry and the LLM that reads it. A regex list catches the obvious attacks. The rest need layers.</description>
+  </item>
+  <item>
+    <title>Flood and fire damage per property, from two Sentinel-2 passes</title>
+    <link>https://mudassiruddin7.github.io/blogs/alphaearth/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/alphaearth/</guid>
+    <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+    <description>AlphaEarth goes from cloud-masked composites to damage tiers for each parcel, and scores itself against independent damage records.</description>
+  </item>
+  <item>
+    <title>A data node where the text never leaves the device</title>
+    <link>https://mudassiruddin7.github.io/blogs/text-never-leaves-the-device/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/text-never-leaves-the-device/</guid>
+    <pubDate>Sat, 01 Aug 2026 00:00:00 +0000</pubDate>
+    <description>Collecting Telugu, Tamil, Hindi and Bengali text for training without shipping anyone&#x27;s health records to a server. The rule is one line; enforcing it took four separate guards.</description>
+  </item>
+  <item>
+    <title>I audited my own paper</title>
+    <link>https://mudassiruddin7.github.io/blogs/i-audited-my-own-paper/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/i-audited-my-own-paper/</guid>
+    <pubDate>Sat, 01 Aug 2026 00:00:00 +0000</pubDate>
+    <description>HAGD&#x27;s search is fast. The circuit it found in GPT-2 Small kept no more behaviour than random features, and the preprint&#x27;s larger results were not in the code. What the audit found, and what I changed.</description>
+  </item>
+  <item>
+    <title>What our AgentCompress notebook shows, and what it doesn&#x27;t</title>
+    <link>https://mudassiruddin7.github.io/blogs/what-the-agentcompress-notebook-shows/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/what-the-agentcompress-notebook-shows/</guid>
+    <pubDate>Wed, 01 Jul 2026 00:00:00 +0000</pubDate>
+    <description>The paper&#x27;s benchmark is not public, so the released notebook runs on synthetic workflows and its numbers are lower. Both columns belong in the README.</description>
+  </item>
+  <item>
+    <title>Four proposals, one question each</title>
+    <link>https://mudassiruddin7.github.io/blogs/four-proposals/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/four-proposals/</guid>
+    <pubDate>Wed, 01 Jul 2026 00:00:00 +0000</pubDate>
+    <description>What the proposals we sent to Google, Amazon and GARA this year each set out to answer, including the one that names its own likely negative result.</description>
+  </item>
+  <item>
+    <title>Vak joins the Sarvam AI startup program</title>
+    <link>https://mudassiruddin7.github.io/blogs/vak-sarvam/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/vak-sarvam/</guid>
+    <pubDate>Wed, 01 Jul 2026 00:00:00 +0000</pubDate>
+    <description>An AI literacy and interpretability platform built natively in Telugu and Hindi, not translated from an English tool.</description>
+  </item>
+  <item>
+    <title>Done with the degree</title>
+    <link>https://mudassiruddin7.github.io/blogs/done-with-the-degree/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/done-with-the-degree/</guid>
+    <pubDate>Mon, 01 Jun 2026 00:00:00 +0000</pubDate>
+    <description>Three years of diploma, three years of engineering, and the two habits they gave me.</description>
+  </item>
+  <item>
+    <title>Does the explanation predict the model?</title>
+    <link>https://mudassiruddin7.github.io/blogs/does-the-explanation-predict-the-model/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/does-the-explanation-predict-the-model/</guid>
+    <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
+    <description>In May I began working with Prof. Hamdi Al-Jamimi at KFUPM on a narrow question about sepsis decision support: when a model explains itself, is the explanation true?</description>
+  </item>
+  <item>
+    <title>Flood claims from radar in under five minutes</title>
+    <link>https://mudassiruddin7.github.io/blogs/flood-claims-from-radar/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/flood-claims-from-radar/</guid>
+    <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
+    <description>At the 418 Hackathon at Mahindra University we built OrbitClaim Sentinel: Sentinel-1 radar in, a flood-claim decision out, in a JSON small enough to downlink.</description>
+  </item>
+  <item>
+    <title>Looking for two people who work below the framework</title>
+    <link>https://mudassiruddin7.github.io/blogs/below-the-framework/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/below-the-framework/</guid>
+    <pubDate>Wed, 01 Apr 2026 00:00:00 +0000</pubDate>
+    <description>We were preparing proposals for the Google TPU Research Awards and the Amazon Research Awards, so I asked for collaborators who care about memory hierarchies and kernels.</description>
+  </item>
+  <item>
+    <title>A cost check for code an agent wrote</title>
+    <link>https://mudassiruddin7.github.io/blogs/a-cost-check-for-agent-code/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/a-cost-check-for-agent-code/</guid>
+    <pubDate>Wed, 01 Apr 2026 00:00:00 +0000</pubDate>
+    <description>At the OpenAI Codex Community Hackathon in Hyderabad we built Gravity, a FinOps check that runs before AI-written code is merged.</description>
+  </item>
+  <item>
+    <title>Overdue is not a status</title>
+    <link>https://mudassiruddin7.github.io/blogs/overdue-is-not-a-status/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/overdue-is-not-a-status/</guid>
+    <pubDate>Sun, 01 Mar 2026 00:00:00 +0000</pubDate>
+    <description>A small tool for compliance analysts, and the one modelling decision in it that I would defend in any review.</description>
+  </item>
+  <item>
+    <title>Four pull requests to pyGAM, starting with the p-values</title>
+    <link>https://mudassiruddin7.github.io/blogs/pygam-p-values/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/pygam-p-values/</guid>
+    <pubDate>Sun, 01 Mar 2026 00:00:00 +0000</pubDate>
+    <description>Generalized additive models report p-values for their smooth terms. Getting those right needs Wood&#x27;s rank-r eigendecomposition.</description>
+  </item>
+  <item>
+    <title>Eleven pull requests to pgmpy in one week</title>
+    <link>https://mudassiruddin7.github.io/blogs/eleven-pull-requests-to-pgmpy/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/eleven-pull-requests-to-pgmpy/</guid>
+    <pubDate>Sun, 01 Feb 2026 00:00:00 +0000</pubDate>
+    <description>Reading a causal-inference library closely enough to fix it, from d-separators to NaN treatment effects.</description>
+  </item>
+  <item>
+    <title>Blocking ads on every device from a Raspberry Pi Zero 2 W</title>
+    <link>https://mudassiruddin7.github.io/blogs/pihole-tailscale/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/pihole-tailscale/</guid>
+    <pubDate>Sun, 01 Feb 2026 00:00:00 +0000</pubDate>
+    <description>Pi-hole filters ads at the DNS level at home, and Tailscale carries the same filter to my phone when I am out. About two hours of setup.</description>
+  </item>
+  <item>
+    <title>An AI chief of staff in 36 hours</title>
+    <link>https://mudassiruddin7.github.io/blogs/ai-chief-of-staff/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/ai-chief-of-staff/</guid>
+    <pubDate>Sun, 01 Feb 2026 00:00:00 +0000</pubDate>
+    <description>At the Hack-Nation Global AI Hackathon with the MIT Sloan AI Club we mapped how information moves inside a company. The RAG pipeline died at hour 22.</description>
+  </item>
+  <item>
+    <title>Searching a hierarchy instead of the graph</title>
+    <link>https://mudassiruddin7.github.io/blogs/searching-a-hierarchy/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/searching-a-hierarchy/</guid>
+    <pubDate>Thu, 01 Jan 2026 00:00:00 +0000</pubDate>
+    <description>HAGD, our circuit-extraction preprint: cluster the attribution graph, search it from the top, and report a circuit only after it passes causal tests.</description>
+  </item>
+  <item>
+    <title>Not every agent step needs the whole model</title>
+    <link>https://mudassiruddin7.github.io/blogs/agentcompress/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/agentcompress/</guid>
+    <pubDate>Thu, 01 Jan 2026 00:00:00 +0000</pubDate>
+    <description>AgentCompress picks a precision for each step of an LLM agent&#x27;s workflow, from the first 32 tokens of the request.</description>
+  </item>
+  <item>
+    <title>Pruning for the disease, not for ImageNet</title>
+    <link>https://mudassiruddin7.github.io/blogs/pruning-for-the-disease/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/pruning-for-the-disease/</guid>
+    <pubDate>Thu, 01 Jan 2026 00:00:00 +0000</pubDate>
+    <description>Our first preprint of the year keeps the channels that separate one leaf disease from another, so a few-shot model fits on a Raspberry Pi 4.</description>
+  </item>
+  <item>
+    <title>A PDF in, a training series out</title>
+    <link>https://mudassiruddin7.github.io/blogs/a-pdf-in-a-training-series-out/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/a-pdf-in-a-training-series-out/</guid>
+    <pubDate>Mon, 01 Dec 2025 00:00:00 +0000</pubDate>
+    <description>At the ElevenLabs Worldwide Hackathon in Hyderabad we turned long training documents into short narrated video episodes.</description>
+  </item>
+  <item>
+    <title>2,300 developers, one room, and a fraud-detection agent</title>
+    <link>https://mudassiruddin7.github.io/blogs/agentathon-2025/</link>
+    <guid>https://mudassiruddin7.github.io/blogs/agentathon-2025/</guid>
+    <pubDate>Mon, 01 Dec 2025 00:00:00 +0000</pubDate>
+    <description>Agentathon 2025 set a Guinness World Record for the largest agentic AI hackathon. What I built there, and the one design idea I kept.</description>
+  </item>
+</channel>
+</rss>

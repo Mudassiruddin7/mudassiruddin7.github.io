@@ -1,0 +1,14 @@
+{
+    "name": "Mohammed Mudassir Uddin",
+    "short_name": "Mudassir",
+    "icons": [
+        {
+            "src": "android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#111110",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}

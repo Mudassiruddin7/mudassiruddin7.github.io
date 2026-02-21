@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flood and fire damage per property, from two Sentinel-2 passes | Mohammed Mudassir Uddin</title>
+<meta name="description" content="AlphaEarth goes from cloud-masked composites to damage tiers for each parcel, and scores itself against independent damage records.">
+<meta name="author" content="Mohammed Mudassir Uddin">
+<link rel="canonical" href="https://mudassiruddin7.github.io/blogs/alphaearth/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="Flood and fire damage per property, from two Sentinel-2 passes | Mohammed Mudassir Uddin">
+<meta property="og:description" content="AlphaEarth goes from cloud-masked composites to damage tiers for each parcel, and scores itself against independent damage records.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/blogs/alphaearth/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/images/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="Mohammed Mudassir Uddin: blog" href="https://mudassiruddin7.github.io/blogs/feed.xml">
+<link rel="icon" href="../../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/paper/paper.css">
+<link rel="stylesheet" href="../../assets/blog/blog.css">
+</head>
+<body class="acc-blue">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Site"><a href="../../blogs/">Blog</a><a href="../../#-publications">Research</a><a href="https://drive.google.com/file/d/1gz7MvatR6PW-qhG1u03cm1_K6LDS6_O4/view">CV</a></nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="wrap">
+  <header class="post-hero">
+    <p class="eyebrow"><span class="name"><a href="../">Blog</a></span><span>September 2026</span><span>remote sensing</span><span>evaluation</span></p>
+    <h1 class="title">Flood and fire damage per property, from two Sentinel-2 passes</h1>
+    <p class="subtitle">AlphaEarth goes from cloud-masked composites to damage tiers for each parcel, and scores itself against independent damage records.</p>
+  </header>
+  <main id="main" class="post">
+<p>Insurance adjusters, FEMA inspectors and local emergency managers take two to four weeks to compile a damage picture after a disaster. Sentinel-2 photographs the whole county at 10 m resolution within five days of the event, for free. <a href="https://github.com/Mudassiruddin7/AlphaEarth">AlphaEarth</a>, which I published on 7 September, is the pipeline between those two facts: before and after composites, index change detection, a damage tier for every property parcel, and a score against independent damage records.</p>
+
+<p>Two scenarios so far: a flood in Perry County, Kentucky, and a wildfire in Los Angeles County. 247 km² and 24,608 parcels in total, 176 seconds of compute on one laptop core. Each configuration below adds one layer to the one above it, measured against complete ground truth.</p>
+
+<div class="table-fig">
+  <div class="tbl-wrap">
+    <table class="bt">
+      <caption><b>Table 1.</b> Parcel-level results. Exact tier is the share of parcels given the correct damage tier.</caption>
+      <thead><tr><th>Configuration</th><th>Exact tier</th><th>Macro F1</th><th>Wrongly flagged</th><th>Missed</th></tr></thead>
+      <tbody>
+        <tr><th class="l" colspan="5">Flood, Perry County, KY (15,635 parcels)</th></tr>
+        <tr><td>Thresholds only</td><td>81.8%</td><td>0.325</td><td>1,816</td><td>446</td></tr>
+        <tr><td>+ mitigations</td><td>93.3%</td><td>0.437</td><td>17</td><td>603</td></tr>
+        <tr class="ours"><td>+ supervised model</td><td>99.3%</td><td>0.906</td><td>22</td><td>10</td></tr>
+        <tr class="mid"><th class="l" colspan="5">Wildfire, Los Angeles County, CA (8,973 parcels)</th></tr>
+        <tr><td>Thresholds only</td><td>93.1%</td><td>0.445</td><td>554</td><td>0</td></tr>
+        <tr><td>+ mitigations</td><td>95.4%</td><td>0.489</td><td>345</td><td>0</td></tr>
+        <tr class="ours"><td>+ supervised model</td><td>98.8%</td><td>0.671</td><td>42</td><td>3</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<p>The counts matter more than the percentages. For the flood, the mitigations cut wrongly flagged parcels from 1,816 to 17, at the cost of more misses, because every mitigation only subtracts. The supervised model, 43 features per parcel into gradient-boosted trees, brings the misses down to 10. The wildfire is harder: in leave-one-event-out validation the model beats the thresholds in only 2 of 4 held-out events.</p>
+
+<h2>Three details that decided whether it worked</h2>
+
+<ul>
+  <li>Flood detection needs both a level test and a change test. Without the change test, every permanent river is classified as flood on every run.</li>
+  <li>Wildfire uses relative dNBR. Absolute dNBR measures how much signal was lost, so chaparral, which starts near NBR 0.38, is under-called against forest starting near 0.66, right across the wildland-urban interface.</li>
+  <li>The model is cross-validated leaving one event out. Parcels inside one event share composites, sun angle and a hazard surface, so a random parcel split leaks all of it.</li>
+</ul>
+
+<p>The report page renders every number from a data file. Nothing is typed into the page, so regenerating the data moves the page with it.</p>
+  </main>
+  <nav class="post-nav" aria-label="More posts">
+<a class="prev" href="../text-never-leaves-the-device/"><span class="pn-l">Earlier</span><span class="pn-t">A data node where the text never leaves the device</span></a>
+<a class="next" href="../instructions-hidden-in-log-fields/"><span class="pn-l">Later</span><span class="pn-t">Instructions hidden in log fields</span></a>
+</nav>
+</div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../../">Mohammed Mudassir Uddin</a> &middot; Blog</span>
+    <nav aria-label="More"><a href="../../blogs/">All posts</a><a href="../../blogs/feed.xml">RSS</a><a href="../../#-publications">Research</a><a href="https://github.com/Mudassiruddin7">GitHub</a></nav>
+  </div>
+</footer>
+<script src="../../assets/paper/paper.js" defer></script>
+</body>
+</html>

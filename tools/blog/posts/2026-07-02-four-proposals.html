@@ -1,0 +1,24 @@
+<!--
+title: Four proposals, one question each
+dek: What the proposals we sent to Google, Amazon and GARA this year each set out to answer, including the one that names its own likely negative result.
+tags: research, proposals
+-->
+<p>By July, four proposals were under review, each with Dr. Fahmina Taranum as principal investigator. Writing them taught me more than anything else this year about saying exactly what a project will and will not show. One question each.</p>
+
+<h2>AetherState <span class="muted">(Google TPU Research Awards)</span></h2>
+
+<p>When a long-running agent reuses cached state, can we still say which evidence that state encodes? Today a summary drifts from its source, a KV page survives because it is cheap to reuse long after its evidence went stale, and retrieval identity sits apart from cache identity, which forces repeated prefill. The proposal makes memory a first-class object that owns its source-span hash, provenance chain, retention policy and KV-page metadata, managed on TPU with Pallas kernels.</p>
+
+<h2>CausalGenome-JAX <span class="muted">(Google TPU Research Awards)</span></h2>
+
+<p>Do perturbation experiments, MPRA and Perturb-seq, improve non-coding variant-effect prediction beyond correlation once the evaluation stops leaking? Standard splits share chromosome, cell-type and lab structure, so a model can score well by reusing nearby sequence and still fail on the variant that matters. The proposal freezes four orthogonal holdouts before any training starts.</p>
+
+<h2>Temporal belief-state auditing <span class="muted">(Amazon Research Awards)</span></h2>
+
+<p>Can we track what an agent believes about its task over time, and flag when that belief drifts outside the scope it was authorised for? The target is regulated deployments in finance and healthcare.</p>
+
+<h2>Locally-quantum decoders <span class="muted">(GARA, as co-PI)</span></h2>
+
+<p>Decoded Quantum Interferometry turns sparse optimisation into decoding, so whether it beats classical methods comes down to the decoder. A 2026 locally-quantum decoder beats belief propagation at many settings, but it has never been built as a circuit, never been costed under the FLASQ surface-code model, and nobody has checked whether real industrial problems land in the region where it wins. We would build it in Qualtran, cost it, rerun an industrial ILP-to-XORSAT pipeline on it, and report where the numbers land, including the case where belief propagation stays the practical choice.</p>
+
+<p>That last clause is the part I am proudest of. A proposal that names its own likely negative result is easier to trust.</p>

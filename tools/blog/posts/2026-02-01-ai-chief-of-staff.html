@@ -1,0 +1,24 @@
+<!--
+title: An AI chief of staff in 36 hours
+dek: At the Hack-Nation Global AI Hackathon with the MIT Sloan AI Club we mapped how information moves inside a company. The RAG pipeline died at hour 22.
+tags: hackathon, agents, knowledge graphs
+-->
+<p>On 7 and 8 February I was at the Hack-Nation Global AI Hackathon, run with the MIT Sloan AI Club. I went in with Bibhor Puhan and Mohammed Kaif Pasha, and we built a prototype we called an AI chief of staff.</p>
+
+<p>The problem: inside most companies, information moves like a game of telephone. Some people drown in updates, others miss the one that mattered, there is no single source of truth, and nobody has a map of who knows what.</p>
+
+<h2>What the prototype did</h2>
+
+<ul>
+  <li>Mapped how knowledge flows across teams, using communication graphs and stakeholder networks built from the Enron email dataset.</li>
+  <li>Kept a living source of truth that versions decisions and flags when a new one conflicts with an old one.</li>
+  <li>Routed each update to the people who needed it, instead of broadcasting it to everyone.</li>
+</ul>
+
+<p>The questions it was meant to answer every morning: what changed today, who needs to know, and where is knowledge getting stuck?</p>
+
+<h2>Hour 22</h2>
+
+<p>The RAG pipeline crashed at hour 22. We rebuilt it by hour 26 and shipped at hour 36. It is a rough prototype, not an operating system for a company.</p>
+
+<p>The piece I would keep is the versioned record of decisions with conflicts flagged, which is the same idea I used at <a href="{blog}agentathon-2025/">Agentathon</a> in December. Search engines organised the world's information. Inside organisations, information still spreads blindly, and I think the fix starts with keeping track of what was decided and when.</p>

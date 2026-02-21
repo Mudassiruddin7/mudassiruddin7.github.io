@@ -1,0 +1,26 @@
+<!--
+title: LaTeX to Word without losing the equations
+dek: Nine months of work, now on the VS Code Marketplace: editable equations, live cross-references, and failed builds explained in plain words.
+tags: tools, open source
+-->
+<p>In September I published <a href="https://marketplace.visualstudio.com/items?itemName=MudassirUddinMohammed.latex-intelligence">LaTeX Intelligence</a> to the VS Code Marketplace, after about nine months of work. The idea came from my supervisors, Dr. Fahmina Taranum and Dr. Tasneem Bano Rehman, who write in LaTeX and keep getting asked for Word files by collaborators, reviewers and grant offices.</p>
+
+<p>The usual route is Pandoc or a conversion website. What comes back has equations as images, cross-references as dead text, broken tables and missing TikZ diagrams, and someone spends two hours repairing it by hand.</p>
+
+<h2>What survives the conversion</h2>
+
+<ul>
+  <li>Equations become OMML, Word's own equation format, so you can click into them and edit.</li>
+  <li><code>\ref</code> and <code>\eqref</code> become live Word fields that carry the numbers from your <code>.aux</code> file, so they renumber when a collaborator adds a section.</li>
+  <li>Tables keep the column widths LaTeX gave them, including booktabs rules, merged cells and shading.</li>
+  <li>TikZ diagrams are compiled against your own preamble when a LaTeX engine is installed, and drawn as native Word shapes you can move and recolour when it is not.</li>
+  <li>The page layout comes from your document class, IEEEtran, ACM, Springer LNCS, Elsevier and others, measured from the class files rather than guessed.</li>
+</ul>
+
+<h2>The other half: why the build failed</h2>
+
+<p>The extension also explains failed builds: the line, what the error means in plain words, and what is missing from your machine. That includes the common case where a file compiles in a terminal but not in VS Code, because the editor's <code>PATH</code> does not include the directory your TeX installation added after the editor started.</p>
+
+<p>It is 153 KB packaged, with 397 tests and no runtime dependencies. The README lists what is still wrong. For example, three of the eight papers in the test corpus come out a page longer than the compiled PDF.</p>
+
+<p>Install it from the Extensions view, or with <code>ext install MudassirUddinMohammed.latex-intelligence</code>. The source is on <a href="https://github.com/Mudassiruddin7/LaTex-Intelligence">GitHub</a>.</p>

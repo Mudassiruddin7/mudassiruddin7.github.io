@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Four pull requests to pyGAM, starting with the p-values | Mohammed Mudassir Uddin</title>
+<meta name="description" content="Generalized additive models report p-values for their smooth terms. Getting those right needs Wood&#x27;s rank-r eigendecomposition.">
+<meta name="author" content="Mohammed Mudassir Uddin">
+<link rel="canonical" href="https://mudassiruddin7.github.io/blogs/pygam-p-values/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="Four pull requests to pyGAM, starting with the p-values | Mohammed Mudassir Uddin">
+<meta property="og:description" content="Generalized additive models report p-values for their smooth terms. Getting those right needs Wood&#x27;s rank-r eigendecomposition.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/blogs/pygam-p-values/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/images/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="Mohammed Mudassir Uddin: blog" href="https://mudassiruddin7.github.io/blogs/feed.xml">
+<link rel="icon" href="../../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/paper/paper.css">
+<link rel="stylesheet" href="../../assets/blog/blog.css">
+</head>
+<body class="acc-blue">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Site"><a href="../../blogs/">Blog</a><a href="../../#-publications">Research</a><a href="https://drive.google.com/file/d/1gz7MvatR6PW-qhG1u03cm1_K6LDS6_O4/view">CV</a></nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="wrap">
+  <header class="post-hero">
+    <p class="eyebrow"><span class="name"><a href="../">Blog</a></span><span>March 2026</span><span>open source</span><span>statistics</span></p>
+    <h1 class="title">Four pull requests to pyGAM, starting with the p-values</h1>
+    <p class="subtitle">Generalized additive models report p-values for their smooth terms. Getting those right needs Wood&#x27;s rank-r eigendecomposition.</p>
+  </header>
+  <main id="main" class="post">
+<p>On 1 March I opened <a href="https://github.com/dswah/pyGAM/pulls?q=is%3Apr+author%3AMudassiruddin7">four pull requests</a> against pyGAM, the Python library for generalized additive models. All four are still open.</p>
+
+<h2>The p-values</h2>
+
+<p>The one I spent longest on changes how p-values and effective degrees of freedom are computed for smooth terms. A smooth term is penalised, so it uses fewer degrees of freedom than it has basis functions, and a test that ignores the penalty gets the reference distribution wrong. Wood's 2013 approach tests the term through a rank-<em>r</em> truncated eigendecomposition of its coefficient covariance, with <em>r</em> set by the term's effective degrees of freedom. The pull request implements that.</p>
+
+<h2>The other three</h2>
+
+<ul>
+  <li>Overflow in link functions, wrong weights in some distributions, and a boolean bug in the B-spline basis.</li>
+  <li>Restoring the scikit-learn estimator contract (<code>score</code>, <code>clone</code>, <code>predict_proba</code>, tags, <code>decision_function</code>), so pyGAM models work inside scikit-learn tooling.</li>
+  <li>Categorical partial dependence, gridsearch memory use, packaging and reproducibility fixes.</li>
+</ul>
+
+<p>What I took from it: statistical libraries fail quietly. A wrong p-value does not raise an exception. It gets copied into a results table.</p>
+  </main>
+  <nav class="post-nav" aria-label="More posts">
+<a class="prev" href="../eleven-pull-requests-to-pgmpy/"><span class="pn-l">Earlier</span><span class="pn-t">Eleven pull requests to pgmpy in one week</span></a>
+<a class="next" href="../overdue-is-not-a-status/"><span class="pn-l">Later</span><span class="pn-t">Overdue is not a status</span></a>
+</nav>
+</div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../../">Mohammed Mudassir Uddin</a> &middot; Blog</span>
+    <nav aria-label="More"><a href="../../blogs/">All posts</a><a href="../../blogs/feed.xml">RSS</a><a href="../../#-publications">Research</a><a href="https://github.com/Mudassiruddin7">GitHub</a></nav>
+  </div>
+</footer>
+<script src="../../assets/paper/paper.js" defer></script>
+</body>
+</html>

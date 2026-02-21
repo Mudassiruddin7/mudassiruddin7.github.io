@@ -1,0 +1,20 @@
+<!--
+title: Four pull requests to pyGAM, starting with the p-values
+dek: Generalized additive models report p-values for their smooth terms. Getting those right needs Wood's rank-r eigendecomposition.
+tags: open source, statistics
+-->
+<p>On 1 March I opened <a href="https://github.com/dswah/pyGAM/pulls?q=is%3Apr+author%3AMudassiruddin7">four pull requests</a> against pyGAM, the Python library for generalized additive models. All four are still open.</p>
+
+<h2>The p-values</h2>
+
+<p>The one I spent longest on changes how p-values and effective degrees of freedom are computed for smooth terms. A smooth term is penalised, so it uses fewer degrees of freedom than it has basis functions, and a test that ignores the penalty gets the reference distribution wrong. Wood's 2013 approach tests the term through a rank-<em>r</em> truncated eigendecomposition of its coefficient covariance, with <em>r</em> set by the term's effective degrees of freedom. The pull request implements that.</p>
+
+<h2>The other three</h2>
+
+<ul>
+  <li>Overflow in link functions, wrong weights in some distributions, and a boolean bug in the B-spline basis.</li>
+  <li>Restoring the scikit-learn estimator contract (<code>score</code>, <code>clone</code>, <code>predict_proba</code>, tags, <code>decision_function</code>), so pyGAM models work inside scikit-learn tooling.</li>
+  <li>Categorical partial dependence, gridsearch memory use, packaging and reproducibility fixes.</li>
+</ul>
+
+<p>What I took from it: statistical libraries fail quietly. A wrong p-value does not raise an exception. It gets copied into a results table.</p>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Not every agent step needs the whole model | Mohammed Mudassir Uddin</title>
+<meta name="description" content="AgentCompress picks a precision for each step of an LLM agent&#x27;s workflow, from the first 32 tokens of the request.">
+<meta name="author" content="Mohammed Mudassir Uddin">
+<link rel="canonical" href="https://mudassiruddin7.github.io/blogs/agentcompress/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Mudassir Uddin">
+<meta property="og:title" content="Not every agent step needs the whole model | Mohammed Mudassir Uddin">
+<meta property="og:description" content="AgentCompress picks a precision for each step of an LLM agent&#x27;s workflow, from the first 32 tokens of the request.">
+<meta property="og:url" content="https://mudassiruddin7.github.io/blogs/agentcompress/">
+<meta property="og:image" content="https://mudassiruddin7.github.io/images/profile.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="alternate" type="application/rss+xml" title="Mohammed Mudassir Uddin: blog" href="https://mudassiruddin7.github.io/blogs/feed.xml">
+<link rel="icon" href="../../images/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('site-theme')}catch(e){}var r=document.documentElement;if(t==='dark')r.setAttribute('data-theme','dark');else if(t==='yellow'||t==='blue')r.setAttribute('data-theme',t);else if(t==='white')r.setAttribute('data-theme','light');})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/paper/paper.css">
+<link rel="stylesheet" href="../../assets/blog/blog.css">
+</head>
+<body class="acc-blue">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="home" href="../../"><span class="back" aria-hidden="true">&larr;</span>Mohammed Mudassir Uddin</a>
+    <nav class="papers" aria-label="Site"><a href="../../blogs/">Blog</a><a href="../../#-publications">Research</a><a href="https://drive.google.com/file/d/1gz7MvatR6PW-qhG1u03cm1_K6LDS6_O4/view">CV</a></nav>
+    <button class="theme" id="theme-toggle" type="button" aria-label="Switch theme"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.8a6.2 6.2 0 0 1 0 12.4z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="wrap">
+  <header class="post-hero">
+    <p class="eyebrow"><span class="name"><a href="../">Blog</a></span><span>January 2026</span><span>paper</span><span>LLM agents</span><span>efficiency</span></p>
+    <h1 class="title">Not every agent step needs the whole model</h1>
+    <p class="subtitle">AgentCompress picks a precision for each step of an LLM agent&#x27;s workflow, from the first 32 tokens of the request.</p>
+  </header>
+  <main id="main" class="post">
+<p>Three days after the pruning paper, <a href="https://arxiv.org/abs/2601.05191">AgentCompress</a> went up. Zuhair Ahmed Khan Taha is the first author; I am second, with Shahnawaz Alam.</p>
+
+<p>A research agent might survey papers, form a hypothesis, design an experiment, clean data and format citations, all with one 70B model at full precision. The hypothesis step needs that model. The citation step does not. Quantizing everything to INT8 saves compute, but it cuts the reasoning steps as hard as the clerical ones.</p>
+
+<h2>How it works</h2>
+
+<p>AgentCompress reads the first 32 tokens of each step, estimates how demanding the step is, and runs it on an FP16, INT8, INT4 or INT2 copy of LLaMA-2-70B. Only one copy fits in the GPU memory we had, so a cache that weighs how often and how recently each copy was used decides which one stays loaded.</p>
+
+<figure>
+  <a class="fig-link" href="../../images/papers/agentcompress.svg"><img class="diagram" src="../../images/papers/agentcompress.svg" alt="AgentCompress: a controller reads the first 32 tokens of each agent task, predicts its cognitive load, and routes it to an FP16, INT8, INT4 or INT2 variant of the model." loading="lazy"></a>
+  <figcaption><b>Routing.</b> A small controller reads the start of each step and picks the precision; the model copies themselves are standard quantized LLaMA-2-70B.</figcaption>
+</figure>
+
+<h2>What the paper reports</h2>
+
+<p>On a benchmark of 290 research workflows, 68.3% less compute than uniform FP16 at 96.2% task success, against 98.2% for the uncompressed model and 87.5% for uniform INT8. Hypothesis steps stay at FP16 most of the time. Citation steps drop to four bits or fewer.</p>
+
+<h2>Two caveats I would read first</h2>
+
+<p>The benchmark and its human difficulty labels are not public, so the public notebook can only run the pipeline on synthetic workflows. I wrote about what that notebook does and does not show in <a href="../what-the-agentcompress-notebook-shows/">July</a>.</p>
+
+<p>And about 8% of steps lose more than 10% quality. Most are steps that look routine and are not, like "summarise the methodology section" when the methodology is a new proof technique.</p>
+  </main>
+  <nav class="post-nav" aria-label="More posts">
+<a class="prev" href="../pruning-for-the-disease/"><span class="pn-l">Earlier</span><span class="pn-t">Pruning for the disease, not for ImageNet</span></a>
+<a class="next" href="../searching-a-hierarchy/"><span class="pn-l">Later</span><span class="pn-t">Searching a hierarchy instead of the graph</span></a>
+</nav>
+</div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="../../">Mohammed Mudassir Uddin</a> &middot; Blog</span>
+    <nav aria-label="More"><a href="../../blogs/">All posts</a><a href="../../blogs/feed.xml">RSS</a><a href="../../#-publications">Research</a><a href="https://github.com/Mudassiruddin7">GitHub</a></nav>
+  </div>
+</footer>
+<script src="../../assets/paper/paper.js" defer></script>
+</body>
+</html>
