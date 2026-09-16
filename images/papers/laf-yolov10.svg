@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" role="img" aria-labelledby="t d"><title id="t">LAF-YOLOv10 architecture</title><desc id="d">YOLOv10n modified at three levels: PC-C2f blocks in the backbone, an Attention-Guided FPN neck with SE-gated lateral connections and DySample upsampling, and detection heads at P2, P3 and P4 with the P5 head removed; Wise-IoU v3 supervises box regression. 35.1% mAP@0.5 on VisDrone-DET2019 with 2.3M parameters, 24.3 FPS on Jetson Orin Nano.</desc><defs><marker id="ah0" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0.8 L10,5 L0,9.2 z" fill="#52514e"/></marker><marker id="ah1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0.8 L10,5 L0,9.2 z" fill="#2a78d6"/></marker><marker id="ah2" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0.8 L10,5 L0,9.2 z" fill="#2a78d6"/></marker><marker id="ah3" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0.8 L10,5 L0,9.2 z" fill="#4a3aa7"/></marker><marker id="ah4" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0.8 L10,5 L0,9.2 z" fill="#4a3aa7"/></marker><marker id="ah5" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0.8 L10,5 L0,9.2 z" fill="#52514e"/></marker><marker id="ah6" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0.8 L10,5 L0,9.2 z" fill="#52514e"/></marker></defs><rect width="960" height="640" fill="#ffffff"/><text x="24" y="46" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="30" font-weight="800" fill="#0b0b0b" text-anchor="start">LAF-YOLOv10<tspan font-size="23" font-weight="400" fill="#52514e">  ·  four plug-in upgrades to YOLOv10n for tiny aerial objects</tspan></text>
+<rect x="168" y="64" width="12" height="12" rx="3" fill="#2a78d6"/>
+<text x="186" y="75" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="600" fill="#52514e" text-anchor="start">Backbone</text>
+<rect x="438" y="64" width="12" height="12" rx="3" fill="#4a3aa7"/>
+<text x="456" y="75" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="600" fill="#52514e" text-anchor="start">Neck</text>
+<rect x="668" y="64" width="12" height="12" rx="3" fill="#1baf7a"/>
+<text x="686" y="75" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="600" fill="#52514e" text-anchor="start">Heads</text>
+<rect x="20" y="118" width="120" height="120" rx="6" fill="#9aa39a"/>
+<rect x="20" y="166" width="120" height="22" rx="10" fill="#6c706b"/>
+<rect x="72" y="118" width="20" height="120" rx="10" fill="#6c706b"/>
+<rect x="34" y="172" width="8" height="5" rx="1" fill="#f2f2f2"/>
+<rect x="31" y="169" width="14" height="11" rx="1" fill="none" stroke="#1baf7a" stroke-width="1.6"/>
+<rect x="52" y="180" width="8" height="5" rx="1" fill="#d94f3d"/>
+<rect x="112" y="170" width="8" height="5" rx="1" fill="#2b2b2b"/>
+<rect x="109" y="167" width="14" height="11" rx="1" fill="none" stroke="#1baf7a" stroke-width="1.6"/>
+<rect x="126" y="180" width="8" height="5" rx="1" fill="#e8c547"/>
+<rect x="76" y="132" width="8" height="5" rx="1" fill="#f2f2f2"/>
+<rect x="73" y="129" width="14" height="11" rx="1" fill="none" stroke="#1baf7a" stroke-width="1.6"/>
+<rect x="84" y="214" width="8" height="5" rx="1" fill="#3d6fd9"/>
+<rect x="81" y="211" width="14" height="11" rx="1" fill="none" stroke="#1baf7a" stroke-width="1.6"/>
+<rect x="78" y="150" width="8" height="5" rx="1" fill="#2b2b2b"/>
+<text x="80" y="258" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="middle">640 × 640 frame</text>
+<text x="80" y="278" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="middle">objects &lt; 8×8 px</text>
+<path d="M142 150 L166 124" fill="none" stroke="#52514e" stroke-width="2.6" stroke-linejoin="round" marker-end="url(#ah0)"/>
+<rect x="168" y="86" width="200" height="64" rx="10" fill="#ecf3fb" stroke="#2a78d6" stroke-width="2"/>
+<text x="182" y="112" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">PC-C2f · stage 1</text>
+<text x="182" y="136" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">160×160 · 32 ch</text>
+<path d="M268 151 L268 170" fill="none" stroke="#2a78d6" stroke-width="2.4" stroke-linejoin="round" marker-end="url(#ah1)"/>
+<rect x="168" y="172" width="200" height="64" rx="10" fill="#ecf3fb" stroke="#2a78d6" stroke-width="2"/>
+<text x="182" y="198" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">PC-C2f · stage 2</text>
+<text x="182" y="222" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">80×80 · 64 ch</text>
+<path d="M268 237 L268 256" fill="none" stroke="#2a78d6" stroke-width="2.4" stroke-linejoin="round" marker-end="url(#ah1)"/>
+<rect x="168" y="258" width="200" height="64" rx="10" fill="#ecf3fb" stroke="#2a78d6" stroke-width="2"/>
+<text x="182" y="284" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">PC-C2f · stage 3</text>
+<text x="182" y="308" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">40×40 · 128 ch</text>
+<path d="M268 323 L268 342" fill="none" stroke="#2a78d6" stroke-width="2.4" stroke-linejoin="round" marker-end="url(#ah1)"/>
+<rect x="168" y="344" width="200" height="64" rx="10" fill="#ecf3fb" stroke="#2a78d6" stroke-width="2"/>
+<text x="182" y="370" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">PC-C2f · stage 4</text>
+<text x="182" y="394" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">20×20 · 256 ch</text>
+<path d="M268 409 L268 422" fill="none" stroke="#2a78d6" stroke-width="2.4" stroke-linejoin="round" marker-end="url(#ah1)"/>
+<rect x="208" y="424" width="120" height="52" rx="10" fill="#ecf3fb" stroke="#2a78d6" stroke-width="2"/>
+<text x="268" y="457" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="middle">SPPF</text>
+<path d="M370 118 L436 118" fill="none" stroke="#2a78d6" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#ah2)" stroke-dasharray="6 5"/>
+<circle cx="403" cy="118" r="15" fill="#ffffff" stroke="#2a78d6" stroke-width="2"/>
+<text x="403" y="123" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="13" font-weight="700" fill="#0b0b0b" text-anchor="middle">SE</text>
+<rect x="438" y="86" width="160" height="64" rx="10" fill="#f1eff8" stroke="#4a3aa7" stroke-width="2"/>
+<text x="452" y="112" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">AG-FPN</text>
+<text x="452" y="136" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">160×160</text>
+<path d="M370 204 L436 204" fill="none" stroke="#2a78d6" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#ah2)" stroke-dasharray="6 5"/>
+<circle cx="403" cy="204" r="15" fill="#ffffff" stroke="#2a78d6" stroke-width="2"/>
+<text x="403" y="209" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="13" font-weight="700" fill="#0b0b0b" text-anchor="middle">SE</text>
+<rect x="438" y="172" width="160" height="64" rx="10" fill="#f1eff8" stroke="#4a3aa7" stroke-width="2"/>
+<text x="452" y="198" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">AG-FPN</text>
+<text x="452" y="222" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">80×80</text>
+<path d="M370 290 L436 290" fill="none" stroke="#2a78d6" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#ah2)" stroke-dasharray="6 5"/>
+<circle cx="403" cy="290" r="15" fill="#ffffff" stroke="#2a78d6" stroke-width="2"/>
+<text x="403" y="295" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="13" font-weight="700" fill="#0b0b0b" text-anchor="middle">SE</text>
+<rect x="438" y="258" width="160" height="64" rx="10" fill="#f1eff8" stroke="#4a3aa7" stroke-width="2"/>
+<text x="452" y="284" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">AG-FPN</text>
+<text x="452" y="308" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">40×40</text>
+<path d="M330 450 L518 450 L518 324" fill="none" stroke="#4a3aa7" stroke-width="2.8" stroke-linejoin="round" marker-end="url(#ah3)"/>
+<text x="528" y="418" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">DySample ↑2</text>
+<path d="M518 257 L518 238" fill="none" stroke="#4a3aa7" stroke-width="2.8" stroke-linejoin="round" marker-end="url(#ah4)"/>
+<text x="528" y="252.0" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">↑2</text>
+<path d="M518 171 L518 152" fill="none" stroke="#4a3aa7" stroke-width="2.8" stroke-linejoin="round" marker-end="url(#ah4)"/>
+<text x="528" y="166.0" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">↑2</text>
+<path d="M600 118 L666 118" fill="none" stroke="#52514e" stroke-width="2.4" stroke-linejoin="round" marker-end="url(#ah5)"/>
+<rect x="668" y="86" width="180" height="64" rx="10" fill="#e4f5ef" stroke="#1baf7a" stroke-width="2.6"/>
+<text x="682" y="112" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">Detect P2</text>
+<text x="682" y="136" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">stride 4 · added</text>
+<path d="M600 204 L666 204" fill="none" stroke="#52514e" stroke-width="2.4" stroke-linejoin="round" marker-end="url(#ah5)"/>
+<rect x="668" y="172" width="180" height="64" rx="10" fill="#eff9f6" stroke="#1baf7a" stroke-width="2"/>
+<text x="682" y="198" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">Detect P3</text>
+<text x="682" y="222" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">stride 8</text>
+<path d="M600 290 L666 290" fill="none" stroke="#52514e" stroke-width="2.4" stroke-linejoin="round" marker-end="url(#ah5)"/>
+<rect x="668" y="258" width="180" height="64" rx="10" fill="#eff9f6" stroke="#1baf7a" stroke-width="2"/>
+<text x="682" y="284" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">Detect P4</text>
+<text x="682" y="308" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">stride 16</text>
+<rect x="668" y="344" width="180" height="64" rx="10" fill="#ffffff" stroke="#898781" stroke-width="2" stroke-dasharray="7 6"/>
+<text x="682" y="370" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#898781" text-anchor="start">P5 head</text>
+<line x1="680" y1="364" x2="758" y2="364" stroke="#898781" stroke-width="2" stroke-linecap="round"/>
+<text x="682" y="394" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#898781" text-anchor="start">removed</text>
+<path d="M862 86 L872 86 L872 322 L862 322" fill="none" stroke="#52514e" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="0" y="0" transform="translate(900 204) rotate(-90)" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" fill="#52514e" text-anchor="middle">regression: Wise-IoU v3</text>
+<rect x="20" y="496" width="330" height="128" rx="14" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<text x="36" y="524" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">(a) PC-C2f block</text>
+<rect x="366" y="496" width="330" height="128" rx="14" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<text x="382" y="524" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">(b) AG-FPN fusion</text>
+<rect x="712" y="496" width="228" height="128" rx="14" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<text x="728" y="524" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="700" fill="#0b0b0b" text-anchor="start">(c) VisDrone-DET2019</text>
+<rect x="254" y="506" width="88" height="26" rx="13.0" fill="#e5effa" stroke="#2a78d6" stroke-width="1.6"/>
+<text x="298.0" y="524.04" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#0b0b0b" text-anchor="middle">−75% FLOPs</text>
+<text x="40" y="582" font-family="'Cambria Math','Times New Roman',Times,serif" font-size="22" font-weight="400" fill="#0b0b0b" text-anchor="start" font-style="italic">X</text>
+<path d="M58 575 L80 575 L80 556 L104 556" fill="none" stroke="#52514e" stroke-width="2" stroke-linejoin="round" marker-end="url(#ah6)"/>
+<path d="M80 575 L80 600 L206 600 L220 586" fill="none" stroke="#52514e" stroke-width="2" stroke-linejoin="round" marker-end="url(#ah6)"/>
+<rect x="106" y="540" width="92" height="32" rx="6" fill="#e5effa" stroke="#2a78d6" stroke-width="1.6"/>
+<text x="152" y="561" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="middle">3×3 conv</text>
+<text x="152" y="620" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#52514e" text-anchor="middle">C/4 conv · 3C/4 pass</text>
+<path d="M198 556 L218 568" fill="none" stroke="#52514e" stroke-width="2" stroke-linejoin="round" marker-end="url(#ah6)"/>
+<circle cx="230" cy="576" r="12" fill="#ffffff" stroke="#52514e" stroke-width="1.6"/>
+<text x="230" y="581" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="13" font-weight="700" fill="#0b0b0b" text-anchor="middle">C</text>
+<path d="M242 576 L262 576" fill="none" stroke="#52514e" stroke-width="2" stroke-linejoin="round" marker-end="url(#ah6)"/>
+<rect x="264" y="560" width="50" height="32" rx="6" fill="#e5effa" stroke="#2a78d6" stroke-width="1.6"/>
+<text x="289" y="581" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="middle">1×1</text>
+<text x="322" y="582" font-family="'Cambria Math','Times New Roman',Times,serif" font-size="22" font-weight="400" fill="#0b0b0b" text-anchor="start" font-style="italic">Y</text>
+<text x="382" y="562" font-family="'Cambria Math','Times New Roman',Times,serif" font-size="20" font-weight="400" fill="#0b0b0b" text-anchor="start" font-style="italic">F<tspan dy="5" font-size="13">i</tspan><tspan dy="-5"> </tspan></text>
+<path d="M404 556 L422 556" fill="none" stroke="#52514e" stroke-width="2" stroke-linejoin="round" marker-end="url(#ah6)"/>
+<rect x="424" y="540" width="92" height="32" rx="6" fill="#edebf6" stroke="#4a3aa7" stroke-width="1.6"/>
+<text x="470" y="561" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="middle">SE gate</text>
+<path d="M516 556 L536 556" fill="none" stroke="#52514e" stroke-width="2" stroke-linejoin="round" marker-end="url(#ah6)"/>
+<circle cx="548" cy="556" r="11" fill="#ffffff" stroke="#52514e" stroke-width="1.6"/>
+<text x="548" y="561" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="700" fill="#0b0b0b" text-anchor="middle">×</text>
+<text x="382" y="606" font-family="'Cambria Math','Times New Roman',Times,serif" font-size="20" font-weight="400" fill="#0b0b0b" text-anchor="start" font-style="italic">F<tspan dy="5" font-size="13">i+1</tspan><tspan dy="-5"> </tspan></text>
+<path d="M418 600 L434 600" fill="none" stroke="#52514e" stroke-width="2" stroke-linejoin="round" marker-end="url(#ah6)"/>
+<rect x="436" y="584" width="110" height="32" rx="6" fill="#edebf6" stroke="#4a3aa7" stroke-width="1.6"/>
+<text x="491" y="605" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#0b0b0b" text-anchor="middle">DySample ↑2</text>
+<path d="M559 560 L604 574" fill="none" stroke="#52514e" stroke-width="2" stroke-linejoin="round" marker-end="url(#ah6)"/>
+<path d="M546 600 L604 584" fill="none" stroke="#52514e" stroke-width="2" stroke-linejoin="round" marker-end="url(#ah6)"/>
+<circle cx="616" cy="578" r="12" fill="#ffffff" stroke="#52514e" stroke-width="1.6"/>
+<text x="616" y="583" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="13" font-weight="700" fill="#0b0b0b" text-anchor="middle">C</text>
+<path d="M628 578 L650 578" fill="none" stroke="#52514e" stroke-width="2" stroke-linejoin="round" marker-end="url(#ah6)"/>
+<text x="658" y="585" font-family="'Cambria Math','Times New Roman',Times,serif" font-size="20" font-weight="400" fill="#0b0b0b" text-anchor="start" font-style="italic">F′<tspan dy="5" font-size="13">i</tspan><tspan dy="-5"> </tspan></text>
+<text x="728" y="560" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="22" font-weight="700" fill="#0b0b0b" text-anchor="start">35.1%</text>
+<text x="812" y="560" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">mAP@0.5 (+3.3)</text>
+<text x="728" y="588" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="22" font-weight="700" fill="#0b0b0b" text-anchor="start">2.3M</text>
+<text x="812" y="588" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">parameters</text>
+<text x="728" y="616" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="22" font-weight="700" fill="#0b0b0b" text-anchor="start">24.3</text>
+<text x="812" y="616" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#52514e" text-anchor="start">FPS, Orin Nano</text></svg>

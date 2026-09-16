@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" role="img" aria-labelledby="t d"><title id="t">PMP-DACIS: disease-aware pruning for few-shot plant pathology</title><desc id="d">A pre-trained ResNet-18 (11.2M parameters) is pruned 40% using Disease-Aware Channel Importance Scores, meta-trained on few-shot tasks, then pruned again with scores re-weighted by meta-gradients, reaching 2.5M parameters that run at 7 FPS on a Raspberry Pi 4 while keeping 92.3% of full accuracy.</desc><defs><marker id="ah0" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="13" markerHeight="13" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0.8 L10,5 L0,9.2 z" fill="#52514e"/></marker><marker id="ah1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0.8 L10,5 L0,9.2 z" fill="#52514e"/></marker><marker id="ah2" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0.8 L10,5 L0,9.2 z" fill="#2a78d6"/></marker></defs><rect width="960" height="640" fill="#ffffff"/><text x="24" y="48" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="31" font-weight="800" fill="#0b0b0b" text-anchor="start">PMP-DACIS<tspan font-size="23" font-weight="400" fill="#52514e">  ·  disease-aware pruning meets few-shot meta-learning</tspan></text>
+<path d="M86 118 C 38 150, 40 222, 86 252 C 132 222, 134 150, 86 118 Z" fill="#c7e4c7" stroke="#008300" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+<line x1="86" y1="128" x2="86" y2="246" stroke="#008300" stroke-width="1.8" stroke-linecap="round"/>
+<circle cx="66" cy="176" r="7" fill="#8a5a2b" opacity="0.75"/>
+<circle cx="104" cy="198" r="9" fill="#8a5a2b" opacity="0.75"/>
+<circle cx="74" cy="214" r="5" fill="#8a5a2b" opacity="0.75"/>
+<circle cx="100" cy="160" r="5" fill="#8a5a2b" opacity="0.75"/>
+<text x="86" y="280" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="400" fill="#52514e" text-anchor="middle">leaf photo</text>
+<rect x="26" y="300" width="120" height="72" rx="10" fill="#ffffff" stroke="#52514e" stroke-width="1.8"/>
+<text x="86" y="328" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="19" font-weight="700" fill="#0b0b0b" text-anchor="middle">ResNet-18</text>
+<text x="86" y="358" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#52514e" text-anchor="middle">11.2M params</text>
+<path d="M150 243 L172 243" fill="none" stroke="#52514e" stroke-width="3" stroke-linejoin="round" marker-end="url(#ah0)"/>
+<rect x="176" y="76" width="240" height="334" rx="16" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<circle cx="208" cy="110" r="17" fill="#2a78d6"/>
+<text x="208" y="117.5" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+<text x="234" y="108" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#0b0b0b" text-anchor="start"><tspan x="234" dy="0">DACIS score</tspan><tspan x="234" dy="23.5">prune 40%</tspan></text>
+<path d="M419 243 L436 243" fill="none" stroke="#52514e" stroke-width="3" stroke-linejoin="round" marker-end="url(#ah1)"/>
+<rect x="438" y="76" width="240" height="334" rx="16" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<circle cx="470" cy="110" r="17" fill="#2a78d6"/>
+<text x="470" y="117.5" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#ffffff" text-anchor="middle">2</text>
+<text x="496" y="108" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#0b0b0b" text-anchor="start"><tspan x="496" dy="0">Episodic</tspan><tspan x="496" dy="23.5">meta-learning</tspan></text>
+<path d="M681 243 L698 243" fill="none" stroke="#52514e" stroke-width="3" stroke-linejoin="round" marker-end="url(#ah1)"/>
+<rect x="700" y="76" width="240" height="334" rx="16" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<circle cx="732" cy="110" r="17" fill="#2a78d6"/>
+<text x="732" y="117.5" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#ffffff" text-anchor="middle">3</text>
+<text x="758" y="108" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#0b0b0b" text-anchor="start"><tspan x="758" dy="0">Meta-gradient</tspan><tspan x="758" dy="23.5">re-prune 38%</tspan></text>
+<path d="M196 262 L196 195 Q196 192 199 192 L204 192 Q207 192 207 195 L207 262 Z" fill="#2a78d6"/>
+<path d="M212 262 L212 237 Q212 234 215 234 L220 234 Q223 234 223 237 L223 262 Z" fill="#d9d9d8"/>
+<path d="M228 262 L228 203 Q228 200 231 200 L236 200 Q239 200 239 203 L239 262 Z" fill="#2a78d6"/>
+<path d="M244 262 L244 185 Q244 182 247 182 L252 182 Q255 182 255 185 L255 262 Z" fill="#2a78d6"/>
+<path d="M260 262 L260 243 Q260 240 263 240 L268 240 Q271 240 271 243 L271 262 Z" fill="#d9d9d8"/>
+<path d="M276 262 L276 210 Q276 207 279 207 L284 207 Q287 207 287 210 L287 262 Z" fill="#2a78d6"/>
+<path d="M292 262 L292 231 Q292 228 295 228 L300 228 Q303 228 303 231 L303 262 Z" fill="#d9d9d8"/>
+<path d="M308 262 L308 189 Q308 186 311 186 L316 186 Q319 186 319 189 L319 262 Z" fill="#2a78d6"/>
+<path d="M324 262 L324 247 Q324 244 327 244 L332 244 Q335 244 335 247 L335 262 Z" fill="#d9d9d8"/>
+<path d="M340 262 L340 199 Q340 196 343 196 L348 196 Q351 196 351 199 L351 262 Z" fill="#2a78d6"/>
+<path d="M356 262 L356 217 Q356 214 359 214 L364 214 Q367 214 367 217 L367 262 Z" fill="#2a78d6"/>
+<path d="M372 262 L372 235 Q372 232 375 232 L380 232 Q383 232 383 235 L383 262 Z" fill="#d9d9d8"/>
+<line x1="190" y1="263" x2="389" y2="263" stroke="#c3c2b7" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="190" y1="224" x2="389" y2="224" stroke="#52514e" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="6 5"/>
+<text x="392" y="230" font-family="'Cambria Math','Times New Roman',Times,serif" font-size="19" font-weight="400" fill="#0b0b0b" text-anchor="start" font-style="italic">τ<tspan dy="5" font-size="13">ℓ</tspan></text>
+<rect x="202" y="280" width="12" height="12" rx="2" fill="#2a78d6"/>
+<text x="220" y="291" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">keep</text>
+<rect x="272" y="280" width="12" height="12" rx="2" fill="#d9d9d8"/>
+<text x="290" y="291" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="start">prune</text>
+<text x="296.0" y="330" font-family="'Cambria Math','Times New Roman',Times,serif" font-size="22" font-weight="400" fill="#0b0b0b" text-anchor="middle" font-style="italic">0.3 G + 0.2 V + 0.5 D</text>
+<text x="296.0" y="354" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="middle">gradient · variance · Fisher</text>
+<rect x="214" y="368" width="164" height="32" rx="16.0" fill="#e5effa" stroke="#2a78d6" stroke-width="1.6"/>
+<text x="296.0" y="390.84" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="19" font-weight="600" fill="#0b0b0b" text-anchor="middle">11.2M → 6.7M</text>
+<rect x="454" y="158" width="96" height="62" rx="10" fill="#ffffff" stroke="#52514e" stroke-width="1.6"/>
+<rect x="466" y="168" width="20" height="20" rx="4" fill="#b2dab2" stroke="#008300" stroke-width="1.2"/>
+<rect x="492" y="168" width="20" height="20" rx="4" fill="#b2dab2" stroke="#008300" stroke-width="1.2"/>
+<rect x="518" y="168" width="20" height="20" rx="4" fill="#b2dab2" stroke="#008300" stroke-width="1.2"/>
+<text x="502" y="211" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#52514e" text-anchor="middle">support <tspan font-family="'Cambria Math','Times New Roman',Times,serif" font-style="italic">S</tspan></text>
+<rect x="566" y="158" width="96" height="62" rx="10" fill="#ffffff" stroke="#52514e" stroke-width="1.6"/>
+<rect x="578" y="168" width="20" height="20" rx="4" fill="#b2dab2" stroke="#008300" stroke-width="1.2"/>
+<rect x="604" y="168" width="20" height="20" rx="4" fill="#b2dab2" stroke="#008300" stroke-width="1.2"/>
+<rect x="630" y="168" width="20" height="20" rx="4" fill="#b2dab2" stroke="#008300" stroke-width="1.2"/>
+<text x="614" y="211" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#52514e" text-anchor="middle">query <tspan font-family="'Cambria Math','Times New Roman',Times,serif" font-style="italic">Q</tspan></text>
+<circle cx="502" cy="290" r="22" fill="#d4e4f7" stroke="#2a78d6" stroke-width="2"/>
+<text x="502" y="298" font-family="'Cambria Math','Times New Roman',Times,serif" font-size="24" font-weight="400" fill="#0b0b0b" text-anchor="middle" font-style="italic">θ</text>
+<circle cx="614" cy="290" r="22" fill="#d4e4f7" stroke="#2a78d6" stroke-width="2"/>
+<text x="614" y="298" font-family="'Cambria Math','Times New Roman',Times,serif" font-size="24" font-weight="400" fill="#0b0b0b" text-anchor="middle" font-style="italic">θ′</text>
+<path d="M526 281 Q558 258 588 281" fill="none" stroke="#2a78d6" stroke-width="2.6" marker-end="url(#ah2)"/>
+<text x="558" y="254" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="middle">adapt on S</text>
+<path d="M590 301 Q558 326 528 301" fill="none" stroke="#2a78d6" stroke-width="2.6" marker-end="url(#ah2)"/>
+<text x="558" y="342" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="middle">update on Q</text>
+<rect x="468" y="368" width="180" height="32" rx="16.0" fill="#e5effa" stroke="#2a78d6" stroke-width="1.6"/>
+<text x="558.0" y="390.48" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="18" font-weight="600" fill="#0b0b0b" text-anchor="middle">2,000 few-shot tasks</text>
+<text x="820.0" y="170" font-family="'Cambria Math','Times New Roman',Times,serif" font-size="23" font-weight="400" fill="#0b0b0b" text-anchor="middle" font-style="italic">DACIS · |G<tspan dy="5" font-size="14">meta</tspan><tspan dy="-5">|</tspan></text>
+<path d="M720 290 L720 263 Q720 260 723 260 L728 260 Q731 260 731 263 L731 290 Z" fill="#d9d9d8"/>
+<rect x="736" y="280" width="11" height="10" rx="2" fill="none" stroke="#c3c2b7" stroke-width="1.3" stroke-dasharray="3 2"/>
+<path d="M752 290 L752 219 Q752 216 755 216 L760 216 Q763 216 763 219 L763 290 Z" fill="#2a78d6"/>
+<path d="M768 290 L768 267 Q768 264 771 264 L776 264 Q779 264 779 267 L779 290 Z" fill="#d9d9d8"/>
+<rect x="784" y="280" width="11" height="10" rx="2" fill="none" stroke="#c3c2b7" stroke-width="1.3" stroke-dasharray="3 2"/>
+<path d="M800 290 L800 259 Q800 256 803 256 L808 256 Q811 256 811 259 L811 290 Z" fill="#d9d9d8"/>
+<rect x="816" y="280" width="11" height="10" rx="2" fill="none" stroke="#c3c2b7" stroke-width="1.3" stroke-dasharray="3 2"/>
+<path d="M832 290 L832 231 Q832 228 835 228 L840 228 Q843 228 843 231 L843 290 Z" fill="#2a78d6"/>
+<rect x="848" y="280" width="11" height="10" rx="2" fill="none" stroke="#c3c2b7" stroke-width="1.3" stroke-dasharray="3 2"/>
+<path d="M864 290 L864 271 Q864 268 867 268 L872 268 Q875 268 875 271 L875 290 Z" fill="#d9d9d8"/>
+<path d="M880 290 L880 215 Q880 212 883 212 L888 212 Q891 212 891 215 L891 290 Z" fill="#2a78d6"/>
+<rect x="896" y="280" width="11" height="10" rx="2" fill="none" stroke="#c3c2b7" stroke-width="1.3" stroke-dasharray="3 2"/>
+<line x1="714" y1="291" x2="913" y2="291" stroke="#c3c2b7" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="714" y1="250" x2="913" y2="250" stroke="#52514e" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="6 5"/>
+<text x="916" y="256" font-family="'Cambria Math','Times New Roman',Times,serif" font-size="19" font-weight="400" fill="#0b0b0b" text-anchor="start" font-style="italic">τ<tspan dy="5" font-size="13">ℓ</tspan></text>
+<text x="820.0" y="318" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="middle">rankings change after</text>
+<text x="820.0" y="338" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="middle">few-shot adaptation</text>
+<rect x="738" y="368" width="164" height="32" rx="16.0" fill="#e5effa" stroke="#2a78d6" stroke-width="1.6"/>
+<text x="820.0" y="390.84" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="19" font-weight="600" fill="#0b0b0b" text-anchor="middle">6.7M → 2.5M</text>
+<rect x="20" y="428" width="450" height="194" rx="16" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<text x="42" y="464" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#0b0b0b" text-anchor="start">Disease taxonomy guards channels</text>
+<line x1="58" y1="506" x2="58" y2="590" stroke="#c3c2b7" stroke-width="2" stroke-linecap="round"/>
+<path d="M98 491 L111 497 L111 507 C111 515 105 520 98 523 C91 520 85 515 85 507 L85 497 Z" fill="#2a78d6" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="124" y="513" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="19" font-weight="700" fill="#0b0b0b" text-anchor="start">Pathogen type<tspan fill="#52514e" font-weight="400">  ·  protected</tspan></text>
+<line x1="58" y1="552" x2="80" y2="552" stroke="#c3c2b7" stroke-width="2" stroke-linecap="round"/>
+<path d="M98 537 L111 543 L111 553 C111 561 105 566 98 569 C91 566 85 561 85 553 L85 543 Z" fill="#b4d0f1" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="124" y="559" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="19" font-weight="700" fill="#0b0b0b" text-anchor="start">Symptom type<tspan fill="#52514e" font-weight="400">  ·  partly protected</tspan></text>
+<line x1="58" y1="598" x2="80" y2="598" stroke="#c3c2b7" stroke-width="2" stroke-linecap="round"/>
+<path d="M98 583 L111 589 L111 599 C111 607 105 612 98 615 C91 612 85 607 85 599 L85 589 Z" fill="#ffffff" stroke="#898781" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="124" y="605" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="19" font-weight="700" fill="#0b0b0b" text-anchor="start">Specific disease<tspan fill="#52514e" font-weight="400">  ·  prunable</tspan></text>
+<text x="446" y="513" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#898781" text-anchor="end">coarse</text>
+<text x="446" y="605" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#898781" text-anchor="end">fine</text>
+<rect x="490" y="428" width="450" height="194" rx="16" fill="#f9f9f9" stroke="#c3c2b7" stroke-width="2"/>
+<text x="512" y="464" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#0b0b0b" text-anchor="start">Runs in the field</text>
+<rect x="512" y="492" width="138" height="104" rx="8" fill="#b8dcb8" stroke="#008300" stroke-width="2"/>
+<rect x="524.0" y="500" width="7" height="7" rx="1.5" fill="#eda100"/>
+<rect x="535.5" y="500" width="7" height="7" rx="1.5" fill="#eda100"/>
+<rect x="547.0" y="500" width="7" height="7" rx="1.5" fill="#eda100"/>
+<rect x="558.5" y="500" width="7" height="7" rx="1.5" fill="#eda100"/>
+<rect x="570.0" y="500" width="7" height="7" rx="1.5" fill="#eda100"/>
+<rect x="581.5" y="500" width="7" height="7" rx="1.5" fill="#eda100"/>
+<rect x="593.0" y="500" width="7" height="7" rx="1.5" fill="#eda100"/>
+<rect x="604.5" y="500" width="7" height="7" rx="1.5" fill="#eda100"/>
+<rect x="616.0" y="500" width="7" height="7" rx="1.5" fill="#eda100"/>
+<rect x="627.5" y="500" width="7" height="7" rx="1.5" fill="#eda100"/>
+<rect x="548" y="526" width="40" height="40" rx="4" fill="#3a3a38"/>
+<rect x="628" y="520" width="26" height="22" rx="2" fill="#b9b8b1" stroke="#52514e" stroke-width="1.2"/>
+<rect x="628" y="556" width="26" height="22" rx="2" fill="#b9b8b1" stroke="#52514e" stroke-width="1.2"/>
+<text x="581" y="616" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="16" font-weight="400" fill="#52514e" text-anchor="middle">Raspberry Pi 4</text>
+<text x="676" y="512" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="29" font-weight="700" fill="#0b0b0b" text-anchor="start">−78%</text>
+<text x="778" y="512" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#52514e" text-anchor="start">size, 11.2M → 2.5M</text>
+<text x="676" y="560" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="29" font-weight="700" fill="#0b0b0b" text-anchor="start">92.3%</text>
+<text x="778" y="560" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#52514e" text-anchor="start">of full accuracy</text>
+<text x="676" y="608" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="29" font-weight="700" fill="#0b0b0b" text-anchor="start">7 FPS</text>
+<text x="778" y="608" font-family="'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="17" font-weight="400" fill="#52514e" text-anchor="start">real-time, 142 ms</text></svg>
