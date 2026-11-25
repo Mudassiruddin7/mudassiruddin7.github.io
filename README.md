@@ -56,7 +56,7 @@ All content lives in `index.html`, in the order it appears on the page. Each sec
 
 | Section | What to edit |
 |---|---|
-| About Me | the three intro paragraphs, the quote, and the `app-cards` grid of projects |
+| About Me | the three intro paragraphs, the quote, and the `app-cards` grid of open-source contributions |
 | News | `<li>` items inside `#newsContent` — newest first, `<em>YYYY.MM:</em>` prefix |
 | Publications | one `<div class="paper-box">` per paper; `data-core="true"` marks first-author work and shows the green badge |
 | Honors, Hackathons, Education, Ventures, Certifications, Others | plain `<ul>` lists |
